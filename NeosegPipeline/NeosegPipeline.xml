@@ -3,7 +3,7 @@
    <title>NeosegPipeline</title>
    <description>A tool to create an sharp atlas specific atlas for Neoseg. For any suggestion or question, please contact cherel[at]unc.edu</description>
    <contributor>Marie Cherel, Francois Budin, Juan Carlos Prieto, Martin Styner</contributor>
-   <version>1.0.8</version>
+   <version>1.0.9</version>
    <parameters>
       <boolean>
          <name>noGUI</name>

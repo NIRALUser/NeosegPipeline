@@ -105,7 +105,7 @@ void DtiRegistration::skullStripb0()
    m_inputs.insert("outbase", outbase_path); 
    m_outputs.insert("b0Mask", b0Mask_path);
    m_outputs.insert("strippedb0", strippedb0_path); 
-   m_argumentsList << "bet2" << "b0Nifti" << "outbase" << "'-m'"<< "b0Mask";
+   m_argumentsList << "bet2" << "b0Nifti" << "outbase" << "'-m'";
    execute();
 
    m_unnecessaryFiles << b0Mask_path;

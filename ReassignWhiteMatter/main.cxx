@@ -241,7 +241,7 @@ int main(int argc, char* argv[])
    labelMapFilter->Update();
 
 
-   for(int labelObj = 0; labelObj < (labelMapFilter->GetOutput())->GetNumberOfLabelObjects(); labelObj++){
+   for(unsigned int labelObj = 1; labelObj < (labelMapFilter->GetOutput())->GetNumberOfLabelObjects(); labelObj++){
        int objectSize = (labelMapFilter->GetOutput())->GetLabelObject(labelObj)->Size();
        if(objectSize < parameters->GetThreshold()){
 

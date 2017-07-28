@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <executable>
    <title>Reassign White Matter</title>
-   <description>A tool to reassign small islands of white matters according to the probability maps. For any suggestion or question, please contact cherel[at]unc.edu, jprieto[at]med.unc.edu</description>
-   <contributor>Marie Cherel, Juan Carlos Prieto</contributor>
-   <version>1.3 | Compiled ${TODAY}</version>
+   <description>A tool to reassign small islands of white matters according to the probability maps. For any suggestion or question,  please contact styner[at]unc.edu, jprieto[at]med.unc.edu. The xml parameter file needs to contain the following information: \n REASSIGN-WHITE-MATTER-PARAMETERS is the main parameter tag \n INPUT = input label file \n THRESHOLD = minimal size of component that is not reassigned \n Also provide filenames for a series of posterior probability maps via the PROBABILITY-MAP tags, one per probability map: Assumption is that order of the probability map filenames is the same as the labels in the labelmap \n OUTPUT = reassigned label file \n \n VOXEL-BY-VOXEL = compute reassigned voxel-by-voxel \n LABEL-VALUE = which label to replace (if component is smaller than threshold)
+</description>
+   <contributor>Martin Styner, Marie Cherel, Juan Carlos Prieto</contributor>
+   <version>1.4 | Compiled ${TODAY}</version>
    <parameters>
       <file>
 	 <name>parameters_file</name>
-	 <description>Path of the XML file that contains the parameters</description>
+	 <description>Path of the XML file that contains the parameters
+	 </description>
 	 <longflag>parameters</longflag>
 	 <label>xml file</label>
       </file>

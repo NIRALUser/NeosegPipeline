@@ -3,8 +3,9 @@
 void XmlReader::setPipelineParameters(PipelineParameters* parameters) 
 {
    m_parameters = parameters;
+   //m_quicksilverParameters = m_parameters->getQuicksilverParameters();
    m_antsParameters_DTI = m_parameters->getAntsParametersDTI(); 
-   m_antsParameters_atlas = m_parameters->getAntsParametersAtlas(); 
+   m_registrationParameters_atlas = m_parameters->getRegistrationParameters(); 
    m_neosegParameters = m_parameters->getNeosegParameters();
    m_executablePaths = m_parameters->getExecutablePaths(); 
    m_libraryPaths = m_parameters->getLibraryPaths(); 
@@ -48,13 +49,18 @@ QString XmlReader::readParametersConfigurationFile(QString file_path)
             {
                readGeneralParameters(stream, errors);
             }
+            /*else if (stream->name() == "Quicksilver-parameters")
+            {
+               readQuicksilverParameters(stream, errors, m_quicksilverParameters);
+            }*/
             else if (stream->name() == "ANTS-parameters-DTI")
             {
                readAntsParameters(stream, errors, m_antsParameters_DTI);
             }
             else if (stream->name() == "ANTS-parameters-atlas")
             {
-                readAntsParameters(stream, errors, m_antsParameters_atlas);
+                readAntsParameters(stream, errors, m_registrationParameters_atlas);
+                readQuicksilverParameters(stream, errors, m_registrationParameters_atlas);
             }
             else if (stream->name() == "Neoseg-parameters")
             {
@@ -569,10 +575,53 @@ void XmlReader::readGeneralParameters(QXmlStreamReader* stream, QString errors)
    m_parameters->setSelectedAtlases(m_selectedAtlases);
 }
 
+void XmlReader::readQuicksilverParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters)
+{
+  bool ok;
+  QuicksilverParameters * quicksilverParameters = (QuicksilverParameters*)parameters;
+  while(!(stream->isEndElement() && stream->name() == "Quicksilver-parameters"))
+  {
+    stream->readNext();
 
-void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, AntsParameters* antsParameters)
+      if(stream->isStartElement())
+      {
+         QXmlStreamAttributes attributes = stream->attributes();
+         if (stream->name() == "Path to registration script")
+         {
+            QString registrationscript_path = (attributes.value("path")).toString();
+            if(QFile(registrationscript_path).exists())
+            {
+                if(quicksilverParameters->checkRegistrationScriptPath(registrationscript_path))
+                {                  
+                    quicksilverParameters->setRegistrationScriptPath(registrationscript_path);
+                }
+                else
+                {
+                    errors += " - 'Path to registration script' is not valid, the file does not exist\n";
+                }
+            }
+         }
+         else if (stream->name() == "Container Id")
+         {
+            QString container_id_QString = (attributes.value("containerId")).toString(); 
+            int containerId = container_id_QString.toInt(&ok);
+            if(ok && quicksilverParameters->checkContainerId(containerId))
+            {
+                quicksilverParameters->setContainerId(containerId);
+            }
+            else if(!container_id_QString.isEmpty())
+            {
+                errors += " - 'Container Id' is not valid, it must be a positive integer\n";
+            }
+        }
+      }
+  }
+}
+ 
+void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters)
 {  
    bool ok; 
+   AntsParameters * antsParameters = (AntsParameters*)parameters;
    while(!(stream->isEndElement() && stream->name() == "ANTS-parameters-" + antsParameters->getName()))
    {
       stream->readNext();

@@ -13,6 +13,13 @@ DerivedWindow::DerivedWindow() : Ui_Window()
    this->radioNeoseg->setChecked( true ) ;
    this->radioABC->setChecked( false ) ;
 
+  /* antsParameters = new Ui::antsParameters ;
+   antsParameters->setupUi( this->softwareFrame ) ;
+   quicksilverParameters = new Ui::quicksilverParameters ;
+   quicksilverParameters->setupUi(this->softwareFrame) ;
+   this->radioAnts->setChecked( true ) ;
+   this->radioQuicksilver->setChecked( false ) ;*/
+
    m_parametersSet = false; 
    m_executablesSet = false; 
    m_pipelineWriten = false; 
@@ -172,6 +179,10 @@ DerivedWindow::DerivedWindow() : Ui_Window()
    // Display Results  
    connect(displayResults_button, SIGNAL(clicked()), this, SLOT(displayResults())); 
    
+   // Display ANTS options or Quicksilver options in "Atlas Registration" tab
+   /*connect( radioAnts, SIGNAL(clicked()), this, SLOT(registrationSoftwareSelection()) );
+   connect( radioQuicksilver, SIGNAL(clicked()), this, SLOT(registrationSoftwareSelection()) );*/
+
    // Display ABC options or neoseg options in "Tissue Segmentation" tab
    connect( radioNeoseg, SIGNAL(clicked()), this, SLOT(tissueSegmentationSoftwareSelection()) ) ;
    connect( radioABC, SIGNAL(clicked()), this, SLOT(tissueSegmentationSoftwareSelection()) ) ;
@@ -338,6 +349,20 @@ void DerivedWindow::tissueSegmentationSoftwareSelection()
     }
 }
 
+/*void DerivedWindow::registrationSoftwareSelection()
+{
+    if(this->radioAnts->isChecked() )
+    {
+        antsParameters->frame->show() ;
+        quicksilverParameters->frame->hide() ;
+    }
+    else
+    {
+        antsParameters->frame->hide() ;
+        quicksilverParameters->frame->hide() ;
+    }
+}*/
+
 void DerivedWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     event->acceptProposedAction();
@@ -388,8 +413,10 @@ void DerivedWindow::dropEvent(QDropEvent* event)
 void DerivedWindow::setPipelineParameters(PipelineParameters* parameters)
 {  
    m_parameters = parameters;
+   //m_quicksilverParameters = m_parameters->getQuicksilverParameters();
    m_antsParameters_DTI = m_parameters->getAntsParametersDTI(); 
-   m_antsParameters_atlas = m_parameters->getAntsParametersAtlas(); 
+   //m_antsParameters_atlas = m_parameters->getAntsParametersAtlas(); 
+   m_registrationParameters_atlas = m_parameters->getRegistrationParameters();
    m_neosegParameters = m_parameters->getNeosegParameters(); 
    m_executables = m_parameters->getExecutablePaths();
    m_libraries = m_parameters->getLibraryPaths();
@@ -1145,6 +1172,8 @@ void DerivedWindow::initializeXMLParameters()
    }
 
    // ANTS
+   AntsParameters* m_antsParameters_atlas=(AntsParameters*) m_registrationParameters_atlas;
+
    numberOfRegistrations_spinBox->setValue(m_antsParameters_atlas->getNumberOfRegistrations());
    numberOfCores_spinBox->setValue(m_antsParameters_atlas->getNumberOfCores());
    numberOfGB_spinBox->setValue(m_antsParameters_atlas->getNumberOfGB());
@@ -1384,6 +1413,8 @@ void DerivedWindow::setParameters()
    m_parameters->setComputingSystem(computingSystem_comboBox->currentText());
 
    // ANTS parameters for DTI Registration
+   AntsParameters* m_antsParameters_atlas=(AntsParameters*) m_registrationParameters_atlas;
+
    m_antsParameters_DTI->setImageMetric1(imageMetric1_DTI_comboBox->currentText());
    m_antsParameters_DTI->setWeight1(weight1_DTI_spinBox->value());
    m_antsParameters_DTI->setRadius1(radius1_DTI_spinBox->value());

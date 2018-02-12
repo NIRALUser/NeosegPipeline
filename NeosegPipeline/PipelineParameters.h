@@ -14,7 +14,9 @@
 // My Specific Librairies //
 #include "Neo.h"
 #include "Atlas.h"
+#include "RegistrationParameters.h" 
 #include "AntsParameters.h" 
+#include "QuicksilverParameters.h" 
 #include "NeosegParameters.h" 
 #include "ExecutablePaths.h" 
 #include "LibraryPaths.h" 
@@ -23,6 +25,9 @@
 
 const int TISSUE_SEG_TYPE_NEOSEG = 0;
 const int TISSUE_SEG_TYPE_ABC = 1;
+const int REGISTRATION_TYPE_ANTS = 0;
+const int REGISTRATION_TYPE_QUICKSILVER = 1;
+
 
 class PipelineParameters
 {
@@ -227,9 +232,15 @@ class PipelineParameters
    void setNumberOfCores(int NumberOfCores); 
    int getNumberOfCores();
 
+   //Quicksilver Parameters
+   //QuicksilverParameters* getQuicksilverParameters();
+
    // ANTS Parameters 
    AntsParameters* getAntsParametersDTI();  
-   AntsParameters* getAntsParametersAtlas();  
+   //AntsParameters* getAntsParametersAtlas();  
+
+   // Registration Parameters
+   RegistrationParameters* getRegistrationParameters();
 
    // Neoseg Parameters
    NeosegParameters* getNeosegParameters(); 
@@ -246,6 +257,17 @@ class PipelineParameters
 
    QString checkImages();
 
+   // Typer of registration 0 for Ants 1 for Quicksilver
+   void setRegistrationType(int type){
+       m_antsRegistrationType =type;
+   }
+
+   /*
+    * @return Type of Registration 0 for Ants 1 for Quicksilver
+    */
+   int getRegistrationType(){
+       return m_antsRegistrationType;
+   }
 
    // Type of tissue segmentation 0 for Neoseg 1 for ABC
    void setTissueSegmentationType(int type){
@@ -335,9 +357,13 @@ class PipelineParameters
        m_NumberOfLabels = labels;
    }
 
+   int m_abcTissueSegmentationType;
+   int m_antsRegistrationType;
+   
    private:
 
-   int m_abcTissueSegmentationType;
+   /*int m_abcTissueSegmentationType;
+   int m_antsRegistrationType;*/
    std::vector<double> m_abcPriorsCoefficients;
    QString m_abcInitialDistributorEstimator;
    double m_abcMaximumDegreeBiasField;
@@ -490,9 +516,16 @@ class PipelineParameters
    int m_numberOfCores_default;
    int m_numberOfCores;
    
+   // Quicksilver Parameters
+   //QuicksilverParameters* m_quicksilverParameters;
+   
    // ANTS Parameters 
    AntsParameters* m_antsParameters_DTI;
-   AntsParameters* m_antsParameters_atlas;
+   //AntsParameters* m_antsParameters_atlas;
+
+   // Registration Parameters
+   RegistrationParameters* m_registrationParameters_atlas;
+
    // Neoseg Parameters
    NeosegParameters* m_neosegParameters;
 

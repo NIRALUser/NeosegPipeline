@@ -29,7 +29,8 @@ class XmlWriter
       void writeDataConfiguration(QString file_path); 
 
       void writeGeneralParameters(QXmlStreamWriter* stream);
-      void writeAntsParameters(QXmlStreamWriter* stream, AntsParameters* antsParameters);
+      void writeAntsParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters);
+      void writeQuicksilverParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters);
       void writeNeosegParameters(QXmlStreamWriter* stream);
       void writeParametersConfiguration(QString file_path); 
 

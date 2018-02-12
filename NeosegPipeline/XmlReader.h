@@ -4,7 +4,9 @@
 #include <QXmlStreamReader>
 
 #include "PipelineParameters.h"
+#include "RegistrationParameters.h"
 #include "AntsParameters.h"
+#include "QuicksilverParameters.h"
 #include "NeosegParameters.h"
 #include "ExecutablePaths.h"
 #include "LibraryPaths.h"
@@ -20,7 +22,8 @@ class XmlReader
 
    QString readParametersConfigurationFile(QString file_path); 
    void readGeneralParameters(QXmlStreamReader* stream, QString errors);
-   void readAntsParameters(QXmlStreamReader* stream, QString errors, AntsParameters* antsParameters);
+   void readAntsParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters);
+   void readQuicksilverParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters);
    void readNeosegParameters(QXmlStreamReader* stream, QString errors);
    void readABCParameters(QXmlStreamReader* stream, QString errors);
 
@@ -31,7 +34,7 @@ class XmlReader
 
    PipelineParameters* m_parameters; 
    AntsParameters* m_antsParameters_DTI;  
-   AntsParameters* m_antsParameters_atlas;  
+   RegistrationParameters* m_registrationParameters_atlas; 
    NeosegParameters* m_neosegParameters; 
    ExecutablePaths* m_executablePaths;
    LibraryPaths* m_libraryPaths;

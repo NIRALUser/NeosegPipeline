@@ -121,8 +121,10 @@ PipelineParameters::PipelineParameters()
    m_computingSystem_default = m_computingSystem_values[0];
    m_computingSystem = m_computingSystem_default;
 
+   //m_quicksilverParameters = new QuicksilverParameters();
    m_antsParameters_DTI = new AntsParameters("DTI"); 
-   m_antsParameters_atlas = new AntsParameters("atlas");
+   //m_antsParameters_atlas = new AntsParameters("atlas");
+   m_registrationParameters_atlas= new RegistrationParameters();
    m_neosegParameters = new NeosegParameters(); 
    m_executablePaths = new ExecutablePaths(); 
    m_libraryPaths = new LibraryPaths(); 
@@ -953,14 +955,25 @@ int PipelineParameters::getNumberOfCores()
    return m_numberOfCores;
 }
 
+// Quicksilver Parameters
+/*QuicksilverParameters* PipelineParameters::getQuicksilverParameters()
+{
+   return m_quicksilverParameters;
+}*/
+
 // ANTS Parameters
 AntsParameters* PipelineParameters::getAntsParametersDTI()
 {
    return m_antsParameters_DTI;
 }
-AntsParameters* PipelineParameters::getAntsParametersAtlas()
+/*AntsParameters* PipelineParameters::getAntsParametersAtlas()
 {
    return m_antsParameters_atlas;
+}*/
+
+RegistrationParameters* PipelineParameters::getRegistrationParameters()
+{
+   return m_registrationParameters_atlas;
 }
 
 // Neoseg Parameters

@@ -139,8 +139,10 @@ void XmlWriter::writeGeneralParameters(QXmlStreamWriter* stream)
    stream->writeEndElement(); // GENERAL-PARAMETERS
 }
 
-void XmlWriter::writeAntsParameters(QXmlStreamWriter* stream, AntsParameters* antsParameters)
+void XmlWriter::writeAntsParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters)
 {
+  AntsParameters * antsParameters = (AntsParameters*)parameters;
+
    stream->writeStartElement("ANTS-parameters-" + antsParameters->getName());
 
    writeElement(stream, "First-modality", "metric", antsParameters->getImageMetric1(), "weight", QString::number(antsParameters->getWeight1()), "radius", QString::number(antsParameters->getRadius1()));
@@ -157,6 +159,19 @@ void XmlWriter::writeAntsParameters(QXmlStreamWriter* stream, AntsParameters* an
 
    stream->writeEndElement();
 }
+
+void XmlWriter::writeQuicksilverParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters)
+{
+  QuicksilverParameters * quicksilverParameters = (QuicksilverParameters*)parameters;
+
+   stream->writeStartElement("Quicksilver-parameters-");
+
+   writeElement(stream, "Path to registration script", "path", quicksilverParameters->getRegistrationScriptPath());
+   writeElement(stream, "Container Id", "number", QString::number(quicksilverParameters->getContainerId()));
+
+   stream->writeEndElement();
+}
+
 
 void XmlWriter::writeNeosegParameters(QXmlStreamWriter* stream)
 {
@@ -197,7 +212,8 @@ void XmlWriter::writeParametersConfiguration(QString file_path)
 
        writeGeneralParameters(stream);
        writeAntsParameters(stream, m_parameters->getAntsParametersDTI());
-       writeAntsParameters(stream, m_parameters->getAntsParametersAtlas());
+       writeAntsParameters(stream, m_parameters->getRegistrationParameters());
+       writeQuicksilverParameters(stream, m_parameters->getRegistrationParameters());
 
        writeNeosegParameters(stream);
 
@@ -212,8 +228,9 @@ void XmlWriter::writeParametersConfiguration(QString file_path)
 
        writeGeneralParameters(stream);
        writeAntsParameters(stream, m_parameters->getAntsParametersDTI());
-       writeAntsParameters(stream, m_parameters->getAntsParametersAtlas());
-
+       writeAntsParameters(stream, m_parameters->getRegistrationParameters());
+       writeQuicksilverParameters(stream, m_parameters->getRegistrationParameters());
+       
        stream->writeStartElement("ABC-parameters");
 
        NeosegParameters* neosegParameters = m_parameters->getNeosegParameters();

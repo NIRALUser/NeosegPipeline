@@ -18,7 +18,7 @@
 #include "Script.h"
 #include "Atlas.h"
 #include "Neo.h"
-#include "AntsParameters.h"
+#include "RegistrationParameters.h"
 #include "ExecutablePaths.h"
 
 
@@ -33,8 +33,10 @@ class AtlasPopulationRegistration : public Script
    // Set // 
    void setAtlasPopulation(std::vector<Atlas> atlasPopulation);  
    void setComputingSystem(QString computingSystem);
+   void setRegistrationParameters(RegistrationParameters* RegistrationParameters);
+   /*
    void setAntsParameters(AntsParameters* ANTSParamaters);
-
+   void setQuicksilverParameters(QuicksilverParameters* QuicksilverParamaters);*/
    // Define Outputs //
    Atlas defineRegisteredAtlas(Atlas atlas);
    std::vector<Atlas> defineRegisteredAtlasPopulation();
@@ -48,9 +50,9 @@ class AtlasPopulationRegistration : public Script
    void implementExecute();
 
    // Register Atlas Script // 
-   void implementRegisterAtlas(QString &script, bool probabilistic);
+   /*void implementRegisterAtlas(QString &script, bool probabilistic);
    void writeRegisterAtlas();
-   void writeRegisterProbabilisticAtlas();
+   void writeRegisterProbabilisticAtlas();*/
 
    // Register Atlas Population Script // 
    void implementTestRegistrationDone();
@@ -69,7 +71,7 @@ class AtlasPopulationRegistration : public Script
 
    // Input // 
    std::vector<Atlas>      m_atlasPopulation;
-   AntsParameters*         m_parameters;
+   RegistrationParameters* m_parameters;
    QString                 m_computingSystem;
    int                     m_nbCores;
    

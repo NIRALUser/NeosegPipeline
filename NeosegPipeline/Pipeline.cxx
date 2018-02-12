@@ -116,7 +116,7 @@ void Pipeline::writeAtlasRegistration()
    m_atlasRegistration->setSuffix(m_parameters->getSuffix()); 
    m_atlasRegistration->setProcessingDirectory(m_processing_path);
    m_atlasRegistration->setLog(m_log_path);
-   m_atlasRegistration->setAntsParameters(m_parameters->getAntsParametersAtlas()); 
+   m_atlasRegistration->setRegistrationParameters(m_parameters->getRegistrationParameters());
    m_atlasRegistration->setExecutablePaths(m_parameters->getExecutablePaths());
    m_atlasRegistration->setOverwriting(m_parameters->getOverwriting());
    m_atlasRegistration->setStoppingIfError(m_parameters->getStoppingIfError());
@@ -141,8 +141,7 @@ void Pipeline::writeAtlasPopulationRegistration()
    m_atlasPopulationRegistration->setSuffix(m_parameters->getSuffix()); 
    m_atlasPopulationRegistration->setOverwriting(m_parameters->getOverwriting()); 
    m_atlasPopulationRegistration->setStoppingIfError(m_parameters->getStoppingIfError());
-   m_atlasPopulationRegistration->setAntsParameters(m_parameters->getAntsParametersAtlas()); 
-
+   m_atlasPopulationRegistration->setRegistrationParameters(m_parameters->getRegistrationParameters()); 
    m_atlasPopulationRegistration->update();
    m_importingModules += "import " + module_name + "\n"; 
    m_runningModules += module_name + ".run()\n"; 
@@ -458,7 +457,7 @@ void Pipeline::writePipeline()
    {
       writeAtlasRegistration();
       writeAtlasPopulationRegistration(); 
-      writeAtlasGeneration();
+      writeAtlasGeneration(); 
    } 
    else
    {

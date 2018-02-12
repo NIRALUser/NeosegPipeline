@@ -14,10 +14,15 @@ void AtlasPopulationRegistration::setComputingSystem(QString computingSystem)
 {
    m_computingSystem=computingSystem;
 }
-void AtlasPopulationRegistration::setAntsParameters(AntsParameters* parameters) 
+void AtlasPopulationRegistration::setRegistrationParameters(RegistrationParameters* parameters) 
 {
    m_parameters = parameters;
 }
+
+/*void AtlasPopulationRegistration::setQuicksilverParameters(QuicksilverParameters* parameters) 
+{
+   m_qsparameters = parameters;
+}*/
 
 // Define Output //  
 Atlas AtlasPopulationRegistration::defineRegisteredAtlas(Atlas atlas)
@@ -156,8 +161,8 @@ void AtlasPopulationRegistration::defineRegisterAtlasParameters(Atlas atlas)
    QString smoothedMask_path = atlas_dir->filePath(m_prefix + "mask-smoothed" + m_suffix + ".nrrd"); 
 
    m_unnecessaryFiles << affine_path;
-   m_unnecessaryFiles << affineTemp_path; 
-   m_unnecessaryFiles << warp_path; 
+   m_unnecessaryFiles << affineTemp_path;
+   //m_unnecessaryFiles << warp_path;
    m_unnecessaryFiles << inverseWarp_path; 
    m_unnecessaryFiles << smoothedMask_path; 
 }

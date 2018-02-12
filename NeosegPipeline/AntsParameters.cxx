@@ -1,8 +1,9 @@
+#include "RegistrationParameters.h"
 #include "AntsParameters.h"
 
 AntsParameters::AntsParameters(QString type)
 {
-   m_numberOfGB_min = 1;
+   //m_numberOfGB_min = 1;
 
    m_imageMetric_values << "CC" << "MI" << "PR" << "MSQ";    
    m_weight_min = 0;
@@ -49,9 +50,9 @@ AntsParameters::AntsParameters(QString type)
    {
       m_name = "atlas";
 
-      m_numberOfRegistrations_default = 1;
+      /*m_numberOfRegistrations_default = 1;
       m_numberOfCores_default = 1;
-      m_numberOfGB_default = 4;
+      m_numberOfGB_default = 4;*/
 
       m_imageMetric_default = m_imageMetric_values[0];
       m_weight_default = 1; 
@@ -74,9 +75,9 @@ AntsParameters::AntsParameters(QString type)
       m_usingSmoothedMask_default = false; 
    }
 
-   m_numberOfRegistrations = m_numberOfRegistrations_default;
+   /*m_numberOfRegistrations = m_numberOfRegistrations_default;
    m_numberOfCores = m_numberOfCores_default;
-   m_numberOfGB = m_numberOfGB_default;
+   m_numberOfGB = m_numberOfGB_default;*/
 
    m_imageMetric1 = m_imageMetric_default;
    m_imageMetric2 = m_imageMetric_default;
@@ -104,82 +105,13 @@ AntsParameters::AntsParameters(QString type)
    m_usingSmoothedMask = m_usingSmoothedMask_default;
 }
 
-bool AntsParameters::isSuperior(int value, int min)
-{
-   if(value>min)
-   {
-      return true; 
-   }
-   return false; 
-}
-
-bool AntsParameters::isSuperiorOrEqual(int value, int min)
-{
-   if(value>=min)
-   {
-      return true; 
-   }
-   return false; 
-}
-
-bool AntsParameters::isBetween(int value, int min, int max)
-{
-   if(value>min && value<max)
-   {
-      return true; 
-   }
-   return false; 
-}
-
-bool AntsParameters::isSuperior(double value, double min)
-{
-   if(value>min)
-   {
-      return true; 
-   }
-   return false; 
-}
-
-bool AntsParameters::isSuperiorOrEqual(double value, double min)
-{
-   if(value>=min)
-   {
-      return true; 
-   }
-   return false; 
-}
-
-
-bool AntsParameters::isBetween(double value, double min, double max)
-{
-   if(value>min && value<max)
-   {
-      return true; 
-   }
-   return false; 
-}
-
-
-bool AntsParameters::isIn(QString item, QStringList list)
-{
-   QStringList::iterator it; 
-   for(it=list.begin(); it!=list.end(); ++it)
-   {
-      if(item.compare(*it, Qt::CaseInsensitive))
-      {
-         return true;
-      }
-   }
-   return false; 
-}
-
 QString AntsParameters::getName()
 {
    return m_name; 
 }
 
 // Number Of Registrations//  
-void AntsParameters::setNumberOfRegistrations(int numberOfRegistrations)
+/*void AntsParameters::setNumberOfRegistrations(int numberOfRegistrations)
 {
    m_numberOfRegistrations = numberOfRegistrations; 
 }
@@ -210,7 +142,7 @@ void AntsParameters::setNumberOfGB(int numberOfGB)
 int AntsParameters::getNumberOfGB()
 {
    return m_numberOfGB;  
-}
+}*/
 
 bool AntsParameters::checkImageMetric(QString imageMetric)
 {

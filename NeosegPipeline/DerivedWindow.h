@@ -21,6 +21,8 @@
 #include "ui_About.h"
 #include "ui_neosegParameters.h"
 #include "ui_ABCParameters.h"
+/*#include "ui_AntsParameters.h"
+#include "ui_QuicksilverParameters.h"*/
 #include "Pipeline.h"
 #include "XmlReader.h"
 #include "XmlWriter.h"
@@ -28,6 +30,7 @@
 #include "ExecutablePaths.h" 
 #include "LibraryPaths.h"
 #include "About.h" 
+#include "RegistrationParameters.h"
 
 
 #ifndef NEOSEGPIPELINE_VERSION
@@ -135,6 +138,9 @@ class DerivedWindow : public QMainWindow , public Ui_Window
    // Atlas Registration //
    void changeUsingMaskAtlas(bool) ;
 
+   //Atlas Registration
+   //void registrationSoftwareSelection() ;
+
    //Tissue Segmentation
    void tissueSegmentationSoftwareSelection() ;
 
@@ -202,13 +208,17 @@ private :
    Ui_Window ui;
    Ui::ABCParameters *abcParameters ;
    Ui::neosegParameters *neosegParameters ;
+   /*Ui::AntsParameters *antsParameters ;
+   Ui::QuicksilverParameters *quicksilverParameters ;*/
    // Pipeline 
    Pipeline* m_pipeline;
 
    // Parameters
    PipelineParameters* m_parameters;
    AntsParameters* m_antsParameters_DTI; 
-   AntsParameters* m_antsParameters_atlas; 
+   /*AntsParameters* m_antsParameters_atlas; 
+   QuicksilverParameters* m_quicksilverParameters;*/
+   RegistrationParameters* m_registrationParameters_atlas;
    NeosegParameters* m_neosegParameters; 
 
    // Executables 

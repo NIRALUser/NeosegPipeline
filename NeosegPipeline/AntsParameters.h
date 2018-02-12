@@ -2,28 +2,16 @@
 #define DEF_AntsParameters
 
 #include <iostream>
-
+#include <RegistrationParameters.h>
 #include <QString>
 #include <QStringList>
 
-class AntsParameters
+class AntsParameters : public RegistrationParameters
 {
    public:
 
    // Constructor 
    AntsParameters(QString type);
-
-   // Tests
-   bool isSuperior(int value, int min);
-   bool isSuperior(double value, double min);
-
-   bool isSuperiorOrEqual(int value, int min);
-   bool isSuperiorOrEqual(double value, double min);
-
-   bool isBetween(int value, int min, int max);
-   bool isBetween(double value, double min, double max);
-   
-   bool isIn(QString item, QStringList list);
 
    bool checkImageMetric(QString imageMetric);
    QStringList getImageMetricValues(); 
@@ -32,7 +20,7 @@ class AntsParameters
    QString getName(); 
 
    // Number of Registrations
-   void setNumberOfRegistrations(int numberOfRegistrations);
+   /*void setNumberOfRegistrations(int numberOfRegistrations);
    int getNumberOfRegistrations(); 
 
    // Number of Cores 
@@ -42,7 +30,7 @@ class AntsParameters
    // Number of GB
    bool checkNumberOfGB(int numberOfGB);
    void setNumberOfGB(int numberOfGB);
-   int getNumberOfGB(); 
+   int getNumberOfGB(); */
 
    // Image Metric 1 
    void setImageMetric1(QString imageMetric1);
@@ -151,7 +139,7 @@ class AntsParameters
    private:
    
    // Number of Registrations  
-   int m_numberOfRegistrations_default;   
+   /*int m_numberOfRegistrations_default;   
    int m_numberOfRegistrations;   
 
    // Number of Cores Requested 
@@ -162,7 +150,7 @@ class AntsParameters
    // Number Of GB
    int m_numberOfGB_min; 
    int m_numberOfGB_default;
-   int m_numberOfGB;
+   int m_numberOfGB;*/
 
    // Name 
    QString m_name; 

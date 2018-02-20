@@ -577,7 +577,6 @@ void XmlReader::readGeneralParameters(QXmlStreamReader* stream, QString errors)
 
 void XmlReader::readQuicksilverParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters)
 {
-  bool ok;
   QuicksilverParameters * quicksilverParameters = (QuicksilverParameters*)parameters;
   while(!(stream->isEndElement() && stream->name() == "Quicksilver-parameters"))
   {
@@ -603,15 +602,14 @@ void XmlReader::readQuicksilverParameters(QXmlStreamReader* stream, QString erro
          }
          else if (stream->name() == "Container Id")
          {
-            QString container_id_QString = (attributes.value("containerId")).toString(); 
-            int containerId = container_id_QString.toInt(&ok);
-            if(ok && quicksilverParameters->checkContainerId(containerId))
+            QString containerId_QString = (attributes.value("containerId")).toString(); 
+            if(quicksilverParameters->checkContainerId(containerId_QString))
             {
-                quicksilverParameters->setContainerId(containerId);
+                quicksilverParameters->setContainerId(containerId_QString);
             }
-            else if(!container_id_QString.isEmpty())
+            else if(!containerId_QString.isEmpty())
             {
-                errors += " - 'Container Id' is not valid, it must be a positive integer\n";
+                errors += " - 'Container Id' is not valid\n";
             }
         }
       }

@@ -122,9 +122,9 @@ PipelineParameters::PipelineParameters()
    m_computingSystem = m_computingSystem_default;
 
    //m_quicksilverParameters = new QuicksilverParameters();
-   m_antsParameters_DTI = new AntsParameters("DTI"); 
+   m_antsParameters_DTI = new RegistrationParameters("DTI"); 
    //m_antsParameters_atlas = new AntsParameters("atlas");
-   m_registrationParameters_atlas= new RegistrationParameters();
+   m_registrationParameters_atlas= new RegistrationParameters("atlas");
    m_neosegParameters = new NeosegParameters(); 
    m_executablePaths = new ExecutablePaths(); 
    m_libraryPaths = new LibraryPaths(); 
@@ -962,10 +962,11 @@ int PipelineParameters::getNumberOfCores()
 }*/
 
 // ANTS Parameters
-AntsParameters* PipelineParameters::getAntsParametersDTI()
+RegistrationParameters* PipelineParameters::getAntsParametersDTI()
 {
    return m_antsParameters_DTI;
 }
+
 /*AntsParameters* PipelineParameters::getAntsParametersAtlas()
 {
    return m_antsParameters_atlas;

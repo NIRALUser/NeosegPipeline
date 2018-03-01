@@ -179,7 +179,7 @@ int NeosegPipelineTool::launch(int argc, char *argv[], bool gui)
          window.printErrors(m_errors);
       }
 
-      app.exec();
+      app.exec(); 
       thread->wait();
    }
    else

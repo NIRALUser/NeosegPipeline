@@ -17,12 +17,12 @@
 #include <QList>
 
 // My Specific Librairies
-#include "ui_Window.h"
+#include "ui_WindowMultiseg.h"
 #include "ui_About.h"
 #include "ui_neosegParameters.h"
 #include "ui_ABCParameters.h"
-/*#include "ui_AntsParameters.h"
-#include "ui_QuicksilverParameters.h"*/
+#include "ui_antsParameters.h"
+#include "ui_quicksilverParameters.h"
 #include "Pipeline.h"
 #include "XmlReader.h"
 #include "XmlWriter.h"
@@ -31,13 +31,15 @@
 #include "LibraryPaths.h"
 #include "About.h" 
 #include "RegistrationParameters.h"
+/*#include "AntsParameters.h"
+#include "QuicksilverParameters.h"*/
 
 
 #ifndef NEOSEGPIPELINE_VERSION
 #define NEOSEGPIPELINE_VERSION "unknown"
 #endif
 
-class DerivedWindow : public QMainWindow , public Ui_Window
+class DerivedWindow : public QMainWindow , public Ui_WindowMultiseg
 {
    Q_OBJECT // Enable slots and signals
 
@@ -139,7 +141,7 @@ class DerivedWindow : public QMainWindow , public Ui_Window
    void changeUsingMaskAtlas(bool) ;
 
    //Atlas Registration
-   //void registrationSoftwareSelection() ;
+   void registrationSoftwareSelection() ;
 
    //Tissue Segmentation
    void tissueSegmentationSoftwareSelection() ;
@@ -205,17 +207,17 @@ class DerivedWindow : public QMainWindow , public Ui_Window
 private :
    
    // Window
-   Ui_Window ui;
+   Ui_WindowMultiseg ui;
    Ui::ABCParameters *abcParameters ;
    Ui::neosegParameters *neosegParameters ;
-   /*Ui::AntsParameters *antsParameters ;
-   Ui::QuicksilverParameters *quicksilverParameters ;*/
+   Ui::antsParameters *antsParameters ;
+   Ui::quicksilverParameters *quicksilverParameters ;
    // Pipeline 
    Pipeline* m_pipeline;
 
    // Parameters
    PipelineParameters* m_parameters;
-   AntsParameters* m_antsParameters_DTI; 
+   RegistrationParameters* m_antsParameters_DTI; 
    /*AntsParameters* m_antsParameters_atlas; 
    QuicksilverParameters* m_quicksilverParameters;*/
    RegistrationParameters* m_registrationParameters_atlas;
@@ -309,6 +311,7 @@ private :
    bool m_parametersSet;
    bool m_executablesSet;
    bool m_pipelineWriten; 
+   //bool m_softwareRegistration;
    QString m_abcOutputImageFormat;
 
    MainScriptThread* m_thread; 

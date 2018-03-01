@@ -26,7 +26,7 @@ TARGET_LINK_LIBRARIES(${LIBRARY_NAME} ${ITK_LIBRARIES} )
 INSTALL(TARGETS ${LIBRARY_NAME} ARCHIVE DESTINATION bin)
 
 QT4_ADD_RESOURCES(RESOURCES resources.qrc)
-QT4_WRAP_UI(UI_SOURCES Window.ui neosegParameters.ui ABCParameters.ui About.ui)
+QT4_WRAP_UI(UI_SOURCES WindowMultiseg.ui antsParameters.ui quicksilverParameters.ui neosegParameters.ui ABCParameters.ui About.ui)
 QT4_WRAP_CPP(MOC_SOURCES DerivedWindow.h MainScriptThread.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
@@ -42,7 +42,7 @@ SET(NeosegPipeline_SOURCE  main.cxx
                            XmlWriter.cxx
                            Pipeline.cxx
                            PipelineParameters.cxx
-                           AntsParameters.cxx
+                           RegistrationParameters.cxx
                            NeosegParameters.cxx
                            ExecutablePaths.cxx
                            LibraryPaths.cxx
@@ -67,7 +67,7 @@ SET(NeosegPipeline_HEADERS NeosegPipelineTool.h
                            PipelineParameters.h
                            Atlas.h
                            Neo.h
-                           AntsParameters.h
+                           RegistrationParameters.h
                            NeosegParameters.h
                            ExecutablePaths.h
                            LibraryPaths.h

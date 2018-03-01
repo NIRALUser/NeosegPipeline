@@ -3,7 +3,6 @@
 void XmlReader::setPipelineParameters(PipelineParameters* parameters) 
 {
    m_parameters = parameters;
-   //m_quicksilverParameters = m_parameters->getQuicksilverParameters();
    m_antsParameters_DTI = m_parameters->getAntsParametersDTI(); 
    m_registrationParameters_atlas = m_parameters->getRegistrationParameters(); 
    m_neosegParameters = m_parameters->getNeosegParameters();
@@ -32,7 +31,7 @@ QString XmlReader::readParametersConfigurationFile(QString file_path)
    else
    {
       file->open(QIODevice::ReadOnly);
-
+ 
       QXmlStreamReader* stream = new::QXmlStreamReader(file);
 
       QString errors; 
@@ -55,12 +54,13 @@ QString XmlReader::readParametersConfigurationFile(QString file_path)
             }*/
             else if (stream->name() == "ANTS-parameters-DTI")
             {
-               readAntsParameters(stream, errors, m_antsParameters_DTI);
+               readRegistrationParameters(stream, errors, m_antsParameters_DTI);
             }
-            else if (stream->name() == "ANTS-parameters-atlas")
+            else if (stream->name() == "Registration-parameters-atlas")
             {
-                readAntsParameters(stream, errors, m_registrationParameters_atlas);
-                readQuicksilverParameters(stream, errors, m_registrationParameters_atlas);
+                /*readAntsParameters(stream, errors, m_registrationParameters_atlas);
+                readQuicksilverParameters(stream, errors, m_registrationParameters_atlas);*/
+              readRegistrationParameters(stream, errors, m_registrationParameters_atlas);
             }
             else if (stream->name() == "Neoseg-parameters")
             {
@@ -575,7 +575,7 @@ void XmlReader::readGeneralParameters(QXmlStreamReader* stream, QString errors)
    m_parameters->setSelectedAtlases(m_selectedAtlases);
 }
 
-void XmlReader::readQuicksilverParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters)
+/*void XmlReader::readQuicksilverParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters)
 {
   QuicksilverParameters * quicksilverParameters = (QuicksilverParameters*)parameters;
   while(!(stream->isEndElement() && stream->name() == "Quicksilver-parameters"))
@@ -614,13 +614,13 @@ void XmlReader::readQuicksilverParameters(QXmlStreamReader* stream, QString erro
         }
       }
   }
-}
+}*/
  
-void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters)
+void XmlReader::readRegistrationParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* registrationParameters)
 {  
    bool ok; 
-   AntsParameters * antsParameters = (AntsParameters*)parameters;
-   while(!(stream->isEndElement() && stream->name() == "ANTS-parameters-" + antsParameters->getName()))
+   //AntsParameters * antsParameters = (AntsParameters*)parameters;
+   while(!(stream->isEndElement() && stream->name() == "Registration-parameters-" + registrationParameters->getName()))
    {
       stream->readNext();
 
@@ -630,20 +630,20 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
          if (stream->name() == "First-modality")
          {
             QString imageMetric = (attributes.value("metric")).toString(); 
-            if(antsParameters->checkImageMetric(imageMetric))   
+            if(registrationParameters->checkImageMetric(imageMetric))   
             {
-               antsParameters->setImageMetric1(imageMetric);
+               registrationParameters->setImageMetric1(imageMetric);
             }
             else if(!imageMetric.isEmpty())
             {
-               errors += " - 'First-modality-metric' is not valid, it must be one of the following : " + (antsParameters->getImageMetricValues()).join(", ") +"\n";
+               errors += " - 'First-modality-metric' is not valid, it must be one of the following : " + (registrationParameters->getImageMetricValues()).join(", ") +"\n";
             }
 
             QString radius_QString = (attributes.value("radius")).toString(); 
             int radius = radius_QString.toInt(&ok);
-            if(ok && antsParameters->checkRadius1(radius))
+            if(ok && registrationParameters->checkRadius1(radius))
             {
-               antsParameters->setRadius1(radius);
+               registrationParameters->setRadius1(radius);
             }
             else if(!radius_QString.isEmpty())
             {
@@ -652,9 +652,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
       
             QString weight_QString = (attributes.value("weight")).toString();
             double weight = weight_QString.toDouble(&ok); 
-            if(ok && antsParameters->checkWeight1(weight))
+            if(ok && registrationParameters->checkWeight1(weight))
             {
-               antsParameters->setWeight1(weight);
+               registrationParameters->setWeight1(weight);
             }
             else if(!weight_QString.isEmpty())
             {
@@ -665,20 +665,20 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
          else if (stream->name() == "Second-modality")
          {
             QString imageMetric = (attributes.value("metric")).toString(); 
-            if(antsParameters->checkImageMetric(imageMetric))   
+            if(registrationParameters->checkImageMetric(imageMetric))   
             {
-               antsParameters->setImageMetric2(imageMetric);
+               registrationParameters->setImageMetric2(imageMetric);
             }
             else if(!imageMetric.isEmpty())
             {
-               errors += " - 'Second-modality-metric' is not valid, it must be one of the following : " + (antsParameters->getImageMetricValues()).join(", ") +"\n";
+               errors += " - 'Second-modality-metric' is not valid, it must be one of the following : " + (registrationParameters->getImageMetricValues()).join(", ") +"\n";
             }
 
             QString radius_QString = (attributes.value("radius")).toString();
             int radius = radius_QString.toInt(&ok);
-            if(ok && antsParameters->checkRadius2(radius))
+            if(ok && registrationParameters->checkRadius2(radius))
             {
-               antsParameters->setRadius2(radius);
+               registrationParameters->setRadius2(radius);
             }
             else if(!radius_QString.isEmpty())
             {
@@ -687,9 +687,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
 
             QString weight_QString = (attributes.value("weight")).toString();
             double weight = weight_QString.toDouble(&ok); 
-            if(ok && antsParameters->checkWeight2(weight))
+            if(ok && registrationParameters->checkWeight2(weight))
             {
-               antsParameters->setWeight2(weight);
+               registrationParameters->setWeight2(weight);
             }
             else if(!weight_QString.isEmpty())
             {
@@ -701,9 +701,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
          {
             QString iterationsJ_QString = (attributes.value("J")).toString();
             int iterationsJ = iterationsJ_QString.toInt(&ok);
-            if(ok && antsParameters->checkIterationsJ(iterationsJ))  
+            if(ok && registrationParameters->checkIterationsJ(iterationsJ))  
             {
-              antsParameters->setIterationsJ(iterationsJ); 
+              registrationParameters->setIterationsJ(iterationsJ); 
             }
             else if(!iterationsJ_QString.isEmpty())
             {
@@ -712,9 +712,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
 
             QString iterationsK_QString = (attributes.value("K")).toString();
             int iterationsK = iterationsK_QString.toInt(&ok);
-            if(ok && antsParameters->checkIterationsK(iterationsK))
+            if(ok && registrationParameters->checkIterationsK(iterationsK))
             {
-               antsParameters->setIterationsK(iterationsK);
+               registrationParameters->setIterationsK(iterationsK);
             }
             else if(!iterationsK_QString.isEmpty())
             {
@@ -723,9 +723,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
             
             QString iterationsL_QString = (attributes.value("L")).toString();
             int iterationsL = iterationsL_QString.toInt(&ok);
-            if(ok && antsParameters->checkIterationsL(iterationsL))
+            if(ok && registrationParameters->checkIterationsL(iterationsL))
             {
-               antsParameters->setIterationsL(iterationsL);            
+               registrationParameters->setIterationsL(iterationsL);            
             }
             else if(!iterationsL_QString.isEmpty()) 
             {
@@ -736,20 +736,20 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
          else if (stream->name() == "Transformation")
          {
             QString type = (attributes.value("type")).toString(); 
-            if(antsParameters->checkTransformationType(type))
+            if(registrationParameters->checkTransformationType(type))
             {             
-               antsParameters->setTransformationType(type);        
+               registrationParameters->setTransformationType(type);        
             }
             else if(!type.isEmpty())
             {
-               errors += " - 'Transformation-type' is not valid, it must be one of the following : " + (antsParameters->getTransformationTypeValues()).join(", ") + "\n";
+               errors += " - 'Transformation-type' is not valid, it must be one of the following : " + (registrationParameters->getTransformationTypeValues()).join(", ") + "\n";
             }
 
             QString gradientStepLength_QString = (attributes.value("gradient-step-length")).toString(); 
             double gradientStepLength = gradientStepLength_QString.toDouble(&ok);
-            if(ok && antsParameters->checkGradientStepLength(gradientStepLength))
+            if(ok && registrationParameters->checkGradientStepLength(gradientStepLength))
             {
-               antsParameters->setGradientStepLength(gradientStepLength);
+               registrationParameters->setGradientStepLength(gradientStepLength);
             }
             else if(!gradientStepLength_QString.isEmpty())
             {
@@ -758,9 +758,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
 
             QString numberOfTimeSteps_QString = (attributes.value("number-of-time-steps")).toString();
             double numberOfTimeSteps = numberOfTimeSteps_QString.toDouble(&ok);
-            if(ok && antsParameters->checkNumberOfTimeSteps(numberOfTimeSteps))
+            if(ok && registrationParameters->checkNumberOfTimeSteps(numberOfTimeSteps))
             {
-                antsParameters->setNumberOfTimeSteps(numberOfTimeSteps); 
+                registrationParameters->setNumberOfTimeSteps(numberOfTimeSteps); 
             }
             else if(!numberOfTimeSteps_QString.isEmpty())
             {
@@ -769,9 +769,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
 
             QString deltaTime_QString = (attributes.value("delta-time")).toString();
             double deltaTime = deltaTime_QString.toDouble(&ok);
-            if(ok && antsParameters->checkDeltaTime(deltaTime))
+            if(ok && registrationParameters->checkDeltaTime(deltaTime))
             {
-               antsParameters->setDeltaTime(deltaTime);      
+               registrationParameters->setDeltaTime(deltaTime);      
             }
             else if(!deltaTime_QString.isEmpty())
             {
@@ -782,20 +782,20 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
          else if (stream->name() == "Regularization")
          { 
             QString type = (attributes.value("type")).toString();  
-            if(antsParameters->checkRegularizationType(type)) 
+            if(registrationParameters->checkRegularizationType(type)) 
             {              
-               antsParameters->setRegularizationType(type);
+               registrationParameters->setRegularizationType(type);
             }    
             else if(!type.isEmpty())
             {
-               errors += " - 'Regularization-type' is not valid, it must be one of the following : " + (antsParameters->getRegularizationTypeValues()).join(", ") + "\n";
+               errors += " - 'Regularization-type' is not valid, it must be one of the following : " + (registrationParameters->getRegularizationTypeValues()).join(", ") + "\n";
             }  
   
             QString gradientFieldSigma_QString = (attributes.value("gradient-field-sigma")).toString();
             double gradientFieldSigma = gradientFieldSigma_QString.toDouble(&ok);
-            if(ok && antsParameters->checkGradientFieldSigma(gradientFieldSigma))
+            if(ok && registrationParameters->checkGradientFieldSigma(gradientFieldSigma))
             {
-               antsParameters->setGradientFieldSigma(gradientFieldSigma);
+               registrationParameters->setGradientFieldSigma(gradientFieldSigma);
             }
             else if(!gradientFieldSigma_QString.isEmpty())
             {
@@ -804,9 +804,9 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
 
             QString deformationFieldSigma_QString = (attributes.value("deformation-field-sigma")).toString();
             double deformationFieldSigma = deformationFieldSigma_QString.toDouble(&ok);
-            if(ok && antsParameters->checkDeformationFieldSigma(deformationFieldSigma))
+            if(ok && registrationParameters->checkDeformationFieldSigma(deformationFieldSigma))
             {
-               antsParameters->setDeformationFieldSigma(deformationFieldSigma);             
+               registrationParameters->setDeformationFieldSigma(deformationFieldSigma);             
             }
             else if(!deformationFieldSigma_QString.isEmpty())
             {
@@ -819,7 +819,7 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
             bool brainMask = ((attributes.value("brain-mask")).toString()).toInt(&ok);
             if(ok && isBoolean(brainMask))
             {
-               antsParameters->setUsingMask(brainMask);
+               registrationParameters->setUsingMask(brainMask);
             }
             else 
             {
@@ -828,7 +828,7 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
             bool smoothedBrainMask = ((attributes.value("smoothed-brain-mask")).toString()).toInt(&ok);
             if(ok && isBoolean(smoothedBrainMask))
             {
-               antsParameters->setUsingSmoothedMask(smoothedBrainMask);
+               registrationParameters->setUsingSmoothedMask(smoothedBrainMask);
             }
             else 
             {
@@ -841,7 +841,7 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
             int numberOfRegistrations = numberOfRegistrations_QString.toInt(&ok);
             if(ok) 
             {              
-               antsParameters->setNumberOfRegistrations(numberOfRegistrations);
+               registrationParameters->setNumberOfRegistrations(numberOfRegistrations);
             }    
             else if(!numberOfRegistrations_QString.isEmpty())
             {
@@ -852,7 +852,7 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
             int numberOfCores = numberOfCores_QString.toInt(&ok);
             if(ok) 
             {              
-               antsParameters->setNumberOfCores(numberOfCores);
+               registrationParameters->setNumberOfCores(numberOfCores);
             }    
             else if(!numberOfCores_QString.isEmpty())
             {
@@ -861,14 +861,39 @@ void XmlReader::readAntsParameters(QXmlStreamReader* stream, QString errors, Reg
 
             QString numberOfGB_QString = (attributes.value("Number-of-GB")).toString();  
             int numberOfGB = numberOfGB_QString.toInt(&ok);
-            if(ok && antsParameters->checkNumberOfGB(numberOfGB)) 
+            if(ok && registrationParameters->checkNumberOfGB(numberOfGB)) 
             {              
-               antsParameters->setNumberOfGB(numberOfGB);
+               registrationParameters->setNumberOfGB(numberOfGB);
             }    
             else if(!numberOfGB_QString.isEmpty())
             {
                errors += " - 'Number-of-GB' is not valid, it must be a positive integer\n";
             }  
+         }
+         else if (stream->name() == "Path to registration script")
+         {
+            QString path_to_registrationscript_path = (attributes.value("path")).toString();
+            if(registrationParameters->checkRegistrationScriptPath(path_to_registrationscript_path))
+            {                  
+                 registrationParameters->setRegistrationScriptPath(path_to_registrationscript_path);
+            }
+            else
+            {
+                 errors += " - 'Path to registration script' is not valid, the file does not exist\n";
+            }
+            
+         }
+         else if (stream->name() == "Container Id")
+         {
+            QString containerId_QString = (attributes.value("containerId")).toString(); 
+            if(registrationParameters->checkContainerId(containerId_QString))
+            {
+                registrationParameters->setContainerId(containerId_QString);
+            }
+            else if(!containerId_QString.isEmpty())
+            {
+                errors += " - 'Container Id' is not valid\n";
+            }
          }
 
       }

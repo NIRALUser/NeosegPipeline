@@ -45,7 +45,7 @@ void XmlWriter::writeElement(QXmlStreamWriter* stream, QString tag, QString name
 
 void XmlWriter::writeElement(QXmlStreamWriter* stream, QString tag, QString name1, QString value1, QString name2, QString value2, QString name3, QString value3, QString name4, QString value4, QString name5, QString value5)
 {
-   stream->writeStartElement(tag);
+   stream->writeStartElement(tag); 
    stream->writeAttribute(name1, value1);
    stream->writeAttribute(name2, value2);
    stream->writeAttribute(name3, value3);
@@ -139,38 +139,41 @@ void XmlWriter::writeGeneralParameters(QXmlStreamWriter* stream)
    stream->writeEndElement(); // GENERAL-PARAMETERS
 }
 
-void XmlWriter::writeAntsParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters)
+void XmlWriter::writeRegistrationParameters(QXmlStreamWriter* stream, RegistrationParameters* registrationParameters)
 {
-  AntsParameters * antsParameters = (AntsParameters*)parameters;
+  //AntsParameters * antsParameters = (AntsParameters*)parameters;
 
-   stream->writeStartElement("ANTS-parameters-" + antsParameters->getName());
+   stream->writeStartElement("Registration-parameters-" + registrationParameters->getName());
 
-   writeElement(stream, "First-modality", "metric", antsParameters->getImageMetric1(), "weight", QString::number(antsParameters->getWeight1()), "radius", QString::number(antsParameters->getRadius1()));
-   writeElement(stream, "Second-modality", "metric", antsParameters->getImageMetric2(), "weight", QString::number(antsParameters->getWeight2()), "radius", QString::number(antsParameters->getRadius2()));
+   writeElement(stream, "First-modality", "metric", registrationParameters->getImageMetric1(), "weight", QString::number(registrationParameters->getWeight1()), "radius", QString::number(registrationParameters->getRadius1()));
+   writeElement(stream, "Second-modality", "metric", registrationParameters->getImageMetric2(), "weight", QString::number(registrationParameters->getWeight2()), "radius", QString::number(registrationParameters->getRadius2()));
 
-   writeElement(stream, "Iterations", "J",  QString::number(antsParameters->getIterationsJ()), "K",  QString::number(antsParameters->getIterationsK()), "L",  QString::number(antsParameters->getIterationsL()));
+   writeElement(stream, "Iterations", "J",  QString::number(registrationParameters->getIterationsJ()), "K",  QString::number(registrationParameters->getIterationsK()), "L",  QString::number(registrationParameters->getIterationsL()));
 
-   writeElement(stream, "Transformation", "type", antsParameters->getTransformationType(), "gradient-step-length", QString::number(antsParameters->getGradientStepLength()), "number-of-time-steps", QString::number(antsParameters->getNumberOfTimeSteps()), "delta-time", QString::number(antsParameters->getDeltaTime()));
+   writeElement(stream, "Transformation", "type", registrationParameters->getTransformationType(), "gradient-step-length", QString::number(registrationParameters->getGradientStepLength()), "number-of-time-steps", QString::number(registrationParameters->getNumberOfTimeSteps()), "delta-time", QString::number(registrationParameters->getDeltaTime()));
 
-   writeElement(stream, "Regularization", "type", antsParameters->getRegularizationType(), "gradient-field-sigma", QString::number(antsParameters->getGradientFieldSigma()), "deformation-field-sigma", QString::number(antsParameters->getDeformationFieldSigma()));
+   writeElement(stream, "Regularization", "type", registrationParameters->getRegularizationType(), "gradient-field-sigma", QString::number(registrationParameters->getGradientFieldSigma()), "deformation-field-sigma", QString::number(registrationParameters->getDeformationFieldSigma()));
 
-   writeElement(stream, "Mask", "brain-mask", QString::number(antsParameters->getUsingMask()), "smoothed-brain-mask", QString::number(antsParameters->getUsingSmoothedMask()));
-   writeElement(stream, "Resources", "Number-of-Registrations", QString::number(antsParameters->getNumberOfRegistrations()), "Number-of-Cores", QString::number(antsParameters->getNumberOfCores()), "Number-of-GB", QString::number(antsParameters->getNumberOfGB()));
+   writeElement(stream, "Mask", "brain-mask", QString::number(registrationParameters->getUsingMask()), "smoothed-brain-mask", QString::number(registrationParameters->getUsingSmoothedMask()));
+   writeElement(stream, "Resources", "Number-of-Registrations", QString::number(registrationParameters->getNumberOfRegistrations()), "Number-of-Cores", QString::number(registrationParameters->getNumberOfCores()), "Number-of-GB", QString::number(registrationParameters->getNumberOfGB()));
+
+   writeElement(stream, "Path to registration script", "path", registrationParameters->getRegistrationScriptPath());
+   writeElement(stream, "Container Id", "number", registrationParameters->getContainerId());
 
    stream->writeEndElement();
 }
 
-void XmlWriter::writeQuicksilverParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters)
+/*void XmlWriter::writeQuicksilverParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters)
 {
   QuicksilverParameters * quicksilverParameters = (QuicksilverParameters*)parameters;
 
    stream->writeStartElement("Quicksilver-parameters-");
 
    writeElement(stream, "Path to registration script", "path", quicksilverParameters->getRegistrationScriptPath());
-   writeElement(stream, "Container Id", "number", QString::number(quicksilverParameters->getContainerId()));
+   writeElement(stream, "Container Id", "number", quicksilverParameters->getContainerId());
 
    stream->writeEndElement();
-}
+}*/
 
 
 void XmlWriter::writeNeosegParameters(QXmlStreamWriter* stream)
@@ -211,9 +214,8 @@ void XmlWriter::writeParametersConfiguration(QString file_path)
        stream->writeStartElement("Parameters");
 
        writeGeneralParameters(stream);
-       writeAntsParameters(stream, m_parameters->getAntsParametersDTI());
-       writeAntsParameters(stream, m_parameters->getRegistrationParameters());
-       writeQuicksilverParameters(stream, m_parameters->getRegistrationParameters());
+       writeRegistrationParameters(stream, m_parameters->getAntsParametersDTI());
+       writeRegistrationParameters(stream, m_parameters->getRegistrationParameters());
 
        writeNeosegParameters(stream);
 
@@ -227,9 +229,8 @@ void XmlWriter::writeParametersConfiguration(QString file_path)
        stream->writeStartElement("Parameters");
 
        writeGeneralParameters(stream);
-       writeAntsParameters(stream, m_parameters->getAntsParametersDTI());
-       writeAntsParameters(stream, m_parameters->getRegistrationParameters());
-       writeQuicksilverParameters(stream, m_parameters->getRegistrationParameters());
+       writeRegistrationParameters(stream, m_parameters->getAntsParametersDTI());
+       writeRegistrationParameters(stream, m_parameters->getRegistrationParameters());
        
        stream->writeStartElement("ABC-parameters");
 

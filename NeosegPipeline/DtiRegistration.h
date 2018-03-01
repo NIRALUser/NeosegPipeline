@@ -14,7 +14,7 @@
 // My Specific Librairies
 #include "Script.h"
 #include "Neo.h"
-#include "AntsParameters.h"
+#include "RegistrationParameters.h"
 #include "ExecutablePaths.h"
 
 
@@ -26,7 +26,7 @@ class DtiRegistration : public Script
    DtiRegistration(QString module); 
 
    // Set 
-   void setAntsParameters(AntsParameters* antsParameters);
+   void setRegistrationParameters(RegistrationParameters* registrationParameters);
 
    // Implementing Scripts 
    void initializeScript();
@@ -53,7 +53,7 @@ class DtiRegistration : public Script
    QString m_registering_suffix;
 
    // Ants Parameters 
-   AntsParameters* m_antsParameters; 
+   RegistrationParameters* m_registrationParameters; 
 
    // Output 
    Neo      m_registeredNeo;

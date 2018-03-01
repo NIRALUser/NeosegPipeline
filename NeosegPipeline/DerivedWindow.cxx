@@ -1,7 +1,7 @@
 #include "DerivedWindow.h"
 #include "CountNumberOfLabels.h"
 
-DerivedWindow::DerivedWindow() : Ui_Window()
+DerivedWindow::DerivedWindow() : Ui_WindowMultiseg()
 {
    setupUi(this);
    setAcceptDrops(true);
@@ -13,12 +13,12 @@ DerivedWindow::DerivedWindow() : Ui_Window()
    this->radioNeoseg->setChecked( true ) ;
    this->radioABC->setChecked( false ) ;
 
-  /* antsParameters = new Ui::antsParameters ;
-   antsParameters->setupUi( this->softwareFrame ) ;
+   antsParameters = new Ui::antsParameters ;
+   antsParameters->setupUi( this->registrationsoftwareFrame ) ; 
    quicksilverParameters = new Ui::quicksilverParameters ;
-   quicksilverParameters->setupUi(this->softwareFrame) ;
+   quicksilverParameters->setupUi(this->registrationsoftwareFrame) ;
    this->radioAnts->setChecked( true ) ;
-   this->radioQuicksilver->setChecked( false ) ;*/
+   this->radioQuicksilver->setChecked( false ) ;
 
    m_parametersSet = false; 
    m_executablesSet = false; 
@@ -158,7 +158,7 @@ DerivedWindow::DerivedWindow() : Ui_Window()
    connect(usingMask_DTI_checkBox, SIGNAL(clicked(bool)), this, SLOT( changeUsingMaskDTI(bool) ) ) ;
 
    // Atlas Registration //
-   connect(usingMask_atlas_checkBox, SIGNAL(clicked(bool)), this, SLOT( changeUsingMaskAtlas(bool) ) ) ;
+   connect(this->antsParameters->usingMask_atlas_checkBox, SIGNAL(clicked(bool)), this, SLOT( changeUsingMaskAtlas(bool) ) ) ;
 
    // Computing System
    connect(computingSystem_comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(changeComputingSystem(int))); 
@@ -180,8 +180,8 @@ DerivedWindow::DerivedWindow() : Ui_Window()
    connect(displayResults_button, SIGNAL(clicked()), this, SLOT(displayResults())); 
    
    // Display ANTS options or Quicksilver options in "Atlas Registration" tab
-   /*connect( radioAnts, SIGNAL(clicked()), this, SLOT(registrationSoftwareSelection()) );
-   connect( radioQuicksilver, SIGNAL(clicked()), this, SLOT(registrationSoftwareSelection()) );*/
+   connect( radioAnts, SIGNAL(clicked()), this, SLOT(registrationSoftwareSelection()) );
+   connect( radioQuicksilver, SIGNAL(clicked()), this, SLOT(registrationSoftwareSelection()) );
 
    // Display ABC options or neoseg options in "Tissue Segmentation" tab
    connect( radioNeoseg, SIGNAL(clicked()), this, SLOT(tissueSegmentationSoftwareSelection()) ) ;
@@ -213,6 +213,9 @@ DerivedWindow::DerivedWindow() : Ui_Window()
    // We run the function "tissueSegmentationSoftwareSelection" once to initialize the display.
    radioABC->setChecked(true);
    tissueSegmentationSoftwareSelection() ;
+
+   radioAnts->setChecked(true);
+   registrationSoftwareSelection() ;
 }
 
 
@@ -349,19 +352,21 @@ void DerivedWindow::tissueSegmentationSoftwareSelection()
     }
 }
 
-/*void DerivedWindow::registrationSoftwareSelection()
+void DerivedWindow::registrationSoftwareSelection()
 {
     if(this->radioAnts->isChecked() )
     {
-        antsParameters->frame->show() ;
-        quicksilverParameters->frame->hide() ;
+        antsParameters->registration_frame->show() ;
+        quicksilverParameters->registration_frame->hide() ;
+        m_registrationParameters_atlas->setUsingAnts();
     }
     else
     {
-        antsParameters->frame->hide() ;
-        quicksilverParameters->frame->hide() ;
+        antsParameters->registration_frame->hide() ;
+        quicksilverParameters->registration_frame->show() ;
+        m_registrationParameters_atlas->setUsingQuicksilver();
     }
-}*/
+}
 
 void DerivedWindow::dragEnterEvent(QDragEnterEvent *event)
 {
@@ -852,12 +857,12 @@ void DerivedWindow::changeUsingMaskAtlas(bool checked)
 {
   if( !checked )
   {
-    usingSmoothedMask_atlas_checkBox->setChecked( Qt::Unchecked ) ;
-    usingSmoothedMask_atlas_checkBox->setDisabled( true ) ;
+    this->antsParameters->usingSmoothedMask_atlas_checkBox->setChecked( Qt::Unchecked ) ;
+    this->antsParameters->usingSmoothedMask_atlas_checkBox->setDisabled( true ) ;
   }
   else
   {
-    usingSmoothedMask_atlas_checkBox->setDisabled( false ) ;
+    this->antsParameters->usingSmoothedMask_atlas_checkBox->setDisabled( false ) ;
   }
 }
 
@@ -1171,52 +1176,59 @@ void DerivedWindow::initializeXMLParameters()
      usingSmoothedMask_DTI_checkBox->setDisabled( true ) ;
    }
 
+   // Quicksilver
+
+   //QuicksilverParameters* m_quicksilverParameters=(QuicksilverParameters*) m_registrationParameters_atlas;
+
+   quicksilverParameters->registrationscript_lineEdit->setText(m_registrationParameters_atlas->getRegistrationScriptPath());
+   quicksilverParameters->containerId_lineEdit->setText(m_registrationParameters_atlas->getContainerId());
+
    // ANTS
-   AntsParameters* m_antsParameters_atlas=(AntsParameters*) m_registrationParameters_atlas;
+   //AntsParameters* m_antsParameters_atlas=(AntsParameters*) m_registrationParameters_atlas;
 
-   numberOfRegistrations_spinBox->setValue(m_antsParameters_atlas->getNumberOfRegistrations());
-   numberOfCores_spinBox->setValue(m_antsParameters_atlas->getNumberOfCores());
-   numberOfGB_spinBox->setValue(m_antsParameters_atlas->getNumberOfGB());
+   numberOfRegistrations_spinBox->setValue(m_registrationParameters_atlas->getNumberOfRegistrations());
+   numberOfCores_spinBox->setValue(m_registrationParameters_atlas->getNumberOfCores());
+   numberOfGB_spinBox->setValue(m_registrationParameters_atlas->getNumberOfGB());
 
-   imageMetric1_atlas_comboBox->clear() ;
-   imageMetric1_atlas_comboBox->insertItems(0, m_antsParameters_atlas->getImageMetricValues()); 
-   imageMetric1_atlas_comboBox->setCurrentIndex(m_antsParameters_atlas->getImageMetric1Index()); 
-   weight1_atlas_spinBox->setValue(m_antsParameters_atlas->getWeight1());
-   radius1_atlas_spinBox->setValue(m_antsParameters_atlas->getRadius1());
+   antsParameters->imageMetric1_atlas_comboBox->clear() ;
+   antsParameters->imageMetric1_atlas_comboBox->insertItems(0, m_registrationParameters_atlas->getImageMetricValues()); 
+   antsParameters->imageMetric1_atlas_comboBox->setCurrentIndex(m_registrationParameters_atlas->getImageMetric1Index()); 
+   antsParameters->weight1_atlas_spinBox->setValue(m_registrationParameters_atlas->getWeight1());
+   antsParameters->radius1_atlas_spinBox->setValue(m_registrationParameters_atlas->getRadius1());
 
-   imageMetric2_atlas_comboBox->clear() ;
-   imageMetric2_atlas_comboBox->insertItems(0, m_antsParameters_atlas->getImageMetricValues()); 
-   imageMetric2_atlas_comboBox->setCurrentIndex(m_antsParameters_atlas->getImageMetric2Index()); 
-   weight2_atlas_spinBox->setValue(m_antsParameters_atlas->getWeight2());
-   radius2_atlas_spinBox->setValue(m_antsParameters_atlas->getRadius2());
+   antsParameters->imageMetric2_atlas_comboBox->clear() ;
+   antsParameters->imageMetric2_atlas_comboBox->insertItems(0, m_registrationParameters_atlas->getImageMetricValues()); 
+   antsParameters->imageMetric2_atlas_comboBox->setCurrentIndex(m_registrationParameters_atlas->getImageMetric2Index()); 
+   antsParameters->weight2_atlas_spinBox->setValue(m_registrationParameters_atlas->getWeight2());
+   antsParameters->radius2_atlas_spinBox->setValue(m_registrationParameters_atlas->getRadius2());
    
-   iterationsJ_atlas_spinBox->setValue(m_antsParameters_atlas->getIterationsJ());   
-   iterationsK_atlas_spinBox->setValue(m_antsParameters_atlas->getIterationsK());
-   iterationsL_atlas_spinBox->setValue(m_antsParameters_atlas->getIterationsL());
+   antsParameters->iterationsJ_atlas_spinBox->setValue(m_registrationParameters_atlas->getIterationsJ());   
+   antsParameters->iterationsK_atlas_spinBox->setValue(m_registrationParameters_atlas->getIterationsK());
+   antsParameters->iterationsL_atlas_spinBox->setValue(m_registrationParameters_atlas->getIterationsL());
 
-   transformationType_atlas_comboBox->clear() ;
-   transformationType_atlas_comboBox->insertItems(0, m_antsParameters_atlas->getTransformationTypeValues());
-   transformationType_atlas_comboBox->setCurrentIndex(m_antsParameters_atlas->getTransformationTypeIndex());
-   gradientStepLength_atlas_spinBox->setValue(m_antsParameters_atlas->getGradientStepLength());
-   numberOfTimeSteps_atlas_spinBox->setValue(m_antsParameters_atlas->getNumberOfTimeSteps());
-   deltaTime_atlas_spinBox->setValue(m_antsParameters_atlas->getDeltaTime());
+   antsParameters->transformationType_atlas_comboBox->clear() ;
+   antsParameters->transformationType_atlas_comboBox->insertItems(0, m_registrationParameters_atlas->getTransformationTypeValues());
+   antsParameters->transformationType_atlas_comboBox->setCurrentIndex(m_registrationParameters_atlas->getTransformationTypeIndex());
+   antsParameters->gradientStepLength_atlas_spinBox->setValue(m_registrationParameters_atlas->getGradientStepLength());
+   antsParameters->numberOfTimeSteps_atlas_spinBox->setValue(m_registrationParameters_atlas->getNumberOfTimeSteps());
+   antsParameters->deltaTime_atlas_spinBox->setValue(m_registrationParameters_atlas->getDeltaTime());
 
-   regularizationType_atlas_comboBox->clear() ;
-   regularizationType_atlas_comboBox->insertItems(0, m_antsParameters_atlas->getRegularizationTypeValues());
-   regularizationType_atlas_comboBox->setCurrentIndex(m_antsParameters_atlas->getRegularizationTypeIndex());
-   gradientFieldSigma_atlas_spinBox->setValue(m_antsParameters_atlas->getGradientFieldSigma());
-   deformationFieldSigma_atlas_spinBox->setValue(m_antsParameters_atlas->getDeformationFieldSigma());
+   antsParameters->regularizationType_atlas_comboBox->clear() ;
+   antsParameters->regularizationType_atlas_comboBox->insertItems(0, m_registrationParameters_atlas->getRegularizationTypeValues());
+   antsParameters->regularizationType_atlas_comboBox->setCurrentIndex(m_registrationParameters_atlas->getRegularizationTypeIndex());
+   antsParameters->gradientFieldSigma_atlas_spinBox->setValue(m_registrationParameters_atlas->getGradientFieldSigma());
+   antsParameters->deformationFieldSigma_atlas_spinBox->setValue(m_registrationParameters_atlas->getDeformationFieldSigma());
 
-   usingMask_atlas_checkBox->setChecked(m_antsParameters_atlas->getUsingMask());
-   if( m_antsParameters_atlas->getUsingMask() )
+   antsParameters->usingMask_atlas_checkBox->setChecked(m_registrationParameters_atlas->getUsingMask());
+   if( m_registrationParameters_atlas->getUsingMask() )
    {
-     usingSmoothedMask_atlas_checkBox->setDisabled( false ) ;
-     usingSmoothedMask_atlas_checkBox->setChecked( m_antsParameters_atlas->getUsingSmoothedMask() ) ;
+     antsParameters->usingSmoothedMask_atlas_checkBox->setDisabled( false ) ;
+     antsParameters->usingSmoothedMask_atlas_checkBox->setChecked( m_registrationParameters_atlas->getUsingSmoothedMask() ) ;
    }
    else
    {
-     usingSmoothedMask_atlas_checkBox->setChecked( false ) ;
-     usingSmoothedMask_atlas_checkBox->setDisabled( true ) ;
+     antsParameters->usingSmoothedMask_atlas_checkBox->setChecked( false ) ;
+     antsParameters->usingSmoothedMask_atlas_checkBox->setDisabled( true ) ;
    }
 
    //Neoseg
@@ -1413,7 +1425,7 @@ void DerivedWindow::setParameters()
    m_parameters->setComputingSystem(computingSystem_comboBox->currentText());
 
    // ANTS parameters for DTI Registration
-   AntsParameters* m_antsParameters_atlas=(AntsParameters*) m_registrationParameters_atlas;
+   //AntsParameters* m_antsParameters_atlas=(AntsParameters*) m_registrationParameters_atlas;
 
    m_antsParameters_DTI->setImageMetric1(imageMetric1_DTI_comboBox->currentText());
    m_antsParameters_DTI->setWeight1(weight1_DTI_spinBox->value());
@@ -1439,34 +1451,37 @@ void DerivedWindow::setParameters()
    m_antsParameters_DTI->setUsingMask(usingMask_DTI_checkBox->isChecked());
    m_antsParameters_DTI->setUsingSmoothedMask( usingSmoothedMask_DTI_checkBox->isChecked() ) ;
 
-   //ANTS parameters for Atlas Population Registration 
-   m_antsParameters_atlas->setNumberOfRegistrations(numberOfRegistrations_spinBox->value());
-   m_antsParameters_atlas->setNumberOfCores(numberOfCores_spinBox->value());
-   m_antsParameters_atlas->setNumberOfGB(numberOfGB_spinBox->value());
+   //Registration parameters for Atlas Population Registration 
+   m_registrationParameters_atlas->setRegistrationScriptPath(this->quicksilverParameters->registrationscript_lineEdit->text());
+   m_registrationParameters_atlas->setContainerId(this->quicksilverParameters->containerId_lineEdit->text());
 
-   m_antsParameters_atlas->setImageMetric1(imageMetric1_atlas_comboBox->currentText());
-   m_antsParameters_atlas->setWeight1(weight1_atlas_spinBox->value());
-   m_antsParameters_atlas->setRadius1(radius1_atlas_spinBox->value());
+   m_registrationParameters_atlas->setNumberOfRegistrations(numberOfRegistrations_spinBox->value());
+   m_registrationParameters_atlas->setNumberOfCores(numberOfCores_spinBox->value());
+   m_registrationParameters_atlas->setNumberOfGB(numberOfGB_spinBox->value());
 
-   m_antsParameters_atlas->setImageMetric2(imageMetric2_atlas_comboBox->currentText());
-   m_antsParameters_atlas->setWeight2(weight2_atlas_spinBox->value());
-   m_antsParameters_atlas->setRadius2(radius2_atlas_spinBox->value());
+   m_registrationParameters_atlas->setImageMetric1(this->antsParameters->imageMetric1_atlas_comboBox->currentText());
+   m_registrationParameters_atlas->setWeight1(this->antsParameters->weight1_atlas_spinBox->value());
+   m_registrationParameters_atlas->setRadius1(this->antsParameters->radius1_atlas_spinBox->value());
 
-   m_antsParameters_atlas->setIterationsJ(iterationsJ_atlas_spinBox->value());
-   m_antsParameters_atlas->setIterationsK(iterationsK_atlas_spinBox->value());
-   m_antsParameters_atlas->setIterationsL(iterationsL_atlas_spinBox->value());
+   m_registrationParameters_atlas->setImageMetric2(this->antsParameters->imageMetric2_atlas_comboBox->currentText());
+   m_registrationParameters_atlas->setWeight2(this->antsParameters->weight2_atlas_spinBox->value());
+   m_registrationParameters_atlas->setRadius2(this->antsParameters->radius2_atlas_spinBox->value());
 
-   m_antsParameters_atlas->setTransformationType(transformationType_atlas_comboBox->currentText());
-   m_antsParameters_atlas->setGradientStepLength(gradientStepLength_atlas_spinBox->value());
-   m_antsParameters_atlas->setNumberOfTimeSteps(numberOfTimeSteps_atlas_spinBox->value());
-   m_antsParameters_atlas->setDeltaTime(deltaTime_atlas_spinBox->value());
+   m_registrationParameters_atlas->setIterationsJ(this->antsParameters->iterationsJ_atlas_spinBox->value());
+   m_registrationParameters_atlas->setIterationsK(this->antsParameters->iterationsK_atlas_spinBox->value());
+   m_registrationParameters_atlas->setIterationsL(this->antsParameters->iterationsL_atlas_spinBox->value());
 
-   m_antsParameters_atlas->setRegularizationType(regularizationType_atlas_comboBox->currentText());  
-   m_antsParameters_atlas->setGradientFieldSigma(gradientFieldSigma_atlas_spinBox->value());
-   m_antsParameters_atlas->setDeformationFieldSigma(deformationFieldSigma_atlas_spinBox->value());
+   m_registrationParameters_atlas->setTransformationType(this->antsParameters->transformationType_atlas_comboBox->currentText());
+   m_registrationParameters_atlas->setGradientStepLength(this->antsParameters->gradientStepLength_atlas_spinBox->value());
+   m_registrationParameters_atlas->setNumberOfTimeSteps(this->antsParameters->numberOfTimeSteps_atlas_spinBox->value());
+   m_registrationParameters_atlas->setDeltaTime(this->antsParameters->deltaTime_atlas_spinBox->value());
 
-   m_antsParameters_atlas->setUsingMask(usingMask_atlas_checkBox->isChecked());
-   m_antsParameters_atlas->setUsingSmoothedMask( usingSmoothedMask_atlas_checkBox->isChecked() ) ;
+   m_registrationParameters_atlas->setRegularizationType(this->antsParameters->regularizationType_atlas_comboBox->currentText());  
+   m_registrationParameters_atlas->setGradientFieldSigma(this->antsParameters->gradientFieldSigma_atlas_spinBox->value());
+   m_registrationParameters_atlas->setDeformationFieldSigma(this->antsParameters->deformationFieldSigma_atlas_spinBox->value());
+
+   m_registrationParameters_atlas->setUsingMask(this->antsParameters->usingMask_atlas_checkBox->isChecked());
+   m_registrationParameters_atlas->setUsingSmoothedMask(this->antsParameters->usingSmoothedMask_atlas_checkBox->isChecked() ) ;
 
    // Neoseg parameters 
    m_neosegParameters->setReferenceImage(referenceModality_comboBox->currentText()); 
@@ -1578,7 +1593,7 @@ void DerivedWindow::setParametersWidgetEnabled(bool enabled)
 
    // Atlas Registration
    numberOfRegistrations_groupBox->setEnabled(enabled);
-   ANTSParameters_groupBox->setEnabled(enabled);
+   AntsParameters_groupBox->setEnabled(enabled);
 
    // Atlas Generation
    computingCCWeights_groupBox->setEnabled(enabled);

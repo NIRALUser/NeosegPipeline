@@ -6,7 +6,7 @@ ExistingAtlasRegistration::ExistingAtlasRegistration(QString module) : Script(mo
 }
 
 // SET // 
-void ExistingAtlasRegistration::setAntsParameters(AntsParameters* parameters) 
+void ExistingAtlasRegistration::setRegistrationParameters(RegistrationParameters* parameters) 
 {
    m_parameters = parameters;
 }

@@ -15,8 +15,8 @@
 #include "Neo.h"
 #include "Atlas.h"
 #include "RegistrationParameters.h" 
-#include "AntsParameters.h" 
-#include "QuicksilverParameters.h" 
+/*#include "AntsParameters.h" 
+#include "QuicksilverParameters.h" */
 #include "NeosegParameters.h" 
 #include "ExecutablePaths.h" 
 #include "LibraryPaths.h" 
@@ -235,8 +235,8 @@ class PipelineParameters
    //Quicksilver Parameters
    //QuicksilverParameters* getQuicksilverParameters();
 
-   // ANTS Parameters 
-   AntsParameters* getAntsParametersDTI();  
+   // ANTS DTI Parameters 
+   RegistrationParameters* getAntsParametersDTI();  
    //AntsParameters* getAntsParametersAtlas();  
 
    // Registration Parameters
@@ -520,11 +520,12 @@ class PipelineParameters
    //QuicksilverParameters* m_quicksilverParameters;
    
    // ANTS Parameters 
-   AntsParameters* m_antsParameters_DTI;
-   //AntsParameters* m_antsParameters_atlas;
+   /*AntsParameters* m_antsParameters_DTI;
+   AntsParameters* m_antsParameters_atlas;*/
 
    // Registration Parameters
    RegistrationParameters* m_registrationParameters_atlas;
+   RegistrationParameters* m_antsParameters_DTI;
 
    // Neoseg Parameters
    NeosegParameters* m_neosegParameters;

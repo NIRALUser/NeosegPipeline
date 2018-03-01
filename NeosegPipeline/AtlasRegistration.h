@@ -19,8 +19,8 @@
 #include "Atlas.h"
 #include "Neo.h"
 #include "RegistrationParameters.h"
-#include "AntsParameters.h"
-#include "QuicksilverParameters.h"
+/*#include "AntsParameters.h"
+#include "QuicksilverParameters.h"*/
 #include "ExecutablePaths.h"
 #include "MinMax.h"
 
@@ -43,9 +43,9 @@ class AtlasRegistration : public Script
    void initializeLogging();
 
    // Register Atlas Script // 
-   /*void implementRegisterAtlas(bool probabilistic, bool ants);
+   void implementRegisterAtlas(bool probabilistic);
    void writeRegisterAtlas();
-   void writeRegisterProbabilisticAtlas();*/
+   void writeRegisterProbabilisticAtlas();
 
    // Output //
    void update();
@@ -53,15 +53,11 @@ class AtlasRegistration : public Script
 
 
    private:
-   void implementRegisterAtlas(bool probabilistic);
-   void writeRegisterAtlas();
-   void writeRegisterProbabilisticAtlas();
-
    // Log Path 
    QString m_log_path; 
 
    // Input // 
-   RegistrationParameters* m_regparameters;
+   RegistrationParameters* m_parameters;
 
 
 };

@@ -13,19 +13,10 @@ void AtlasRegistration::setLog(QString log_path)
 {
    m_log_path = log_path; 
 }
-/*void AtlasRegistration::setAntsParameters(AntsParameters* parameters) 
-{
-   m_parameters = parameters;
-}
-
-void AtlasRegistration::setQuicksilverParameters(QuicksilverParameters* parameters) 
-{
-   m_qsparameters = parameters;
-}*/
 
 void AtlasRegistration::setRegistrationParameters(RegistrationParameters* parameters) 
 {
-   m_regparameters = parameters;
+   m_parameters = parameters;
 }
 
 
@@ -114,11 +105,10 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
    m_script += m_indent + "T2 = '" + m_neo.T2 + "'\n";
    m_script += m_indent + "mask = '" + m_neo.mask + "'\n\n";
 
-
-   /*if(m_regparameters==typeid(AntsParameters))
-   {*/
+   bool registrationSoftware=m_parameters->getRegistrationSoftware();
+   if(registrationSoftware==true)
+   {
    // ANTS Registration 
-      AntsParameters* m_parameters = (AntsParameters*) m_regparameters;
 
       QString modality1 = "CC[' + T1 + ',' + T1Atlas + '," + QString::number(m_parameters->getWeight1()) + "," + QString::number(m_parameters->getRadius1()) + "]";
       QString modality2 = "CC[' + T2 + ',' + T2Atlas + '," + QString::number(m_parameters->getWeight2()) + "," + QString::number(m_parameters->getRadius2()) + "]";
@@ -236,14 +226,10 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
          m_argumentsList << "ResampleScalarVectorDWIVolume" << "segAtlas" << "segReg" << "'--Reference'" << "T2" << "'-i'" << "'nn'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
          execute(); 
       }
-   /*}*/
-  /* else
+   }
+   else
    {
       //QUICKSILVER Registration
-
-      QuicksilverParameters* m_parameters = (QuicksilverParameters*) m_regparameters;
-
-   
       QString warp = "' + outbase + '_Warp.nrrd";
 
       m_log = "Calculating transformations";
@@ -256,9 +242,11 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
       m_outputs.insert("T1Reg", T1Reg); 
 
       QString path = m_parameters->getRegistrationScriptPath(); //"/work/kpham/Data_ped_space/Registration_script/registration.py";
+      QString container = m_parameters->getContainerId();
       m_inputs.insert("path", path); 
+      m_inputs.insert("container", container);
 
-      m_argumentsList << "python" << "path" << "'--target-images'" << "T1" << "'--moving-images'" << "T1Atlas" << "'--output-prefix'" << "T1Reg" << "'--container-id'" << "'0dfc316374c3'" << "'--output-deffield'" << "warp";
+      m_argumentsList << "python" << "path" << "'--target-images'" << "T1" << "'--moving-images'" << "T1Atlas" << "'--output-prefix'" << "T1Reg" << "'--container-id'" << "container" << "'--output-deffield'" << "warp";
       execute();
     
       QString T2Reg = "' + outbase + '-T2.nrrd";
@@ -269,6 +257,34 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
       m_argumentsList << "ResampleScalarVectorDWIVolume" << "T2Atlas" << "T2Reg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
       execute(); 
 
+      if(probabilistic)
+      {
+         // Applying transformations to the white probability 
+         QString whiteReg = "' + outbase + '-white.nrrd";
+
+         m_log = "Applying transformations to the white probability";
+         m_outputs.insert("whiteReg", whiteReg); 
+         m_argumentsList << "ResampleScalarVectorDWIVolume" << "whiteAtlas" << "whiteReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
+         execute(); 
+
+         // Applying transformations to the gray probability 
+         QString grayReg = "' + outbase + '-gray.nrrd";
+
+         m_log = "Applying transformations to the gray probability";
+         m_outputs.insert("grayReg", grayReg);
+         m_argumentsList << "ResampleScalarVectorDWIVolume" << "grayAtlas" << "grayReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
+         execute(); 
+
+         // Applying transformations to the CSF probability 
+         QString csfReg = "' + outbase + '-csf.nrrd";
+
+         m_log = "Applying transformations to the CSF probability";
+         m_outputs.insert("csfReg", csfReg);
+         m_argumentsList << "ResampleScalarVectorDWIVolume" << "csfAtlas" << "csfReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
+         execute(); 
+      }
+      else
+      {
       // Applying transformations to the segmentation
       QString segReg = "' + outbase + '-seg.nrrd";
 
@@ -276,7 +292,8 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
       m_outputs.insert("segReg", segReg);
       m_argumentsList << "ResampleScalarVectorDWIVolume" << "segAtlas" << "segReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
       execute(); 
-   }*/
+      }
+   }
 }
 
 void AtlasRegistration::writeRegisterAtlas() // args = (T1Atlas, T2Atlas, output, log)

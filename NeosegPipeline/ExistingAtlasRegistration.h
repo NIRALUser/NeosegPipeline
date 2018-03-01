@@ -17,7 +17,7 @@
 // My Specific Librairies
 #include "Script.h"
 #include "Neo.h"
-#include "AntsParameters.h"
+#include "RegistrationParameters.h"
 #include "ExecutablePaths.h"
 
 class ExistingAtlasRegistration : public Script  
@@ -28,7 +28,7 @@ class ExistingAtlasRegistration : public Script
    ExistingAtlasRegistration(QString module);
 
    // Set // 
-   void setAntsParameters(AntsParameters* ANTSParamaters);
+   void setRegistrationParameters(RegistrationParameters* REGISTRATIONParamaters);
    void setExistingAtlas(QString atlas_path);
 
    // Scripts //
@@ -46,7 +46,7 @@ class ExistingAtlasRegistration : public Script
    private:
  
    // Input // 
-   AntsParameters*         m_parameters;
+   RegistrationParameters*         m_parameters;
    
    QString m_atlas_path; 
    QDir* m_atlas_dir; 

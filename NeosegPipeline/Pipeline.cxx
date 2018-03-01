@@ -33,7 +33,7 @@ void Pipeline::setPlainTextEdit(QPlainTextEdit* plainTextEdit)
 QProcess* Pipeline::getMainScriptProcess()
 {
    return m_mainScriptProcess;
-}
+} 
 
 void Pipeline::createProcessingDirectory()
 {
@@ -71,7 +71,7 @@ void Pipeline::writePreProcessingData()
    m_preProcessingData->setSuffix(m_parameters->getSuffix()); 
    m_preProcessingData->setStoppingIfError(m_parameters->getStoppingIfError());
 
-   m_preProcessingData->setUsingSmoothedMask((m_parameters->getAntsParametersDTI())->getUsingSmoothedMask() || (m_parameters->getAntsParametersAtlas())->getUsingSmoothedMask());
+   m_preProcessingData->setUsingSmoothedMask((m_parameters->getAntsParametersDTI())->getUsingSmoothedMask() || (m_parameters->getRegistrationParameters())->getUsingSmoothedMask());
    m_preProcessingData->setSkullStripping(m_parameters->getSkullStripping());
    m_preProcessingData->setCorrecting(m_parameters->getCorrecting());   
 
@@ -94,7 +94,7 @@ void Pipeline::writeDTIRegistration()
    m_dtiRegistration->setNeo(m_parameters->getNeo());
    m_dtiRegistration->setModuleDirectory(directory_path);
    m_dtiRegistration->setProcessingDirectory(m_processing_path);
-   m_dtiRegistration->setAntsParameters(m_parameters->getAntsParametersDTI());
+   m_dtiRegistration->setRegistrationParameters(m_parameters->getAntsParametersDTI());
    m_dtiRegistration->setExecutablePaths(m_parameters->getExecutablePaths());
    m_dtiRegistration->setSuffix(m_parameters->getSuffix()); 
    m_dtiRegistration->setOverwriting(m_parameters->getOverwriting()); 
@@ -203,7 +203,7 @@ void Pipeline::writeExistingAtlasRegistration()
    m_existingAtlasRegistration->setModuleDirectory(directory_path);
    m_existingAtlasRegistration->setProcessingDirectory(m_processing_path);
    m_existingAtlasRegistration->setExistingAtlas(m_parameters->getExistingAtlas());
-   m_existingAtlasRegistration->setAntsParameters(m_parameters->getAntsParametersAtlas());
+   m_existingAtlasRegistration->setRegistrationParameters(m_parameters->getRegistrationParameters());
    m_existingAtlasRegistration->setExecutablePaths(m_parameters->getExecutablePaths());
    m_existingAtlasRegistration->setSuffix(m_parameters->getSuffix());
    m_existingAtlasRegistration->setOverwriting(m_parameters->getOverwriting());

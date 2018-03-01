@@ -8,9 +8,9 @@ DtiRegistration::DtiRegistration(QString module) : Script(module)
    m_registering_suffix = "-registered";
 }
 
-void DtiRegistration::setAntsParameters(AntsParameters* antsParameters)
+void DtiRegistration::setRegistrationParameters(RegistrationParameters* registrationParameters)
 {
-   m_antsParameters = antsParameters; 
+   m_registrationParameters = registrationParameters; 
 }
 
 void DtiRegistration::initializeScript()
@@ -157,14 +157,14 @@ void DtiRegistration::generateAD()
 void DtiRegistration::calculateTransformations()
 {
    // Calculating transformations
-   QString modality1 = m_antsParameters->getImageMetric1() + "[' + T2 + ',' + strippedb0 + '," + QString::number(m_antsParameters->getWeight1()) + "," + QString::number(m_antsParameters->getRadius1()) + "]";
-   QString modality2 = m_antsParameters->getImageMetric2() + "[' + T2 + ',' + upsampledAD + '," + QString::number(m_antsParameters->getWeight2()) + "," + QString::number(m_antsParameters->getRadius2()) + "]";
+   QString modality1 = m_registrationParameters->getImageMetric1() + "[' + T2 + ',' + strippedb0 + '," + QString::number(m_registrationParameters->getWeight1()) + "," + QString::number(m_registrationParameters->getRadius1()) + "]";
+   QString modality2 = m_registrationParameters->getImageMetric2() + "[' + T2 + ',' + upsampledAD + '," + QString::number(m_registrationParameters->getWeight2()) + "," + QString::number(m_registrationParameters->getRadius2()) + "]";
 
-   QString iterations = QString::number(m_antsParameters->getIterationsJ()) + "x" + QString::number(m_antsParameters->getIterationsK()) + "x" + QString::number(m_antsParameters->getIterationsL());
+   QString iterations = QString::number(m_registrationParameters->getIterationsJ()) + "x" + QString::number(m_registrationParameters->getIterationsK()) + "x" + QString::number(m_registrationParameters->getIterationsL());
 
-   QString regularization = m_antsParameters->getRegularizationType() + "[" + QString::number(m_antsParameters->getGradientFieldSigma()) + "," + QString::number(m_antsParameters->getDeformationFieldSigma()) + "]";
+   QString regularization = m_registrationParameters->getRegularizationType() + "[" + QString::number(m_registrationParameters->getGradientFieldSigma()) + "," + QString::number(m_registrationParameters->getDeformationFieldSigma()) + "]";
 
-   QString transformation = m_antsParameters->getTransformationType() + "[" + QString::number(m_antsParameters->getGradientStepLength()) + "]"; 
+   QString transformation = m_registrationParameters->getTransformationType() + "[" + QString::number(m_registrationParameters->getGradientStepLength()) + "]"; 
 
    QString output_name = "DTI_to_" + m_prefix + ".nii.gz";
    QString output_path = m_module_dir->filePath(output_name); 

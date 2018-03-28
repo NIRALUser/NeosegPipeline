@@ -157,24 +157,10 @@ void XmlWriter::writeRegistrationParameters(QXmlStreamWriter* stream, Registrati
    writeElement(stream, "Mask", "brain-mask", QString::number(registrationParameters->getUsingMask()), "smoothed-brain-mask", QString::number(registrationParameters->getUsingSmoothedMask()));
    writeElement(stream, "Resources", "Number-of-Registrations", QString::number(registrationParameters->getNumberOfRegistrations()), "Number-of-Cores", QString::number(registrationParameters->getNumberOfCores()), "Number-of-GB", QString::number(registrationParameters->getNumberOfGB()));
 
-   writeElement(stream, "Path to registration script", "path", registrationParameters->getRegistrationScriptPath());
    writeElement(stream, "Container Id", "number", registrationParameters->getContainerId());
 
    stream->writeEndElement();
 }
-
-/*void XmlWriter::writeQuicksilverParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters)
-{
-  QuicksilverParameters * quicksilverParameters = (QuicksilverParameters*)parameters;
-
-   stream->writeStartElement("Quicksilver-parameters-");
-
-   writeElement(stream, "Path to registration script", "path", quicksilverParameters->getRegistrationScriptPath());
-   writeElement(stream, "Container Id", "number", quicksilverParameters->getContainerId());
-
-   stream->writeEndElement();
-}*/
-
 
 void XmlWriter::writeNeosegParameters(QXmlStreamWriter* stream)
 {

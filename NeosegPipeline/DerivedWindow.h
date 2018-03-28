@@ -31,9 +31,6 @@
 #include "LibraryPaths.h"
 #include "About.h" 
 #include "RegistrationParameters.h"
-/*#include "AntsParameters.h"
-#include "QuicksilverParameters.h"*/
-
 
 #ifndef NEOSEGPIPELINE_VERSION
 #define NEOSEGPIPELINE_VERSION "unknown"

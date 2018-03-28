@@ -19,11 +19,6 @@ void AtlasPopulationRegistration::setRegistrationParameters(RegistrationParamete
    m_parameters = parameters;
 }
 
-/*void AtlasPopulationRegistration::setQuicksilverParameters(QuicksilverParameters* parameters) 
-{
-   m_qsparameters = parameters;
-}*/
-
 // Define Output //  
 Atlas AtlasPopulationRegistration::defineRegisteredAtlas(Atlas atlas)
 {
@@ -354,4 +349,3 @@ std::vector<Atlas> AtlasPopulationRegistration::getOutput()
 {
    return defineRegisteredAtlasPopulation();
 }
-

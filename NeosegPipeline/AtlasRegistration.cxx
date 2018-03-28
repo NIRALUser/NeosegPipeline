@@ -1,14 +1,13 @@
 #include <typeinfo>
-
+#include <iostream>
 #include "AtlasRegistration.h"
-
 
 AtlasRegistration::AtlasRegistration(QString module) : Script(module)
 {
 
 }
 
-// SET // 
+// SET //  
 void AtlasRegistration::setLog(QString log_path)
 {
    m_log_path = log_path; 
@@ -58,7 +57,7 @@ void AtlasRegistration::initializeLogging()
 }
 
 void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
-{   
+{
    if(probabilistic)
    {
       m_script += "def main(name, T1Atlas, T2Atlas, whiteAtlas, grayAtlas, csfAtlas, output, log):\n\n";
@@ -177,6 +176,9 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
       m_log = "Applying transformations to T1";
       m_test = "T1Atlas";
       m_outputs.insert("T1Reg", T1Reg); 
+
+      //std::cout << "T1Reg is -------->"<<T1Reg.toStdString() << std::endl;
+
       m_argumentsList << "ResampleScalarVectorDWIVolume" << "T1Atlas" << "T1Reg" << "'--Reference'" << "T2" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
       execute();
 
@@ -215,7 +217,7 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
          m_argumentsList << "ResampleScalarVectorDWIVolume" << "csfAtlas" << "csfReg" << "'--Reference'" << "T2" << "'-i'" << "'nn'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
          execute(); 
       }
-   
+
       else
       {
          // Applying transformations to the segmentation
@@ -230,25 +232,43 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
    else
    {
       //QUICKSILVER Registration
-      QString warp = "' + outbase + '_Warp.nrrd";
 
       m_log = "Calculating transformations";
-      
-      m_outputs.insert("warp", warp);
 
       m_log = "Applying transformations to T1";
-      QString T1Reg = "' + outbase + '-T1.nrrd";
+
+      //Read the registration script resource and write the new one with arguments
+      QResource resources(":/quicksilver_script/Resources/quicksilver_script/registration.py");
+      QFile quicksilver_scriptResource( resources.absoluteFilePath() );
+      quicksilver_scriptResource.open( QIODevice::ReadOnly ) ;
+      QString registration_script = quicksilver_scriptResource.readAll() ;
+      quicksilver_scriptResource.flush();
+      quicksilver_scriptResource.close();
+
+      QString output_dir=m_parameters->getOutputDir();
+      m_outputs.insert("output_dir",output_dir);
+      QDir().mkdir(output_dir);
+      QString main_script = QDir::cleanPath(output_dir + QString("/quicksilver_exe.py"));
+      QFile quicksilver_script(main_script);
+      quicksilver_script.open( QIODevice::WriteOnly ) ;
+      QTextStream out( &quicksilver_script );
+      out << registration_script ;
+      quicksilver_script.flush();
+      quicksilver_script.close();
+
+      QString warp = "'+outbase+'_Warp.nrrd";
+      m_outputs.insert("warp", warp);
+
+      QString T1Reg = "'+outbase+'-T1.nrrd";
       m_test = "T1Atlas";
       m_outputs.insert("T1Reg", T1Reg); 
 
-      QString path = m_parameters->getRegistrationScriptPath(); //"/work/kpham/Data_ped_space/Registration_script/registration.py";
       QString container = m_parameters->getContainerId();
-      m_inputs.insert("path", path); 
       m_inputs.insert("container", container);
 
-      m_argumentsList << "python" << "path" << "'--target-images'" << "T1" << "'--moving-images'" << "T1Atlas" << "'--output-prefix'" << "T1Reg" << "'--container-id'" << "container" << "'--output-deffield'" << "warp";
+      m_argumentsList << "python" << "output_dir+'/quicksilver_exe.py'" << "'--target-images'" << "T1" << "'--moving-images'" << "T1Atlas" << "'--output-prefix'" << "T1Reg" << "'--container-id'" << "container" << "'--output-deffield'" << "warp";
       execute();
-    
+
       QString T2Reg = "' + outbase + '-T2.nrrd";
       m_log = "Applying transformations to T2";
       m_test = "T2Atlas";
@@ -343,5 +363,3 @@ void AtlasRegistration::update()
    writeRegisterAtlas();
    writeRegisterProbabilisticAtlas();
 }
-
-

@@ -418,9 +418,7 @@ void DerivedWindow::dropEvent(QDropEvent* event)
 void DerivedWindow::setPipelineParameters(PipelineParameters* parameters)
 {  
    m_parameters = parameters;
-   //m_quicksilverParameters = m_parameters->getQuicksilverParameters();
    m_antsParameters_DTI = m_parameters->getAntsParametersDTI(); 
-   //m_antsParameters_atlas = m_parameters->getAntsParametersAtlas(); 
    m_registrationParameters_atlas = m_parameters->getRegistrationParameters();
    m_neosegParameters = m_parameters->getNeosegParameters(); 
    m_executables = m_parameters->getExecutablePaths();
@@ -1058,7 +1056,7 @@ void DerivedWindow::initializeDataParameters()
 //  T2_lineEdit->setText(QString("/Users/prieto/NetBeansProjects/UNC/data/testNeoSeg/BUSS_2002_T2_Bias_regAtlas_corrected_EMS-stripped.nrrd"));
 //  mask_lineEdit->setText(QString("/Users/prieto/NetBeansProjects/UNC/data/testNeoSeg/BUSS_2002_mask.nrrd"));
 
-  output_lineEdit->setText(m_parameters->getOutput());
+  output_lineEdit->setText(m_parameters->getOutput()); 
   T1_lineEdit->setText(m_parameters->getT1());
   T2_lineEdit->setText(m_parameters->getT2());
   mask_lineEdit->setText(m_parameters->getMask());
@@ -1178,13 +1176,9 @@ void DerivedWindow::initializeXMLParameters()
 
    // Quicksilver
 
-   //QuicksilverParameters* m_quicksilverParameters=(QuicksilverParameters*) m_registrationParameters_atlas;
-
-   quicksilverParameters->registrationscript_lineEdit->setText(m_registrationParameters_atlas->getRegistrationScriptPath());
    quicksilverParameters->containerId_lineEdit->setText(m_registrationParameters_atlas->getContainerId());
 
    // ANTS
-   //AntsParameters* m_antsParameters_atlas=(AntsParameters*) m_registrationParameters_atlas;
 
    numberOfRegistrations_spinBox->setValue(m_registrationParameters_atlas->getNumberOfRegistrations());
    numberOfCores_spinBox->setValue(m_registrationParameters_atlas->getNumberOfCores());
@@ -1370,6 +1364,7 @@ void DerivedWindow::setData()
 
 
    m_parameters->setOutput(output_lineEdit->text()); 
+   m_registrationParameters_atlas->setOutputDir(output_lineEdit->text());
 }
 
 void DerivedWindow::setParameters()
@@ -1452,7 +1447,7 @@ void DerivedWindow::setParameters()
    m_antsParameters_DTI->setUsingSmoothedMask( usingSmoothedMask_DTI_checkBox->isChecked() ) ;
 
    //Registration parameters for Atlas Population Registration 
-   m_registrationParameters_atlas->setRegistrationScriptPath(this->quicksilverParameters->registrationscript_lineEdit->text());
+   //m_registrationParameters_atlas->setRegistrationScriptPath(this->quicksilverParameters->registrationscript_lineEdit->text());
    m_registrationParameters_atlas->setContainerId(this->quicksilverParameters->containerId_lineEdit->text());
 
    m_registrationParameters_atlas->setNumberOfRegistrations(numberOfRegistrations_spinBox->value());

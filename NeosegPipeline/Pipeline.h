@@ -56,10 +56,8 @@ class Pipeline
    void writePipeline(); 
    void runPipeline();
    void stopPipeline(); 
-
+   
    private: 
-
-
 
    // Create Directories
    void createProcessingDirectory();
@@ -97,7 +95,7 @@ class Pipeline
    NeosegExecution* m_neosegExecution; 
    ABCExecution* m_ABCExecution;
 
-   PipelineParameters* m_parameters; 
+   PipelineParameters* m_parameters;  
 
    QString m_processing_name;
    QString m_processing_path;
@@ -123,5 +121,3 @@ class Pipeline
 };
 
 #endif
-
-

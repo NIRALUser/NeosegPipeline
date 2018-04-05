@@ -1,12 +1,13 @@
-#include <QApplication>
-
 #include "NeosegPipelineCLP.h"
 #include "NeosegPipelineTool.h"
 
+//#include <QApplication>
 
 int main(int argc, char *argv[])
 {
    PARSE_ARGS; 
+   //QApplication NeosegPipeline( argc , argv );
+   Q_INIT_RESOURCE(resources);
 
    NeosegPipelineTool tool(QString::fromStdString(argv[0]));
    if( !data.empty()

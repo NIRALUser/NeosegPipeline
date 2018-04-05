@@ -43,7 +43,7 @@ class RegistrationParameters
    void setNumberOfGB(int numberOfGB);
    int getNumberOfGB(); 
 
-      // Image Metric 1 
+   // Image Metric 1 
    void setImageMetric1(QString imageMetric1);
    QString getImageMetric1();
    int getImageMetric1Index();
@@ -147,13 +147,16 @@ class RegistrationParameters
    bool getUsingSmoothedMask();
 
    // Path to the registration script
-   void setRegistrationScriptPath(QString registrationscript_path);
+   /*void setRegistrationScriptPath(QString registrationscript_path);
    bool checkRegistrationScriptPath(QString registrationscript_path);
-   QString getRegistrationScriptPath();
+   QString getRegistrationScriptPath();*/
 
    void setContainerId(QString container_id);
    bool checkContainerId(QString container_id);
    QString getContainerId();
+
+   void setOutputDir(QString output_dir);
+   QString getOutputDir();
 
    void setUsingAnts() ;
    void setUsingQuicksilver() ;
@@ -268,12 +271,15 @@ class RegistrationParameters
    bool m_usingSmoothedMask; 
 
    //Path to registration script   
-   QString m_registrationscript_path_default;
-   QString m_registrationscript_path;
+   //QString m_registrationscript_path_default;
+   //QString m_registrationscript_path;
 
    //Docker container id
    QString m_container_id_default;
    QString m_container_id;
+
+   QString m_output_dir_default;
+   QString m_output_dir;
 };
 
 #endif

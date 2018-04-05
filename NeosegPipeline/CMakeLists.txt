@@ -26,8 +26,10 @@ TARGET_LINK_LIBRARIES(${LIBRARY_NAME} ${ITK_LIBRARIES} )
 INSTALL(TARGETS ${LIBRARY_NAME} ARCHIVE DESTINATION bin)
 
 QT4_ADD_RESOURCES(RESOURCES resources.qrc)
+#QT4_ADD_RESOURCES(quicksilver_generated_rcc ${quicksilver_rcc})
 QT4_WRAP_UI(UI_SOURCES WindowMultiseg.ui antsParameters.ui quicksilverParameters.ui neosegParameters.ui ABCParameters.ui About.ui)
 QT4_WRAP_CPP(MOC_SOURCES DerivedWindow.h MainScriptThread.h)
+
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR})
@@ -86,6 +88,8 @@ SET(NeosegPipeline_HEADERS NeosegPipelineTool.h
                            MinMax.h
                            ABCExecution.h
 )
+
+
 
 FILE(READ NeosegPipeline.xml var)
 

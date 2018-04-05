@@ -24,18 +24,6 @@
    </property>
    <layout class="QVBoxLayout" name="verticalLayout_6">
     <item>
-     <widget class="QGroupBox" name="groupBox_6">
-      <property name="title">
-       <string>Registration script path</string>
-      </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <widget class="QLineEdit" name="registrationscript_lineEdit"/>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item>
      <widget class="QGroupBox" name="groupBox_7">
       <property name="title">
        <string>Docker container Id</string>
@@ -63,6 +51,8 @@
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

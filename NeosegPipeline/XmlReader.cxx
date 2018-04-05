@@ -574,52 +574,10 @@ void XmlReader::readGeneralParameters(QXmlStreamReader* stream, QString errors)
    }
    m_parameters->setSelectedAtlases(m_selectedAtlases);
 }
-
-/*void XmlReader::readQuicksilverParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters)
-{
-  QuicksilverParameters * quicksilverParameters = (QuicksilverParameters*)parameters;
-  while(!(stream->isEndElement() && stream->name() == "Quicksilver-parameters"))
-  {
-    stream->readNext();
-
-      if(stream->isStartElement())
-      {
-         QXmlStreamAttributes attributes = stream->attributes();
-         if (stream->name() == "Path to registration script")
-         {
-            QString registrationscript_path = (attributes.value("path")).toString();
-            if(QFile(registrationscript_path).exists())
-            {
-                if(quicksilverParameters->checkRegistrationScriptPath(registrationscript_path))
-                {                  
-                    quicksilverParameters->setRegistrationScriptPath(registrationscript_path);
-                }
-                else
-                {
-                    errors += " - 'Path to registration script' is not valid, the file does not exist\n";
-                }
-            }
-         }
-         else if (stream->name() == "Container Id")
-         {
-            QString containerId_QString = (attributes.value("containerId")).toString(); 
-            if(quicksilverParameters->checkContainerId(containerId_QString))
-            {
-                quicksilverParameters->setContainerId(containerId_QString);
-            }
-            else if(!containerId_QString.isEmpty())
-            {
-                errors += " - 'Container Id' is not valid\n";
-            }
-        }
-      }
-  }
-}*/
  
 void XmlReader::readRegistrationParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* registrationParameters)
 {  
    bool ok; 
-   //AntsParameters * antsParameters = (AntsParameters*)parameters;
    while(!(stream->isEndElement() && stream->name() == "Registration-parameters-" + registrationParameters->getName()))
    {
       stream->readNext();
@@ -869,19 +827,6 @@ void XmlReader::readRegistrationParameters(QXmlStreamReader* stream, QString err
             {
                errors += " - 'Number-of-GB' is not valid, it must be a positive integer\n";
             }  
-         }
-         else if (stream->name() == "Path to registration script")
-         {
-            QString path_to_registrationscript_path = (attributes.value("path")).toString();
-            if(registrationParameters->checkRegistrationScriptPath(path_to_registrationscript_path))
-            {                  
-                 registrationParameters->setRegistrationScriptPath(path_to_registrationscript_path);
-            }
-            else
-            {
-                 errors += " - 'Path to registration script' is not valid, the file does not exist\n";
-            }
-            
          }
          else if (stream->name() == "Container Id")
          {

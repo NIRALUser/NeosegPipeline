@@ -431,7 +431,6 @@ void Pipeline::writeXMLFiles()
 
    QString executables_path = output_dir->filePath(m_parameters->getPrefix() + "-executables.xml");   
    writer->writeExecutablesConfiguration(executables_path);
-
 }
 
 void Pipeline::writePipeline()

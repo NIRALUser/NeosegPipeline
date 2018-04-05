@@ -38,7 +38,7 @@ RegistrationParameters::RegistrationParameters(QString type)
       m_iterationsL_default = 10;
 
       m_tranformation_default = m_transformationType_values[0];
-      m_gradientStepLength_default = 0.125;   
+      m_gradientStepLength_default = 0.125;    
       m_numberOfTimeSteps_default = 2;
       m_deltaTime_default = 0.01;
 
@@ -78,8 +78,8 @@ RegistrationParameters::RegistrationParameters(QString type)
       m_usingMask_default = true;
       m_usingSmoothedMask_default = false; 
 
-      m_registrationscript_path_default=" ";
-      m_container_id_default=" ";
+      m_container_id_default="";
+      m_output_dir_default="";
    }
 
    m_numberOfRegistrations = m_numberOfRegistrations_default;
@@ -111,8 +111,8 @@ RegistrationParameters::RegistrationParameters(QString type)
    m_usingMask = m_usingMask_default;
    m_usingSmoothedMask = m_usingSmoothedMask_default;
 
-   m_registrationscript_path=m_registrationscript_path_default;
    m_container_id=m_container_id_default;
+   m_output_dir=m_output_dir_default;
 
    m_registrationSoftware=m_registrationSoftware_default;
 
@@ -514,29 +514,6 @@ bool RegistrationParameters::getUsingSmoothedMask()
    return m_usingSmoothedMask; 
 }
 
-// Path to the regisration script quicksilver
-void RegistrationParameters::setRegistrationScriptPath(QString registrationscript_path)
-{
-   m_registrationscript_path=registrationscript_path;
-}
-
-bool RegistrationParameters::checkRegistrationScriptPath(QString registrationscript_path)
-{
-   if(registrationscript_path!=NULL)
-   {
-      return true;
-   }
-   else
-   {
-      return false;
-   }
-}
-
-QString RegistrationParameters::getRegistrationScriptPath()
-{
-   return m_registrationscript_path;
-}
-
 // Quicksilver container id
 void RegistrationParameters::setContainerId(QString container_id)
 {
@@ -545,7 +522,7 @@ void RegistrationParameters::setContainerId(QString container_id)
 
 bool RegistrationParameters::checkContainerId(QString container_id)
 {
-   if(container_id!=" ")
+   if(container_id!="")
    {
       return true;
    }
@@ -558,6 +535,16 @@ bool RegistrationParameters::checkContainerId(QString container_id)
 QString RegistrationParameters::getContainerId()
 {
    return m_container_id;
+}
+
+void RegistrationParameters::setOutputDir(QString output_dir)
+{
+   m_output_dir=output_dir;
+}
+
+QString RegistrationParameters::getOutputDir()
+{
+   return m_output_dir;
 }
 
 void RegistrationParameters::setUsingAnts()

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip> 
+#include <string>
 
 // Qt Librairies // 
 #include <QString>
@@ -15,8 +16,7 @@
 #include "Neo.h"
 #include "Atlas.h"
 #include "RegistrationParameters.h" 
-/*#include "AntsParameters.h" 
-#include "QuicksilverParameters.h" */
+
 #include "NeosegParameters.h" 
 #include "ExecutablePaths.h" 
 #include "LibraryPaths.h" 
@@ -232,16 +232,12 @@ class PipelineParameters
    void setNumberOfCores(int NumberOfCores); 
    int getNumberOfCores();
 
-   //Quicksilver Parameters
-   //QuicksilverParameters* getQuicksilverParameters();
-
    // ANTS DTI Parameters 
    RegistrationParameters* getAntsParametersDTI();  
-   //AntsParameters* getAntsParametersAtlas();  
 
    // Registration Parameters
    RegistrationParameters* getRegistrationParameters();
-
+   
    // Neoseg Parameters
    NeosegParameters* getNeosegParameters(); 
 
@@ -515,14 +511,8 @@ class PipelineParameters
    int m_numberOfCores_max;
    int m_numberOfCores_default;
    int m_numberOfCores;
-   
-   // Quicksilver Parameters
-   //QuicksilverParameters* m_quicksilverParameters;
-   
-   // ANTS Parameters 
-   /*AntsParameters* m_antsParameters_DTI;
-   AntsParameters* m_antsParameters_atlas;*/
 
+ 
    // Registration Parameters
    RegistrationParameters* m_registrationParameters_atlas;
    RegistrationParameters* m_antsParameters_DTI;

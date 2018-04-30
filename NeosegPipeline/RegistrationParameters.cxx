@@ -1,7 +1,7 @@
-#include "RegistrationParameters.h"
+#include "RegistrationParameters.h" 
 
 RegistrationParameters::RegistrationParameters(QString type)
-{
+{ 
 	m_numberOfGB_min = 1;
    m_numberOfRegistrations_default = 1;
    m_numberOfCores_default = 1;
@@ -115,8 +115,6 @@ RegistrationParameters::RegistrationParameters(QString type)
    m_output_dir=m_output_dir_default;
 
    m_registrationSoftware=m_registrationSoftware_default;
-
-
 }
 
 QString RegistrationParameters::getName()
@@ -549,15 +547,42 @@ QString RegistrationParameters::getOutputDir()
 
 void RegistrationParameters::setUsingAnts()
 {
- m_registrationSoftware=true;
+   m_registrationSoftware=true;
 }
 
 void RegistrationParameters::setUsingQuicksilver()
 {
- m_registrationSoftware=false ;
+   m_registrationSoftware=false ;
 }
 
 bool RegistrationParameters::getRegistrationSoftware()
 {
    return m_registrationSoftware;
+}
+
+void RegistrationParameters::setBoolParc(bool bool_parc)
+{
+   m_parc_ok=bool_parc;
+}
+bool RegistrationParameters::getBoolParc()
+{
+   return m_parc_ok;
+}
+   
+void RegistrationParameters::setBoolRoi(bool bool_roi)
+{
+   m_roi_ok=bool_roi;
+}
+bool RegistrationParameters::getBoolRoi()
+{
+   return m_roi_ok;
+}
+   
+void RegistrationParameters::setRoiNbr(int nbr_roi)
+{
+   m_roi_nbr=nbr_roi;
+}
+int RegistrationParameters::getRoiNbr()
+{
+   return m_roi_nbr;
 }

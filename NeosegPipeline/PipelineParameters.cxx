@@ -121,10 +121,8 @@ PipelineParameters::PipelineParameters()
    m_computingSystem_default = m_computingSystem_values[0];
    m_computingSystem = m_computingSystem_default;
 
-   //m_quicksilverParameters = new QuicksilverParameters();
    m_antsParameters_DTI = new RegistrationParameters("DTI"); 
-   //m_antsParameters_atlas = new AntsParameters("atlas");
-   m_registrationParameters_atlas= new RegistrationParameters("atlas");
+   m_registrationParameters_atlas = new RegistrationParameters("atlas");
    m_neosegParameters = new NeosegParameters(); 
    m_executablePaths = new ExecutablePaths(); 
    m_libraryPaths = new LibraryPaths(); 
@@ -517,6 +515,13 @@ QMap<QString,QFileInfoList> PipelineParameters::findAtlasFiles(QString atlas_nam
    atlasFiles.insert("T1",find(atlas_dir, "T1" , "*" , "*" ) ) ;
    atlasFiles.insert("T2",find(atlas_dir, "T2" , "*" , "*" ) ) ;
    atlasFiles.insert("seg",find(atlas_dir, "seg" , "*" , "*" ) ) ;
+   for (int i=0; i<10 ; i++)
+   {
+      QString roiX="roi"+QString::number(i);
+      atlasFiles.insert(roiX,find(atlas_dir, roiX , "*" , "*" ) ) ;
+   }
+   atlasFiles.insert("parc",find(atlas_dir, "parc" , "*" , "*" ) ) ;
+
    atlasFiles.insert("white",find(atlas_dir, "white" , "*" , "*" ) ) ;
    atlasFiles.insert("gray",find(atlas_dir, "gray" , "*" , "*" ) ) ;
    atlasFiles.insert("csf",find(atlas_dir, "csf" , "*" , "*" ) ) ;
@@ -591,6 +596,7 @@ bool PipelineParameters::checkAtlas(QString atlas)
 void PipelineParameters::initializeAtlasPopulation() 
 {
    m_atlasPopulation.clear(); 
+   int AtlasNumber=0;
 
    QStringList::const_iterator it;
 
@@ -629,7 +635,6 @@ void PipelineParameters::initializeAtlasPopulation()
          atlas.probabilistic = 0;
       }
 
-
       if( (atlasFiles["white"]).size()==1 && (atlasFiles["gray"]).size()==1 && (atlasFiles["csf"]).size()==1 )
       {
          atlas.white = (atlasFiles["white"])[0].filePath();
@@ -637,6 +642,37 @@ void PipelineParameters::initializeAtlasPopulation()
          atlas.csf = (atlasFiles["csf"])[0].filePath();
          atlas.probabilistic=1;
       }
+
+      if ( (atlasFiles["parc"]).size()==1 )
+      {
+         atlas.parc_ok=1;
+         atlas.parc = (atlasFiles["parc"])[0].filePath();
+      }
+      else
+      {
+         atlas.parc_ok=0;
+      }
+
+      atlas.roi_nbr=0;
+      for (int i=0 ; i<9 ; i++)
+      {
+         QString roiX="roi"+QString::number(i);
+         if ((atlasFiles[roiX]).size()==1)
+         {
+            atlas.roi[i] = (atlasFiles[roiX])[0].filePath();
+            atlas.roi_nbr++;
+            atlas.roi_ok=1;
+         }
+      }  
+
+      if(atlas.roi_nbr==0)
+      {
+         atlas.roi_ok=0;
+      }     
+
+      m_registrationParameters_atlas->setBoolParc(atlas.parc_ok);    
+      m_registrationParameters_atlas->setBoolRoi(atlas.roi_ok);
+      m_registrationParameters_atlas->setRoiNbr(atlas.roi_nbr);
 
       //atlas.log = QDir(atlas_path).filePath(atlas.name + ".log");
 
@@ -955,23 +991,13 @@ int PipelineParameters::getNumberOfCores()
    return m_numberOfCores;
 }
 
-// Quicksilver Parameters
-/*QuicksilverParameters* PipelineParameters::getQuicksilverParameters()
-{
-   return m_quicksilverParameters;
-}*/
-
-// ANTS Parameters
+// ANTS Parameters DTI
 RegistrationParameters* PipelineParameters::getAntsParametersDTI()
 {
    return m_antsParameters_DTI;
 }
 
-/*AntsParameters* PipelineParameters::getAntsParametersAtlas()
-{
-   return m_antsParameters_atlas;
-}*/
-
+// Registration Parameters
 RegistrationParameters* PipelineParameters::getRegistrationParameters()
 {
    return m_registrationParameters_atlas;

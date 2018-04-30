@@ -215,8 +215,6 @@ private :
    // Parameters
    PipelineParameters* m_parameters;
    RegistrationParameters* m_antsParameters_DTI; 
-   /*AntsParameters* m_antsParameters_atlas; 
-   QuicksilverParameters* m_quicksilverParameters;*/
    RegistrationParameters* m_registrationParameters_atlas;
    NeosegParameters* m_neosegParameters; 
 

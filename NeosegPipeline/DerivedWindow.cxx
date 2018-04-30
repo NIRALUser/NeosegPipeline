@@ -1447,7 +1447,6 @@ void DerivedWindow::setParameters()
    m_antsParameters_DTI->setUsingSmoothedMask( usingSmoothedMask_DTI_checkBox->isChecked() ) ;
 
    //Registration parameters for Atlas Population Registration 
-   //m_registrationParameters_atlas->setRegistrationScriptPath(this->quicksilverParameters->registrationscript_lineEdit->text());
    m_registrationParameters_atlas->setContainerId(this->quicksilverParameters->containerId_lineEdit->text());
 
    m_registrationParameters_atlas->setNumberOfRegistrations(numberOfRegistrations_spinBox->value());

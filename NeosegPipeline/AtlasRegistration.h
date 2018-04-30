@@ -9,6 +9,7 @@
 #include <iterator>
 #include <map>
 #include <utility>
+#include <string>
 
 // Qt Librairies
 #include <QString>
@@ -21,7 +22,7 @@
 #include "RegistrationParameters.h"
 #include "ExecutablePaths.h"
 #include "MinMax.h"
- 
+
 #include <QResource>
 #include <QFile>
 #include <QTextStream>
@@ -44,7 +45,7 @@ class AtlasRegistration : public Script
    void initializeLogging();
 
    // Register Atlas Script // 
-   void implementRegisterAtlas(bool probabilistic);
+   void implementRegisterAtlas(bool probabilistic, bool parc_ok, bool roi_ok , int roi_nbr);
    void writeRegisterAtlas();
    void writeRegisterProbabilisticAtlas();
 
@@ -58,7 +59,6 @@ class AtlasRegistration : public Script
 
    // Input // 
    RegistrationParameters* m_parameters;
-
 };
 
 #endif 

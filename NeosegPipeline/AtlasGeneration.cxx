@@ -230,8 +230,6 @@ void AtlasGeneration::generateWeightedAveragedLabels()
              addSubElement("atlas", "image", "IMAGE", atlas.T2);
          }
          addSubElement("atlas", "seg", "SEG", atlas.seg);
-         /*addSubElement("atlas", "roi", "ROI", atlas.roi);
-         addSubElement("atlas", "parc", "PARC", atlas.parc);*/
       }
    }
    

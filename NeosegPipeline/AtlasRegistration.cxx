@@ -55,16 +55,19 @@ void AtlasRegistration::initializeLogging()
    m_script += m_indent + "logger.addHandler(fileHandler)\n\n";
 }
 
-void AtlasRegistration::implementRegisterAtlas(bool probabilistic, bool parc_ok, bool roi_ok , int roi_nbr)
+//void AtlasRegistration::implementRegisterAtlas(bool probabilistic, bool parc_ok, bool roi_ok , int roi_nbr)
+void AtlasRegistration::implementRegisterAtlas(bool probabilistic)
 {
    if(probabilistic)
    {
       m_script += "def main(name, T1Atlas, T2Atlas, whiteAtlas, grayAtlas, csfAtlas, output, log):\n\n";
    } 
    else
-   {
+   {      
+      m_script += "def main(name, T1Atlas, T2Atlas, segAtlas, output, log, parcAtlas, roi0Atlas, roi1Atlas, roi2Atlas, roi3Atlas, roi4Atlas, roi5Atlas, roi6Atlas, roi7Atlas, roi8Atlas, roi9Atlas):\n\n";
+
       //m_script += "def main(name, T1Atlas, T2Atlas, segAtlas, roiAtlas, parcAtlas, output, log):\n\n";
-      m_script += "def main(name, T1Atlas, T2Atlas, segAtlas, output, log";
+      /*m_script += "def main(name, T1Atlas, T2Atlas, segAtlas, output, log";
       if(parc_ok)
       {
          m_script += ", parcAtlas";
@@ -78,7 +81,7 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic, bool parc_ok,
             m_script += ",roi"+QString::number(i)+"Atlas";
          }
       }
-      m_script += "):\n\n";
+      m_script += "):\n\n";*/
    }
 
    m_script += m_indent + "signal.signal(signal.SIGINT, stop)\n";
@@ -100,22 +103,44 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic, bool parc_ok,
    }
    else
    {
-      m_script += m_indent + "finalSeg = outbase + '-seg.nrrd'\n";
-      if(parc_ok)
+      m_script += m_indent + "finalSeg = outbase + '-seg.nrrd'\n\n";
+      
+      /*if(parc_ok)
       {
          m_script += m_indent + "finalParc = outbase + '-parc.nrrd'\n";
-      }
-      
-      if(roi_ok)
+      }*/
+      m_script += m_indent + "if parcAtlas != '""':\n";
+      m_script += m_indent + m_indent + "finalParc = outbase + '-parc.nrrd'\n\n";
+
+      m_script += m_indent + "finalRoi0='""'\n";
+      m_script += m_indent + "finalRoi1='""'\n";
+      m_script += m_indent + "finalRoi2='""'\n";
+      m_script += m_indent + "finalRoi3='""'\n";
+      m_script += m_indent + "finalRoi4='""'\n";
+      m_script += m_indent + "finalRoi5='""'\n";
+      m_script += m_indent + "finalRoi6='""'\n";
+      m_script += m_indent + "finalRoi7='""'\n";
+      m_script += m_indent + "finalRoi8='""'\n";
+      m_script += m_indent + "finalRoi9='""'\n\n";
+
+      m_script += m_indent + "finalRoiX=[finalRoi0,finalRoi1,finalRoi2,finalRoi3,finalRoi4,finalRoi5,finalRoi6,finalRoi7,finalRoi8,finalRoi9]\n";
+      m_script += m_indent + "roiXAtlas=[roi0Atlas, roi1Atlas, roi2Atlas, roi3Atlas, roi4Atlas, roi5Atlas, roi6Atlas, roi7Atlas, roi8Atlas, roi9Atlas]\n\n";
+
+      m_script += m_indent + "for i in range(0,10):\n";
+      m_script += m_indent + m_indent + "if roiXAtlas[i] != '""':\n";
+      m_script += m_indent + m_indent + m_indent + "finalRoiX[i] = outbase + '-roi'+str(i)+'.nrrd'\n\n";
+
+      /*if(roi_ok)
       {
          int j=0;
          for (j=0; j<roi_nbr ;j++)
          {
             m_script += m_indent + "finalRoi = outbase + '-roi"+QString::number(j)+".nrrd'\n";
          }
-      }
+      }*/
 
-      m_script += m_indent + "if checkFileExistence(finalT1)==True and checkFileExistence(finalT2) and checkFileExistence(finalSeg) and checkFileExistence(finalRoi) and checkFileExistence(finalParc):\n";
+
+      m_script += m_indent + "if checkFileExistence(finalT1)==True and checkFileExistence(finalT2) and checkFileExistence(finalSeg) :\n";
    }
 
    //m_script += m_indent + m_indent + "time.sleep(0.5)\n";
@@ -256,30 +281,26 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic, bool parc_ok,
          m_argumentsList << "ResampleScalarVectorDWIVolume" << "segAtlas" << "segReg" << "'--Reference'" << "T2" << "'-i'" << "'nn'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
          execute(); 
 
-         
+         m_test = "parcAtlas"; 
 
-         if(parc_ok)
+         QString parcReg = "' + outbase + '-parc.nrrd";
+         m_log = "Applying transformations to the brain parcellation";                     
+         m_outputs.insert("parcReg", parcReg);
+         m_argumentsList << "ResampleScalarVectorDWIVolume" << "parcAtlas" << "parcReg" << "'--Reference'" << "T2" << "'-i'" << "'nn'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
+         execute(); 
+            
+         QString roiXAtlas[10]={"roi0Atlas","roi1Atlas","roi2Atlas","roi3Atlas","roi4Atlas","roi5Atlas","roi6Atlas","roi7Atlas","roi8Atlas","roi9Atlas"};
+         for (int k=0 ; k<10 ; k++)
          {
-            QString parcReg = "' + outbase + '-parc.nrrd";
+            m_test=roiXAtlas[k];
 
-            m_log = "Applying transformations to the brain parcellation";
-            m_outputs.insert("parcReg", parcReg);
-            m_argumentsList << "ResampleScalarVectorDWIVolume" << "parcAtlas" << "parcReg" << "'--Reference'" << "T2" << "'-i'" << "'nn'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
+            m_log = "Applying transformations to the ROI"+QString::number(k);
+            QString roiReg = "' + outbase + '-roi"+QString::number(k)+".nrrd";
+            m_outputs.insert("roiReg", roiReg);
+
+            m_argumentsList << "ResampleScalarVectorDWIVolume" << "roi"+QString::number(k)+"Atlas" << "roiReg" << "'--Reference'" << "T2" << "'-i'" << "'nn'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
             execute(); 
-         }
-
-         if(roi_ok)
-         {
-            int k=0;
-            for (k=0 ; k<roi_nbr ; k++)
-            {
-               QString roiReg = "' + outbase + '-roi"+QString::number(k)+".nrrd";
-
-               m_log = "Applying transformations to the ROI";
-               m_outputs.insert("roiReg", roiReg);
-               m_argumentsList << "ResampleScalarVectorDWIVolume" << "roi"+QString::number(k)+"Atlas" << "roiReg" << "'--Reference'" << "T2" << "'-i'" << "'nn'" << "'--hfieldtype'" << "'displacement'" << "'--defField'" << "warp" << "'--transformationFile'" << "affine";
-               execute(); 
-            }
+            
          }
       }
    }
@@ -367,37 +388,32 @@ void AtlasRegistration::implementRegisterAtlas(bool probabilistic, bool parc_ok,
          m_argumentsList << "ResampleScalarVectorDWIVolume" << "segAtlas" << "segReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
          execute(); 
 
-         
-         if(parc_ok)
-         {
-            QString parcReg = "' + outbase + '-parc.nrrd";
+         m_test = "parcAtlas"; 
 
-            m_log = "Applying transformations to the brain parcellation";
-            m_outputs.insert("parcReg", parcReg);
-            m_argumentsList << "ResampleScalarVectorDWIVolume" << "parcAtlas" << "parcReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
-            execute(); 
-         }
-         
-         if(roi_ok)
+         QString parcReg = "' + outbase + '-parc.nrrd";
+         m_log = "Applying transformations to the brain parcellation";
+         m_outputs.insert("parcReg", parcReg);
+         m_argumentsList << "ResampleScalarVectorDWIVolume" << "parcAtlas" << "parcReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
+         execute(); 
+
+         QString roiXAtlas[10]={"roi0Atlas", "roi1Atlas", "roi2Atlas", "roi3Atlas", "roi4Atlas", "roi5Atlas", "roi6Atlas", "roi7Atlas", "roi8Atlas", "roi9Atlas"};
+         for (int k=0;k<10;k++)
          {
-            int k=0;
-            for (k=0 ; k<roi_nbr ; k++)
-            {
+            m_test=roiXAtlas[k];
+
+            m_log = "Applying transformations to the ROI"+QString::number(k);
             QString roiReg = "' + outbase + '-roi"+QString::number(k)+".nrrd";
-
-            m_log = "Applying transformations to the ROI "+QString::number(k);
             m_outputs.insert("roiReg", roiReg);
+
             m_argumentsList << "ResampleScalarVectorDWIVolume" << "roi"+QString::number(k)+"Atlas" << "roiReg" << "'--Reference'" << "T2" << "'-H'" << "warp" << "'-i'" << "'bs'" << "'--hfieldtype'" << "'displacement'";
             execute(); 
-            }
-
          }
 
       }
    }
 }
 
-void AtlasRegistration::writeRegisterAtlas() // args = (T1Atlas, T2Atlas, , segAtlas, output, log)
+void AtlasRegistration::writeRegisterAtlas() // args = (T1Atlas, T2Atlas, segAtlas, output, log, parcAtlas, roi0Atlas, ..., roi9Atlas)
 {
    initializeScript();
 
@@ -407,19 +423,15 @@ void AtlasRegistration::writeRegisterAtlas() // args = (T1Atlas, T2Atlas, , segA
    implementExecute();
 
 
-   bool parc_ok=m_parameters->getBoolParc();
+   /*bool parc_ok=m_parameters->getBoolParc();
    bool roi_ok=m_parameters->getBoolRoi();
-   int roi_nbr=m_parameters->getRoiNbr();
+   int roi_nbr=m_parameters->getRoiNbr();*/
 
-   implementRegisterAtlas(0,parc_ok,roi_ok,roi_nbr);
-
+   //implementRegisterAtlas(0,parc_ok,roi_ok,roi_nbr);
+   implementRegisterAtlas(0);
    m_script += "if __name__ == '__main__':\n";
    //m_script += m_indent + "main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8])\n";
-   m_script += m_indent + "main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6]";
-
-   std::cout<<"atlas parc ok = "<<m_parameters->getBoolParc()<<std::endl;
-   std::cout<<"atlas roi ok = "<<m_parameters->getBoolRoi()<<std::endl;
-   std::cout<<"atlas roi nbr = "<<m_parameters->getRoiNbr()<<std::endl<<std::endl;
+   /*m_script += m_indent + "main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6]";
 
    int argv_nbr=0;
    if(parc_ok)
@@ -437,7 +449,9 @@ void AtlasRegistration::writeRegisterAtlas() // args = (T1Atlas, T2Atlas, , segA
    {
       m_script += ", sys.argv["+QString::number(7+i)+"]";
    }
-   m_script += ")\n";
+   m_script += ")\n";*/
+   
+   m_script += m_indent + "main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8], sys.argv[9], sys.argv[10], sys.argv[11], sys.argv[12], sys.argv[13], sys.argv[14], sys.argv[15], sys.argv[16], sys.argv[17])\n";
 
    QString script_path = m_processing_dir->filePath("atlasRegistration.py");
 
@@ -456,7 +470,9 @@ void AtlasRegistration::writeRegisterProbabilisticAtlas() // args = (T1Atlas, T2
    initializeLogging(); 
    implementExecute();
 
-   implementRegisterAtlas(1,0,0,0);
+   //implementRegisterAtlas(1,0,0,0);
+
+   implementRegisterAtlas(1);
 
    m_script += "if __name__ == '__main__':\n";
    m_script += m_indent + "main(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7], sys.argv[8])\n";

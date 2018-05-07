@@ -11,8 +11,10 @@ QString T2;
 QString mask;
 bool probabilistic;
 bool parc_ok;
-bool roi_ok;
-int roi_nbr;
+bool roi_ok[10];
+
+//int roi_nbr;
+
 QString seg; 
 QString roi[10];
 QString parc;

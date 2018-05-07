@@ -45,7 +45,9 @@ class AtlasRegistration : public Script
    void initializeLogging();
 
    // Register Atlas Script // 
-   void implementRegisterAtlas(bool probabilistic, bool parc_ok, bool roi_ok , int roi_nbr);
+   //void implementRegisterAtlas(bool probabilistic, bool parc_ok, bool roi_ok , int roi_nbr);
+
+   void implementRegisterAtlas(bool probabilistic);
    void writeRegisterAtlas();
    void writeRegisterProbabilisticAtlas();
 

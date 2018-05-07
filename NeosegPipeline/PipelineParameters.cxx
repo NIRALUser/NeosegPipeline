@@ -596,8 +596,6 @@ bool PipelineParameters::checkAtlas(QString atlas)
 void PipelineParameters::initializeAtlasPopulation() 
 {
    m_atlasPopulation.clear(); 
-   int AtlasNumber=0;
-
    QStringList::const_iterator it;
 
    for (it = m_selectedAtlases.constBegin(); it != m_selectedAtlases.constEnd(); ++it) 
@@ -653,7 +651,7 @@ void PipelineParameters::initializeAtlasPopulation()
          atlas.parc_ok=0;
       }
 
-      atlas.roi_nbr=0;
+      /*atlas.roi_nbr=0;
       for (int i=0 ; i<9 ; i++)
       {
          QString roiX="roi"+QString::number(i);
@@ -668,11 +666,26 @@ void PipelineParameters::initializeAtlasPopulation()
       if(atlas.roi_nbr==0)
       {
          atlas.roi_ok=0;
-      }     
+      }     */
 
-      m_registrationParameters_atlas->setBoolParc(atlas.parc_ok);    
+      for (int i=0 ; i<10 ; i++)
+      {
+         QString roiX="roi"+QString::number(i);
+         if ((atlasFiles[roiX]).size()==1)
+         {
+            atlas.roi[i] = (atlasFiles[roiX])[0].filePath();
+            atlas.roi_ok[i]=1;
+         }
+         else
+         {
+            atlas.roi_ok[i]=0;
+         }
+      }  
+
+
+      /*m_registrationParameters_atlas->setBoolParc(atlas.parc_ok);    
       m_registrationParameters_atlas->setBoolRoi(atlas.roi_ok);
-      m_registrationParameters_atlas->setRoiNbr(atlas.roi_nbr);
+      m_registrationParameters_atlas->setRoiNbr(atlas.roi_nbr);*/
 
       //atlas.log = QDir(atlas_path).filePath(atlas.name + ".log");
 

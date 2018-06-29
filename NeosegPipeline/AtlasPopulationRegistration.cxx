@@ -31,7 +31,7 @@ Atlas AtlasPopulationRegistration::defineRegisteredAtlas(Atlas atlas)
    {
       QString T1Reg_name = atlas.name + "_to_" + m_neo.prefix + "-T1.nrrd";
       atlasReg.T1 = atlas_dir->filePath(T1Reg_name);
-   } 
+   }
    else
    {
       atlasReg.T1 = "";
@@ -58,13 +58,27 @@ Atlas AtlasPopulationRegistration::defineRegisteredAtlas(Atlas atlas)
       QString csfReg_name = atlas.name + "_to_" + m_neo.prefix + "-csf.nrrd";
       atlasReg.csf = atlas_dir->filePath(csfReg_name);
    }
-
    else
    {
       QString segReg_name = atlas.name + "_to_" + m_neo.prefix + "-seg.nrrd";
       atlasReg.seg = atlas_dir->filePath(segReg_name);
-   }
 
+      if(atlas.parc_ok)
+      {
+         QString parcReg_name = atlas.name + "_to_" + m_neo.prefix + "-parc.nrrd";
+         atlasReg.parc = atlas_dir->filePath(parcReg_name);
+      }
+
+      int i=0;
+      for (i=0; i<10 ; i++)
+      {
+         if(atlas.roi_ok[i])
+         {
+            QString roiReg_name = atlas.name + "_to_" + m_neo.prefix + "-roi"+ QString::number(i)+".nrrd";
+            atlasReg.roi[i] = atlas_dir->filePath(roiReg_name);
+         }
+      }
+   }
    return atlasReg;
 }
 
@@ -133,6 +147,27 @@ void AtlasPopulationRegistration::defineRegisterAtlasParameters(Atlas atlas)
    else
    {
       m_script += m_indent + "segAtlas = '" + atlas.seg + "'\n";
+      if(atlas.parc_ok==1)
+      {
+         m_script += m_indent + "parcAtlas = '" + atlas.parc + "'\n";
+      }
+      else
+      {
+         m_script += m_indent + "parcAtlas = '""'\n";
+      }
+
+      int i=0;
+      for (i=0;i<10;i++)
+      {
+         if(atlas.roi_ok[i]==1)
+         {
+            m_script += m_indent + "roi"+QString::number(i)+"Atlas = '" + atlas.roi[i] + "'\n";
+         }
+         else
+         {
+            m_script += m_indent + "roi"+QString::number(i)+"Atlas = '""'\n";
+         }
+      }
    }
 
    QString atlas_path = m_module_dir->filePath(atlas.name);
@@ -171,6 +206,7 @@ void AtlasPopulationRegistration::submitRegisterAtlasJob(Atlas atlas, int i)
    QString registration_name = "registration_" + QString_i;
 
    QString args = "'bsub', '-q', 'day', '-M', '" + QString::number(m_parameters->getNumberOfGB()) + "', '-n', '" + QString::number(m_parameters->getNumberOfCores()) + "', '-R', 'span[hosts=1]', ";
+   m_script += m_indent + "logger.info('ok')\n";
 
    if(atlas.probabilistic)
    {
@@ -178,8 +214,8 @@ void AtlasPopulationRegistration::submitRegisterAtlasJob(Atlas atlas, int i)
    }
    
    else
-   {
-      args += "'python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log";
+   {      
+      args += "'python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log, parcAtlas, roi0Atlas, roi1Atlas, roi2Atlas, roi3Atlas, roi4Atlas, roi5Atlas, roi6Atlas, roi7Atlas, roi8Atlas, roi9Atlas";
    }
    m_script += m_indent + "args = [" + args + "]\n";
    m_script += m_indent + "bsub_process = subprocess.Popen(args, stdout=subprocess.PIPE)\n";
@@ -189,6 +225,9 @@ void AtlasPopulationRegistration::submitRegisterAtlasJob(Atlas atlas, int i)
    m_script += m_indent + "logger.info(jobID)\n";
    m_script += m_indent + "" + registration_name + " = registration('" + atlas.name + "', jobID)\n";
    m_script += m_indent + "runningRegistrations.append(" + registration_name + ")\n\n";
+
+   m_script += m_indent + "logger.info('ok2')\n";
+
 
 }
 
@@ -216,7 +255,7 @@ void AtlasPopulationRegistration::executeRegisterAtlasProcess(Atlas atlas, int i
    }
    else
    {
-      command = "['python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log]";
+      command = "['python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log, parcAtlas, roi0Atlas, roi1Atlas, roi2Atlas, roi3Atlas, roi4Atlas, roi5Atlas, roi6Atlas, roi7Atlas, roi8Atlas, roi9Atlas]";
    }
    
    

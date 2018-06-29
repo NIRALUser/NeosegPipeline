@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <iomanip> 
+#include <string>
 
 // Qt Librairies // 
 #include <QString>
@@ -15,8 +16,7 @@
 #include "Neo.h"
 #include "Atlas.h"
 #include "RegistrationParameters.h" 
-/*#include "AntsParameters.h" 
-#include "QuicksilverParameters.h" */
+#include "AntsJointFusionParameters.h"
 #include "NeosegParameters.h" 
 #include "ExecutablePaths.h" 
 #include "LibraryPaths.h" 
@@ -25,6 +25,8 @@
 
 const int TISSUE_SEG_TYPE_NEOSEG = 0;
 const int TISSUE_SEG_TYPE_ABC = 1;
+const int TISSUE_SEG_TYPE_ANTSJOINTFUSION = 2;
+
 const int REGISTRATION_TYPE_ANTS = 0;
 const int REGISTRATION_TYPE_QUICKSILVER = 1;
 
@@ -232,16 +234,15 @@ class PipelineParameters
    void setNumberOfCores(int NumberOfCores); 
    int getNumberOfCores();
 
-   //Quicksilver Parameters
-   //QuicksilverParameters* getQuicksilverParameters();
-
    // ANTS DTI Parameters 
    RegistrationParameters* getAntsParametersDTI();  
-   //AntsParameters* getAntsParametersAtlas();  
 
    // Registration Parameters
    RegistrationParameters* getRegistrationParameters();
 
+   // AntsJointFusion Parameters
+   AntsJointFusionParameters* getAntsJointFusionParameters();
+   
    // Neoseg Parameters
    NeosegParameters* getNeosegParameters(); 
 
@@ -269,13 +270,13 @@ class PipelineParameters
        return m_antsRegistrationType;
    }
 
-   // Type of tissue segmentation 0 for Neoseg 1 for ABC
+   // Type of tissue segmentation 0 for Neoseg 1 for ABC 2 for AntsJointFusion
    void setTissueSegmentationType(int type){
        m_abcTissueSegmentationType = type;
    }
 
    /*
-    * @return Type of tissue segmentation 0 for Neoseg 1 for ABC
+    * @return Type of tissue segmentation 0 for Neoseg 1 for ABC 2 for antsJointFusion
     */
    int getTissueSegmentationType(){
        return m_abcTissueSegmentationType;
@@ -357,13 +358,13 @@ class PipelineParameters
        m_NumberOfLabels = labels;
    }
 
-   int m_abcTissueSegmentationType;
-   int m_antsRegistrationType;
+   /*int m_abcTissueSegmentationType;
+   int m_antsRegistrationType;*/
    
    private:
 
-   /*int m_abcTissueSegmentationType;
-   int m_antsRegistrationType;*/
+   int m_abcTissueSegmentationType;
+   int m_antsRegistrationType;
    std::vector<double> m_abcPriorsCoefficients;
    QString m_abcInitialDistributorEstimator;
    double m_abcMaximumDegreeBiasField;
@@ -515,17 +516,14 @@ class PipelineParameters
    int m_numberOfCores_max;
    int m_numberOfCores_default;
    int m_numberOfCores;
-   
-   // Quicksilver Parameters
-   //QuicksilverParameters* m_quicksilverParameters;
-   
-   // ANTS Parameters 
-   /*AntsParameters* m_antsParameters_DTI;
-   AntsParameters* m_antsParameters_atlas;*/
 
+ 
    // Registration Parameters
    RegistrationParameters* m_registrationParameters_atlas;
    RegistrationParameters* m_antsParameters_DTI;
+
+   // AntsJointFusion parameters
+   AntsJointFusionParameters* m_antsJointFusionParameters;
 
    // Neoseg Parameters
    NeosegParameters* m_neosegParameters;

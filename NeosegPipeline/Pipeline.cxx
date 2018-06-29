@@ -6,6 +6,7 @@ Pipeline::Pipeline()
    m_indent = "  " ; // 2 white-spaces
    m_neosegExecution = 0;
    m_ABCExecution = 0;
+   m_antsJointFusionExecution = 0;
 }
 
 Pipeline::~Pipeline()
@@ -147,6 +148,30 @@ void Pipeline::writeAtlasPopulationRegistration()
    m_runningModules += module_name + ".run()\n"; 
    
    m_parameters->setAtlasPopulation(m_atlasPopulationRegistration->getOutput());
+}
+
+void Pipeline::writeantsJointFusionExecution()
+{
+    QString directory_name = "6.AntsJointFusionExecution";
+    QString directory_path = createModuleDirectory(directory_name);
+
+    QString module_name = "AntsJointFusionExecution";
+    m_antsJointFusionExecution = new::AntsJointFusionExecution(module_name);
+    m_antsJointFusionExecution->setIndent(m_indent);   
+    //m_atlasPopulationRegistration->setAtlasPopulation(m_parameters->getAtlasPopulation());
+    m_antsJointFusionExecution->setAntsJointFusionParameters(m_parameters->getAntsJointFusionParameters());
+    //m_antsJointFusionExecution->SetPipelineParameters(m_parameters);
+    m_antsJointFusionExecution->setModuleDirectory(directory_path);
+    m_antsJointFusionExecution->setProcessingDirectory(m_processing_path);
+    m_antsJointFusionExecution->setExecutablePaths(m_parameters->getExecutablePaths());
+    m_antsJointFusionExecution->setSuffix(m_parameters->getSuffix());
+    m_antsJointFusionExecution->setOverwriting(m_parameters->getOverwriting());
+    m_antsJointFusionExecution->setStoppingIfError(m_parameters->getStoppingIfError());
+
+    m_antsJointFusionExecution->update();
+
+    m_importingModules += "import " + module_name +"\n";
+    m_runningModules += module_name + ".run()\n";
 }
 
 void Pipeline::writeAtlasGeneration()
@@ -399,7 +424,10 @@ void Pipeline::cleanUp()
    {
       m_atlasRegistration->cleanUp(); 
       m_atlasPopulationRegistration->cleanUp();
-      m_atlasGeneration->cleanUp(); 
+      if(m_parameters->getTissueSegmentationType() != TISSUE_SEG_TYPE_ANTSJOINTFUSION)
+      {
+        m_atlasGeneration->cleanUp();
+      }
    }
    else
    {
@@ -414,6 +442,10 @@ void Pipeline::cleanUp()
        m_ABCExecution->cleanUp();
    }
 
+   if(m_antsJointFusionExecution){
+       m_antsJointFusionExecution->cleanUp();
+   }
+   
 }
 
 void Pipeline::writeXMLFiles()
@@ -455,17 +487,28 @@ void Pipeline::writePipeline()
    if(m_parameters->getNewAtlas()==true)
    {
       writeAtlasRegistration();
-      writeAtlasPopulationRegistration(); 
-      writeAtlasGeneration(); 
+      writeAtlasPopulationRegistration();
+      if (m_parameters->getTissueSegmentationType() != TISSUE_SEG_TYPE_ANTSJOINTFUSION)
+      {
+         writeAtlasGeneration();
+      } 
    } 
    else
    {
       writeExistingAtlasRegistration(); 
    }
-   if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_NEOSEG){
+
+   if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_NEOSEG)
+   {
        writeNeosegExecution();
-   }else{
+   }
+   else if (m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_ABC)
+   {
        writeABCExecution();
+   }
+   else
+   {
+       writeantsJointFusionExecution();
    }
 
    writeMainScript();
@@ -502,8 +545,7 @@ void Pipeline::runPipeline()
    m_mainScriptProcess->setProcessEnvironment(env);
    m_mainScriptProcess->start(command);
 
-   m_mainScriptProcess->waitForStarted();   
-
+   m_mainScriptProcess->waitForStarted();     
    m_mainScriptProcess->waitForFinished( -1 ) ;
 
    if(!(m_parameters->getComputingSystem()).compare("killdevil", Qt::CaseInsensitive))

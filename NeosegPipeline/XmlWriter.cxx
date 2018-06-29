@@ -141,10 +141,12 @@ void XmlWriter::writeGeneralParameters(QXmlStreamWriter* stream)
 
 void XmlWriter::writeRegistrationParameters(QXmlStreamWriter* stream, RegistrationParameters* registrationParameters)
 {
-  //AntsParameters * antsParameters = (AntsParameters*)parameters;
+  //AntsParameters * antsParameters = (AntsParameters*)parameters; 
 
    stream->writeStartElement("Registration-parameters-" + registrationParameters->getName());
 
+   writeElement(stream, "Software-used", "bool", QString::number(registrationParameters->getRegistrationSoftware()));
+   
    writeElement(stream, "First-modality", "metric", registrationParameters->getImageMetric1(), "weight", QString::number(registrationParameters->getWeight1()), "radius", QString::number(registrationParameters->getRadius1()));
    writeElement(stream, "Second-modality", "metric", registrationParameters->getImageMetric2(), "weight", QString::number(registrationParameters->getWeight2()), "radius", QString::number(registrationParameters->getRadius2()));
 
@@ -157,7 +159,7 @@ void XmlWriter::writeRegistrationParameters(QXmlStreamWriter* stream, Registrati
    writeElement(stream, "Mask", "brain-mask", QString::number(registrationParameters->getUsingMask()), "smoothed-brain-mask", QString::number(registrationParameters->getUsingSmoothedMask()));
    writeElement(stream, "Resources", "Number-of-Registrations", QString::number(registrationParameters->getNumberOfRegistrations()), "Number-of-Cores", QString::number(registrationParameters->getNumberOfCores()), "Number-of-GB", QString::number(registrationParameters->getNumberOfGB()));
 
-   writeElement(stream, "Container Id", "number", registrationParameters->getContainerId());
+   writeElement(stream, "Container-Id", "number", registrationParameters->getContainerId());
 
    stream->writeEndElement();
 }
@@ -185,6 +187,14 @@ void XmlWriter::writeNeosegParameters(QXmlStreamWriter* stream)
    stream->writeEndElement();
 }
 
+void XmlWriter::writeAntsJointFusionParameters(QXmlStreamWriter* stream)
+{
+   AntsJointFusionParameters* antsJointFusionParameters = m_parameters->getAntsJointFusionParameters();
+   stream->writeStartElement("AntsJointFusion-parameters");
+
+   writeElement(stream, "Compute-Rois-Parc-Fusion", "bool", QString::number(antsJointFusionParameters->getRoicParcFusion()));
+   stream->writeEndElement();
+}  
 
 void XmlWriter::writeParametersConfiguration(QString file_path)
 {
@@ -193,7 +203,8 @@ void XmlWriter::writeParametersConfiguration(QString file_path)
    QXmlStreamWriter* stream = new::QXmlStreamWriter(file);
    stream->setAutoFormatting(true);
 
-   if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_NEOSEG){
+   if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_NEOSEG)
+   {
        stream->writeStartDocument();
        stream->writeDTD("<!DOCTYPE Neoseg-pipeline-parameters>");
 
@@ -207,7 +218,9 @@ void XmlWriter::writeParametersConfiguration(QString file_path)
 
        stream->writeEndElement();
        stream->writeEndDocument();
-   }else if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_ABC){
+   }
+   else if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_ABC)
+   {
 
        stream->writeStartDocument();
        stream->writeDTD("<!DOCTYPE ABC-pipeline-parameters>");
@@ -252,6 +265,21 @@ void XmlWriter::writeParametersConfiguration(QString file_path)
        stream->writeEndDocument();
 
    }
+   else
+   {
+       stream->writeStartDocument();
+       stream->writeDTD("<!DOCTYPE AntsJointFusion-pipeline-parameters>");
+
+       stream->writeStartElement("Parameters");
+
+       writeGeneralParameters(stream);
+       writeRegistrationParameters(stream, m_parameters->getRegistrationParameters());
+
+        writeAntsJointFusionParameters(stream);
+
+       stream->writeEndElement();
+       stream->writeEndDocument();
+   }
    file->close(); 
 }
 
@@ -277,6 +305,7 @@ void XmlWriter::writeExecutables(QXmlStreamWriter* stream)
    writeElement(stream, "ReassignWhiteMatter", "path", executablePaths->getExecutablePath("ReassignWhiteMatter"));
    writeElement(stream, "InsightSNAP", "path", executablePaths->getExecutablePath("InsightSNAP"));
    writeElement(stream, "ABC", "path", executablePaths->getExecutablePath("ABC"));
+   writeElement(stream, "antsJointFusion", "path", executablePaths->getExecutablePath("antsJointFusion"));
 
    stream->writeEndElement(); 
 

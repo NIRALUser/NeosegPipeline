@@ -6,6 +6,7 @@ void XmlReader::setPipelineParameters(PipelineParameters* parameters)
    m_antsParameters_DTI = m_parameters->getAntsParametersDTI(); 
    m_registrationParameters_atlas = m_parameters->getRegistrationParameters(); 
    m_neosegParameters = m_parameters->getNeosegParameters();
+   m_antsJointFusionParameters = m_parameters->getAntsJointFusionParameters();
    m_executablePaths = m_parameters->getExecutablePaths(); 
    m_libraryPaths = m_parameters->getLibraryPaths(); 
 }
@@ -48,23 +49,21 @@ QString XmlReader::readParametersConfigurationFile(QString file_path)
             {
                readGeneralParameters(stream, errors);
             }
-            /*else if (stream->name() == "Quicksilver-parameters")
-            {
-               readQuicksilverParameters(stream, errors, m_quicksilverParameters);
-            }*/
             else if (stream->name() == "ANTS-parameters-DTI")
             {
                readRegistrationParameters(stream, errors, m_antsParameters_DTI);
             }
             else if (stream->name() == "Registration-parameters-atlas")
             {
-                /*readAntsParameters(stream, errors, m_registrationParameters_atlas);
-                readQuicksilverParameters(stream, errors, m_registrationParameters_atlas);*/
               readRegistrationParameters(stream, errors, m_registrationParameters_atlas);
             }
             else if (stream->name() == "Neoseg-parameters")
             {
-                readNeosegParameters(stream, errors);
+              readNeosegParameters(stream, errors);
+            }
+            else if (stream->name() == "AntsJointFusion-parameters")
+            {
+                readAntsJointFusionParameters(stream, errors);
             }
             else if (stream->name() == "ABC-parameters")
             {
@@ -585,7 +584,24 @@ void XmlReader::readRegistrationParameters(QXmlStreamReader* stream, QString err
       if(stream->isStartElement())
       {
          QXmlStreamAttributes attributes = stream->attributes();
-         if (stream->name() == "First-modality")
+         if(stream->name() == "Software-used")
+         {
+            bool softwareUsed = ((attributes.value("bool")).toString()).toInt(&ok);
+            if(ok && isBoolean(softwareUsed))
+            {
+              if(softwareUsed==true){
+               registrationParameters->setUsingAnts();
+              }
+              else{
+               registrationParameters->setUsingQuicksilver();
+              }
+            }
+            else 
+            {
+               errors += " - 'Software-used' is not valid, it must be a boolean\n";
+            }
+         }
+         else if (stream->name() == "First-modality")
          {
             QString imageMetric = (attributes.value("metric")).toString(); 
             if(registrationParameters->checkImageMetric(imageMetric))   
@@ -828,21 +844,49 @@ void XmlReader::readRegistrationParameters(QXmlStreamReader* stream, QString err
                errors += " - 'Number-of-GB' is not valid, it must be a positive integer\n";
             }  
          }
-         else if (stream->name() == "Container Id")
+         else if (stream->name() == "Container-Id")
          {
-            QString containerId_QString = (attributes.value("containerId")).toString(); 
+            QString containerId_QString = (attributes.value("number")).toString(); 
             if(registrationParameters->checkContainerId(containerId_QString))
             {
                 registrationParameters->setContainerId(containerId_QString);
             }
             else if(!containerId_QString.isEmpty())
             {
-                errors += " - 'Container Id' is not valid\n";
+                errors += " - 'Container-Id' is not valid, it must be a boolean\n";
             }
          }
-
       }
    }
+}
+         
+void XmlReader::readAntsJointFusionParameters(QXmlStreamReader* stream, QString errors)
+{
+  bool ok; 
+
+  while(!(stream->isEndElement() && stream->name() == "AntsJointFusion-parameters"))
+  {
+    stream->readNext();
+
+      if(stream->isStartElement())
+      {
+         QXmlStreamAttributes attributes = stream->attributes();
+
+         if (stream->name() == "Compute-Rois-Parc-Fusion")
+         {
+          bool ComputeRoisParc = ((attributes.value("bool")).toString()).toInt(&ok);
+            if(ok && isBoolean(ComputeRoisParc))
+            {
+               m_antsJointFusionParameters->setRoicParcFusion(ComputeRoisParc);
+            }
+            else 
+            {
+               errors += " - 'ComputeRoisParc' is not valid, it must be a boolean\n";
+            }
+         }
+      }
+  }
+  m_parameters->setTissueSegmentationType(TISSUE_SEG_TYPE_ANTSJOINTFUSION);
 }
 
 void XmlReader::readNeosegParameters(QXmlStreamReader* stream, QString errors)
@@ -1017,9 +1061,8 @@ void XmlReader::readNeosegParameters(QXmlStreamReader* stream, QString errors)
          }
       }
    }
+    m_parameters->setTissueSegmentationType(TISSUE_SEG_TYPE_NEOSEG);
 }
-
-
 
 QString XmlReader::readExecutablesConfigurationFile(QString file_path)
 {
@@ -1189,6 +1232,8 @@ QString XmlReader::readDataConfigurationFile( QString file_path )
                     else
                     {
                         m_parameters->setOutput( path ) ;
+                        m_registrationParameters_atlas->setOutputDir( path );
+                        m_antsJointFusionParameters->setOutputDir( path );
                     }
                 }
                 else

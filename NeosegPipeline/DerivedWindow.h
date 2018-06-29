@@ -21,8 +21,10 @@
 #include "ui_About.h"
 #include "ui_neosegParameters.h"
 #include "ui_ABCParameters.h"
+#include "ui_antsJointFusionParameters.h"
 #include "ui_antsParameters.h"
 #include "ui_quicksilverParameters.h"
+
 #include "Pipeline.h"
 #include "XmlReader.h"
 #include "XmlWriter.h"
@@ -207,6 +209,7 @@ private :
    Ui_WindowMultiseg ui;
    Ui::ABCParameters *abcParameters ;
    Ui::neosegParameters *neosegParameters ;
+   Ui::antsJointFusionParameters *antsJointFusionParameters ;
    Ui::antsParameters *antsParameters ;
    Ui::quicksilverParameters *quicksilverParameters ;
    // Pipeline 
@@ -215,10 +218,9 @@ private :
    // Parameters
    PipelineParameters* m_parameters;
    RegistrationParameters* m_antsParameters_DTI; 
-   /*AntsParameters* m_antsParameters_atlas; 
-   QuicksilverParameters* m_quicksilverParameters;*/
    RegistrationParameters* m_registrationParameters_atlas;
-   NeosegParameters* m_neosegParameters; 
+   NeosegParameters* m_neosegParameters;
+   AntsJointFusionParameters* m_antsJointFusionParameters; 
 
    // Executables 
    ExecutablePaths* m_executables; 

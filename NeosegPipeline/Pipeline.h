@@ -29,6 +29,8 @@
 #include "NeosegExecution.h"
 #include "XmlWriter.h"
 #include "ABCExecution.h"
+#include "AntsJointFusionExecution.h"
+
 
 
 class Pipeline
@@ -72,6 +74,7 @@ class Pipeline
    void writeExistingAtlasRegistration();
    void writeNeosegExecution();
    void writeABCExecution();
+   void writeantsJointFusionExecution();
 
    // Write Main Script 
    void initializeMainScript();
@@ -94,6 +97,7 @@ class Pipeline
    ExistingAtlasRegistration* m_existingAtlasRegistration; 
    NeosegExecution* m_neosegExecution; 
    ABCExecution* m_ABCExecution;
+   AntsJointFusionExecution* m_antsJointFusionExecution;
 
    PipelineParameters* m_parameters;  
 

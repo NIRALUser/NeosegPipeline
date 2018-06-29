@@ -27,7 +27,7 @@ INSTALL(TARGETS ${LIBRARY_NAME} ARCHIVE DESTINATION bin)
 
 QT4_ADD_RESOURCES(RESOURCES resources.qrc)
 #QT4_ADD_RESOURCES(quicksilver_generated_rcc ${quicksilver_rcc})
-QT4_WRAP_UI(UI_SOURCES WindowMultiseg.ui antsParameters.ui quicksilverParameters.ui neosegParameters.ui ABCParameters.ui About.ui)
+QT4_WRAP_UI(UI_SOURCES WindowMultiseg.ui antsParameters.ui quicksilverParameters.ui neosegParameters.ui ABCParameters.ui antsJointFusionParameters.ui About.ui)
 QT4_WRAP_CPP(MOC_SOURCES DerivedWindow.h MainScriptThread.h)
 
 
@@ -58,6 +58,8 @@ SET(NeosegPipeline_SOURCE  main.cxx
                            DtiRegistration.cxx
                            MainScriptThread.cxx
                            ABCExecution.cxx
+                           AntsJointFusionExecution.cxx
+                           AntsJointFusionParameters.cxx
 )
 
 SET(NeosegPipeline_HEADERS NeosegPipelineTool.h
@@ -87,8 +89,10 @@ SET(NeosegPipeline_HEADERS NeosegPipelineTool.h
                            Origin.h
                            MinMax.h
                            ABCExecution.h
-)
+                           AntsJointFusionExecution.h
+                           AntsJointFusionParameters.h
 
+)
 
 
 FILE(READ NeosegPipeline.xml var)
@@ -99,10 +103,10 @@ STRING(REPLACE "</version>" "" version_number ${version_number})
 
 ADD_DEFINITIONS(-DNEOSEGPIPELINE_VERSION="${version_number}")
 
-ADD_EXECUTABLE(NeosegPipeline ${NeosegPipeline_SOURCE} ${NeosegPipeline_HEADERS} ${MOC_SOURCES} ${UI_SOURCES} ${NeosegPipeline_CLP} ${RESOURCES})
-TARGET_LINK_LIBRARIES(NeosegPipeline ${QT_LIBRARIES} ${ITK_LIBRARIES} CountNumberOfLabels)
+ADD_EXECUTABLE(MultisegPipeline ${NeosegPipeline_SOURCE} ${NeosegPipeline_HEADERS} ${MOC_SOURCES} ${UI_SOURCES} ${NeosegPipeline_CLP} ${RESOURCES})
+TARGET_LINK_LIBRARIES(MultisegPipeline ${QT_LIBRARIES} ${ITK_LIBRARIES} CountNumberOfLabels)
 
-INSTALL(TARGETS NeosegPipeline RUNTIME DESTINATION bin)
+INSTALL(TARGETS MultisegPipeline RUNTIME DESTINATION bin)
 
 
 

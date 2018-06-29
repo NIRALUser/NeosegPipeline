@@ -146,11 +146,6 @@ class RegistrationParameters
    void setUsingSmoothedMask(bool usingSmoothedMask); 
    bool getUsingSmoothedMask();
 
-   // Path to the registration script
-   /*void setRegistrationScriptPath(QString registrationscript_path);
-   bool checkRegistrationScriptPath(QString registrationscript_path);
-   QString getRegistrationScriptPath();*/
-
    void setContainerId(QString container_id);
    bool checkContainerId(QString container_id);
    QString getContainerId();
@@ -161,9 +156,6 @@ class RegistrationParameters
    void setUsingAnts() ;
    void setUsingQuicksilver() ;
    bool getRegistrationSoftware();
-
-   bool m_registrationSoftware_default;
-   bool m_registrationSoftware;
 
 	private:
 
@@ -270,16 +262,17 @@ class RegistrationParameters
    bool m_usingSmoothedMask_default;
    bool m_usingSmoothedMask; 
 
-   //Path to registration script   
-   //QString m_registrationscript_path_default;
-   //QString m_registrationscript_path;
-
    //Docker container id
    QString m_container_id_default;
    QString m_container_id;
 
    QString m_output_dir_default;
    QString m_output_dir;
+
+   //Registration software
+   bool m_registrationSoftware_default;
+   bool m_registrationSoftware;
+
 };
 
 #endif

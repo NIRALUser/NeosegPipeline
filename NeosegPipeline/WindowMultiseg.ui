@@ -17,10 +17,10 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Neoseg Pipeline</string>
+   <string>MultisegPipeline</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="resources.qrc">
     <normaloff>:/icons/icons/LogoWithRing.png</normaloff>:/icons/icons/LogoWithRing.png</iconset>
   </property>
   <property name="iconSize">
@@ -242,7 +242,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>4</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="data_tab">
        <attribute name="title">
@@ -621,9 +621,10 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-weight:600; font-style:italic;&quot;&gt;Each atlas directory must include: &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;- 1 skull-stripped T1 (*T1*)  or  1 skull-stripped T2 (*T2*)  or  both (recommended)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;- 1 3-labels segmentation (*seg*)          or       - 1 WM probability map (*white*)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;(label1=WM, label2=GM, label3=CSF)             - 1 GM probability map (*gray*)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;	                                                 - 1 CSF probability map (*csf*) &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;- 1 3-labels segmentation (*seg*)        or    - 1 WM probability map (*white*)    or    &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;- 1 3-labels segmentation (*seg*) &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;   &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;(label1=WM, label2=GM, label3=CSF)        - 1 GM probability map (*gray*)	  &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt; - X brain ROIs (*roiX*) &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;	                                            - 1 CSF probability map (*csf*) 	    &lt;/span&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;(X is a number from 0 to 9)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;					   - 1 brain parcellation&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt; font-style:italic;&quot;&gt;The probability maps have to range from 0 to 1.  &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                          </property>
                         </widget>
@@ -1677,6 +1678,13 @@ p, li { white-space: pre-wrap; }
             </widget>
            </item>
            <item>
+            <widget class="QRadioButton" name="radioantsJointFusion">
+             <property name="text">
+              <string>antsFusion</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer_3">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -1688,6 +1696,13 @@ p, li { white-space: pre-wrap; }
               </size>
              </property>
             </spacer>
+           </item>
+           <item>
+            <widget class="QCheckBox" name="Compute_brain_Rois_and_parcellation_checkBox">
+             <property name="text">
+              <string>Compute brain Rois and parcellation</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -1969,6 +1984,20 @@ p, li { white-space: pre-wrap; }
            <item>
             <widget class="QWidget" name="widget_2" native="true">
              <layout class="QGridLayout" name="gridLayout_2">
+              <item row="9" column="0">
+               <widget class="QPushButton" name="ResampleScalarVectorDWIVolume_button">
+                <property name="text">
+                 <string>ResampleScalarVectorDWIVolume</string>
+                </property>
+               </widget>
+              </item>
+              <item row="17" column="0">
+               <widget class="QPushButton" name="ABC_button">
+                <property name="text">
+                 <string>ABC</string>
+                </property>
+               </widget>
+              </item>
               <item row="11" column="0">
                <widget class="QPushButton" name="WeightedLabelsAverage_button">
                 <property name="text">
@@ -2059,6 +2088,9 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
+              <item row="2" column="2">
+               <widget class="QLineEdit" name="N4ITKBiasFieldCorrection_lineEdit"/>
+              </item>
               <item row="6" column="0">
                <widget class="QPushButton" name="dtiestim_button">
                 <property name="text">
@@ -2073,8 +2105,8 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="2" column="2">
-               <widget class="QLineEdit" name="N4ITKBiasFieldCorrection_lineEdit"/>
+              <item row="7" column="2">
+               <widget class="QLineEdit" name="dtiprocess_lineEdit"/>
               </item>
               <item row="11" column="3">
                <widget class="QPushButton" name="resetWeightedLabelsAverage_button">
@@ -2083,8 +2115,8 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="7" column="2">
-               <widget class="QLineEdit" name="dtiprocess_lineEdit"/>
+              <item row="4" column="2">
+               <widget class="QLineEdit" name="bet2_lineEdit"/>
               </item>
               <item row="8" column="3">
                <widget class="QPushButton" name="resetANTS_button">
@@ -2092,9 +2124,6 @@ p, li { white-space: pre-wrap; }
                  <string>Reset</string>
                 </property>
                </widget>
-              </item>
-              <item row="4" column="2">
-               <widget class="QLineEdit" name="bet2_lineEdit"/>
               </item>
               <item row="8" column="2">
                <widget class="QLineEdit" name="ANTS_lineEdit">
@@ -2110,6 +2139,9 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
+              <item row="3" column="2">
+               <widget class="QLineEdit" name="ITKTransformTools_lineEdit"/>
+              </item>
               <item row="1" column="2">
                <widget class="QLineEdit" name="SegPostProcessCLP_lineEdit">
                 <property name="text">
@@ -2124,23 +2156,13 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="3" column="2">
-               <widget class="QLineEdit" name="ITKTransformTools_lineEdit"/>
+              <item row="13" column="2">
+               <widget class="QLineEdit" name="Neoseg_lineEdit"/>
               </item>
               <item row="14" column="0">
                <widget class="QPushButton" name="ReassignWhiteMatter_button">
                 <property name="text">
                  <string>ReassignWhiteMatter</string>
-                </property>
-               </widget>
-              </item>
-              <item row="13" column="2">
-               <widget class="QLineEdit" name="Neoseg_lineEdit"/>
-              </item>
-              <item row="6" column="3">
-               <widget class="QPushButton" name="resetDtiestim_button">
-                <property name="text">
-                 <string>Reset</string>
                 </property>
                </widget>
               </item>
@@ -2151,10 +2173,10 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="13" column="0">
-               <widget class="QPushButton" name="Neoseg_button">
+              <item row="6" column="3">
+               <widget class="QPushButton" name="resetDtiestim_button">
                 <property name="text">
-                 <string>Neoseg</string>
+                 <string>Reset</string>
                 </property>
                </widget>
               </item>
@@ -2162,6 +2184,13 @@ p, li { white-space: pre-wrap; }
                <widget class="QPushButton" name="resetUnu_button">
                 <property name="text">
                  <string>Reset</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="0">
+               <widget class="QPushButton" name="Neoseg_button">
+                <property name="text">
+                 <string>Neoseg</string>
                 </property>
                </widget>
               </item>
@@ -2237,13 +2266,6 @@ p, li { white-space: pre-wrap; }
               <item row="5" column="2">
                <widget class="QLineEdit" name="unu_lineEdit"/>
               </item>
-              <item row="9" column="0">
-               <widget class="QPushButton" name="ResampleScalarVectorDWIVolume_button">
-                <property name="text">
-                 <string>ResampleScalarVectorDWIVolume</string>
-                </property>
-               </widget>
-              </item>
               <item row="0" column="2">
                <widget class="QLineEdit" name="python_lineEdit"/>
               </item>
@@ -2261,18 +2283,28 @@ p, li { white-space: pre-wrap; }
                 </property>
                </widget>
               </item>
-              <item row="17" column="0">
-               <widget class="QPushButton" name="ABC_button">
-                <property name="text">
-                 <string>ABC</string>
-                </property>
-               </widget>
-              </item>
               <item row="17" column="2">
                <widget class="QLineEdit" name="ABC_lineEdit"/>
               </item>
               <item row="17" column="3">
                <widget class="QPushButton" name="resetABC_button">
+                <property name="text">
+                 <string>Reset</string>
+                </property>
+               </widget>
+              </item>
+              <item row="18" column="0">
+               <widget class="QPushButton" name="antsJointFusion_button">
+                <property name="text">
+                 <string>antsJointFusion</string>
+                </property>
+               </widget>
+              </item>
+              <item row="18" column="2">
+               <widget class="QLineEdit" name="antsJointFusion_lineEdit"/>
+              </item>
+              <item row="18" column="3">
+               <widget class="QPushButton" name="reset_antsJointFusion_button">
                 <property name="text">
                  <string>Reset</string>
                 </property>
@@ -2407,7 +2439,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>930</width>
-     <height>25</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

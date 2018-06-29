@@ -9,14 +9,12 @@ QString name;
 QString T1;
 QString T2;
 QString mask;
-bool probabilistic;
-bool parc_ok;
-bool roi_ok[10];
-
-//int roi_nbr;
-
-QString seg; 
+QString seg;
+bool roi_ok[10]; 
 QString roi[10];
+bool parc_ok;
+
+bool probabilistic;
 QString parc;
 QString white;
 QString gray;

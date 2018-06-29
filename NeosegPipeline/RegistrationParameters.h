@@ -157,18 +157,6 @@ class RegistrationParameters
    void setUsingQuicksilver() ;
    bool getRegistrationSoftware();
 
-   void setBoolParc(bool bool_parc);
-   bool getBoolParc();
-   
-   void setBoolRoi(bool bool_roi);
-   bool getBoolRoi();
-   
-   void setRoiNbr(int nbr_roi);
-   int getRoiNbr();
-
-   bool m_registrationSoftware_default;
-   bool m_registrationSoftware;
-
 	private:
 
    // Number of Registrations  
@@ -281,9 +269,10 @@ class RegistrationParameters
    QString m_output_dir_default;
    QString m_output_dir;
 
-   bool m_parc_ok;
-   bool m_roi_ok;
-   int m_roi_nbr;
+   //Registration software
+   bool m_registrationSoftware_default;
+   bool m_registrationSoftware;
+
 };
 
 #endif

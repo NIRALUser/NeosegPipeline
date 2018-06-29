@@ -75,10 +75,6 @@ void ABCExecution::implementRun(){
 
     m_script+= m_indent + "args = [ABC, parameters_path]\n";
     m_script+= m_indent + "execute(args)\n";
-
-
-
-
 }
 
 void ABCExecution::addRename(QString s1, QString s2){

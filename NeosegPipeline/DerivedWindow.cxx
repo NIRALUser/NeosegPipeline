@@ -7,11 +7,14 @@ DerivedWindow::DerivedWindow() : Ui_WindowMultiseg()
    setAcceptDrops(true);
 
    neosegParameters = new Ui::neosegParameters ;
-   neosegParameters->setupUi( this->softwareFrame ) ;
+   neosegParameters->setupUi(this->softwareFrame) ;
    abcParameters = new Ui::ABCParameters ;
    abcParameters->setupUi(this->softwareFrame);
+   antsJointFusionParameters = new Ui::antsJointFusionParameters ;
+   antsJointFusionParameters->setupUi(this->softwareFrame) ;
    this->radioNeoseg->setChecked( true ) ;
    this->radioABC->setChecked( false ) ;
+   this->radioantsJointFusion->setChecked( false ) ;
 
    antsParameters = new Ui::antsParameters ;
    antsParameters->setupUi( this->registrationsoftwareFrame ) ; 
@@ -186,6 +189,7 @@ DerivedWindow::DerivedWindow() : Ui_WindowMultiseg()
    // Display ABC options or neoseg options in "Tissue Segmentation" tab
    connect( radioNeoseg, SIGNAL(clicked()), this, SLOT(tissueSegmentationSoftwareSelection()) ) ;
    connect( radioABC, SIGNAL(clicked()), this, SLOT(tissueSegmentationSoftwareSelection()) ) ;
+   connect( radioantsJointFusion, SIGNAL(clicked()), this, SLOT(tissueSegmentationSoftwareSelection()) ) ;
 
    connect(this->abcParameters->pushButtonRefreshPriors, SIGNAL(clicked()), this, SLOT(pushButtonRefreshPriors()));
    connect(this->abcParameters->comboBoxOutputImageFormat, SIGNAL(currentIndexChanged(QString)), this, SLOT(comboBoxOutputImageFormat_currentIndexChanged(QString)));
@@ -344,11 +348,19 @@ void DerivedWindow::tissueSegmentationSoftwareSelection()
     {
         neosegParameters->frame->show() ;
         abcParameters->frame->hide() ;
+        antsJointFusionParameters->frame->hide() ;
+    }
+    else if (this->radioABC->isChecked() )
+    {
+        neosegParameters->frame->hide() ;
+        abcParameters->frame->show() ;
+        antsJointFusionParameters->frame->hide() ;
     }
     else
     {
         neosegParameters->frame->hide() ;
-        abcParameters->frame->show() ;
+        abcParameters->frame->hide() ;
+        antsJointFusionParameters->frame->show() ;     
     }
 }
 
@@ -358,13 +370,11 @@ void DerivedWindow::registrationSoftwareSelection()
     {
         antsParameters->registration_frame->show() ;
         quicksilverParameters->registration_frame->hide() ;
-        m_registrationParameters_atlas->setUsingAnts();
     }
     else
     {
         antsParameters->registration_frame->hide() ;
         quicksilverParameters->registration_frame->show() ;
-        m_registrationParameters_atlas->setUsingQuicksilver();
     }
 }
 
@@ -420,13 +430,16 @@ void DerivedWindow::setPipelineParameters(PipelineParameters* parameters)
    m_parameters = parameters;
    m_antsParameters_DTI = m_parameters->getAntsParametersDTI(); 
    m_registrationParameters_atlas = m_parameters->getRegistrationParameters();
+   m_antsJointFusionParameters = m_parameters->getAntsJointFusionParameters();
    m_neosegParameters = m_parameters->getNeosegParameters(); 
    m_executables = m_parameters->getExecutablePaths();
    m_libraries = m_parameters->getLibraryPaths();
    initializeXMLParameters();
    initializeDataParameters();
    initializeExecutables();
-   updateNumbersOfPriorsForABC();
+   if(m_parameters->getTissueSegmentationType() != TISSUE_SEG_TYPE_ANTSJOINTFUSION){
+   updateNumbersOfPriorsForABC();   
+   }
 }
 
 void DerivedWindow::setPipeline(Pipeline* pipeline) 
@@ -512,6 +525,9 @@ void DerivedWindow::initializeExecutablesMap()
 
    Executable ABC = {ABC_button, ABC_lineEdit, resetABC_button};
    m_executables_map.insert("ABC", ABC);
+
+   Executable antsJointFusion = {antsJointFusion_button, antsJointFusion_lineEdit, reset_antsJointFusion_button};
+   m_executables_map.insert("antsJointFusion", antsJointFusion);
 }
 
 void DerivedWindow::initializeLibrariesMap()
@@ -698,7 +714,7 @@ void DerivedWindow::selectAtlasPopulationDirectory()
    atlasPopulationDirectory_lineEdit->setText(atlasPopulationDirectory);
    m_parameters->setAtlasPopulationDirectory( atlasPopulationDirectory_lineEdit->text() ) ;
    UpdateAtlasPopulationDirectoryDisplay() ;
-    updateNumbersOfPriorsForABC();
+   updateNumbersOfPriorsForABC();
 }
 
 void DerivedWindow::enterAtlasPopulationDirectory()
@@ -997,6 +1013,7 @@ void DerivedWindow::resetAllExecutables()
    resetExecutable("ReassignWhiteMatter"); 
    resetExecutable("InsightSNAP");
    resetExecutable("ABC");
+   resetExecutable("antsJointFusion");
 }
 
 
@@ -1050,12 +1067,6 @@ void DerivedWindow::initializeDataParameters()
 {
   prefix_lineEdit->setText(m_parameters->getPrefix());
   suffix_lineEdit->setText(m_parameters->getSuffix());
-
-//  output_lineEdit->setText(QString("/Users/prieto/NetBeansProjects/UNC/data/testNeoSeg/abcout"));
-//  T1_lineEdit->setText(QString("/Users/prieto/NetBeansProjects/UNC/data/testNeoSeg/BUSS_2002_T1_Bias_regT2_regAtlas_corrected_EMS-stripped.nrrd"));
-//  T2_lineEdit->setText(QString("/Users/prieto/NetBeansProjects/UNC/data/testNeoSeg/BUSS_2002_T2_Bias_regAtlas_corrected_EMS-stripped.nrrd"));
-//  mask_lineEdit->setText(QString("/Users/prieto/NetBeansProjects/UNC/data/testNeoSeg/BUSS_2002_mask.nrrd"));
-
   output_lineEdit->setText(m_parameters->getOutput()); 
   T1_lineEdit->setText(m_parameters->getT1());
   T2_lineEdit->setText(m_parameters->getT2());
@@ -1118,7 +1129,44 @@ void DerivedWindow::initializeXMLParameters()
    } 
 
    usingFA_checkBox->setChecked(m_parameters->getUsingFA()); 
-   usingAD_checkBox->setChecked(m_parameters->getUsingAD()); 
+   usingAD_checkBox->setChecked(m_parameters->getUsingAD());
+
+   Compute_brain_Rois_and_parcellation_checkBox->setChecked(m_antsJointFusionParameters->getRoicParcFusion());
+   
+   if(m_registrationParameters_atlas->getRegistrationSoftware()==true)
+   {
+   radioAnts->setChecked(true);
+   radioQuicksilver->setChecked(false);
+   registrationSoftwareSelection();
+   }
+   else
+   {
+   radioABC->setChecked(false);
+   radioQuicksilver->setChecked(true);
+   registrationSoftwareSelection();
+   }
+   
+   if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_ABC)
+   {
+   radioABC->setChecked(true);
+   radioNeoseg->setChecked(false);
+   radioantsJointFusion->setChecked(false);
+   tissueSegmentationSoftwareSelection();
+   }
+   else if(m_parameters->getTissueSegmentationType() == TISSUE_SEG_TYPE_NEOSEG)
+   {
+   radioABC->setChecked(false);
+   radioNeoseg->setChecked(true);
+   radioantsJointFusion->setChecked(false);
+   tissueSegmentationSoftwareSelection();
+   }
+   else
+   {
+   radioABC->setChecked(false);
+   radioNeoseg->setChecked(false);
+   radioantsJointFusion->setChecked(true);
+   tissueSegmentationSoftwareSelection();
+   }
 
    neosegParameters->computing3LabelsSeg_checkBox->setChecked(m_parameters->getComputing3LabelsSeg() ) ;
    neosegParameters->reassigningWhite_checkBox->setChecked(m_parameters->getReassigningWhiteMatter());
@@ -1305,6 +1353,7 @@ void DerivedWindow::initializeExecutables()
    Neoseg_lineEdit->setText(m_executables->getExecutablePath("neoseg"));
    InsightSNAP_lineEdit->setText(m_executables->getExecutablePath("InsightSNAP"));
    ABC_lineEdit->setText(m_executables->getExecutablePath("ABC"));
+   antsJointFusion_lineEdit->setText(m_executables->getExecutablePath("antsJointFusion"));
    // Libraries
    FSL_lineEdit->setText(m_libraries->getLibraryPath("FSL"));
 }
@@ -1325,24 +1374,41 @@ void DerivedWindow::setData()
    {
       createOutput(output_lineEdit->text()); 
    }
-   if(this->radioNeoseg->isChecked()){
+
+   if(this->radioAnts->isChecked())
+   {
+      m_registrationParameters_atlas->setUsingAnts();
+   }
+   else
+   {
+     m_registrationParameters_atlas->setUsingQuicksilver();
+   }
+
+   if(this->radioNeoseg->isChecked())
+   {
        m_parameters->setTissueSegmentationType(TISSUE_SEG_TYPE_NEOSEG);
-   }else{
+   }
+   else if (this->radioABC->isChecked())
+   {
        m_parameters->setTissueSegmentationType(TISSUE_SEG_TYPE_ABC);
        std::vector<double> coeffs;
        PipelineParameters::ABCVectorReassignLabelsType  vectorReassign;
-       for(unsigned i = 0; i < m_VectorABCPriorCheckBoxes.size(); i++){
+       for(unsigned i = 0; i < m_VectorABCPriorCheckBoxes.size(); i++)
+       {
            PriorSpinBox* priorspin = m_VectorABCPriorCheckBoxes[i];
            coeffs.push_back(priorspin->dspin->value());
 
            PipelineParameters::ABCReassignLabelsType reassign;
-           if(priorspin->checkboxIslands){
+           if(priorspin->checkboxIslands)
+           {
                reassign.m_ReassignEnabled = priorspin->checkboxIslands->isChecked();
                reassign.m_Threshold = (int)priorspin->spinBoxIslands->value();
                reassign.m_VoxelByVoxel = priorspin->checkBoxVoxelByVoxel->isChecked();
                reassign.m_Label = priorspin->m_LabelValue;
                reassign.m_Index = priorspin->m_Index;
-           }else{
+           }
+           else
+           {
                reassign.m_ReassignEnabled = false;
                reassign.m_Threshold = 0;
                reassign.m_VoxelByVoxel = false;
@@ -1360,11 +1426,14 @@ void DerivedWindow::setData()
        m_parameters->setABCOutputImageFormat(this->abcParameters->comboBoxOutputImageFormat->currentText());
 
    }
-
-
+   else
+   {
+        m_parameters->setTissueSegmentationType(TISSUE_SEG_TYPE_ANTSJOINTFUSION);
+   }
 
    m_parameters->setOutput(output_lineEdit->text()); 
    m_registrationParameters_atlas->setOutputDir(output_lineEdit->text());
+   m_antsJointFusionParameters->setOutputDir(output_lineEdit->text());
 }
 
 void DerivedWindow::setParameters()
@@ -1506,6 +1575,8 @@ void DerivedWindow::setParameters()
        m_parameters->setABCWhiteImageIndex(QString::number(index));
    }
 
+  // AntsJointFusion compute Brain Rois and Parcellation fusion
+  m_antsJointFusionParameters->setRoicParcFusion(Compute_brain_Rois_and_parcellation_checkBox->isChecked());
 }
 
 void DerivedWindow::setExecutables()
@@ -1528,6 +1599,7 @@ void DerivedWindow::setExecutables()
    m_executables->setExecutablePath("neoseg", Neoseg_lineEdit->text()); 
    m_executables->setExecutablePath("InsightSNAP", InsightSNAP_lineEdit->text());
    m_executables->setExecutablePath("ABC", ABC_lineEdit->text());
+   m_executables->setExecutablePath("antsJointFusion", antsJointFusion_lineEdit->text());
 
    m_libraries->setLibraryPath("FSL", FSL_lineEdit->text());    
 
@@ -1703,6 +1775,7 @@ void DerivedWindow::initializeRegistrationsLogging()
    QDir output_dir(m_parameters->getOutput());
    QString atlasRegistration_path = output_dir.filePath("3.AtlasRegistration");
    QDir atlasRegistration_dir(atlasRegistration_path);
+   
 
    Logging logging; 
 

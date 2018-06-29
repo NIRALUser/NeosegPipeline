@@ -23,6 +23,7 @@ class XmlReader
    void readRegistrationParameters(QXmlStreamReader* stream, QString errors, RegistrationParameters* parameters);
    void readNeosegParameters(QXmlStreamReader* stream, QString errors);
    void readABCParameters(QXmlStreamReader* stream, QString errors);
+   void readAntsJointFusionParameters(QXmlStreamReader* stream, QString errors);
 
    QString readExecutablesConfigurationFile(QString file_path);
    QString readDataConfigurationFile( QString file_path ) ;
@@ -33,6 +34,7 @@ class XmlReader
    RegistrationParameters* m_antsParameters_DTI;  
    RegistrationParameters* m_registrationParameters_atlas; 
    NeosegParameters* m_neosegParameters; 
+   AntsJointFusionParameters* m_antsJointFusionParameters;
    ExecutablePaths* m_executablePaths;
    LibraryPaths* m_libraryPaths;
    

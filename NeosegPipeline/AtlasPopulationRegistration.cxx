@@ -69,15 +69,6 @@ Atlas AtlasPopulationRegistration::defineRegisteredAtlas(Atlas atlas)
          atlasReg.parc = atlas_dir->filePath(parcReg_name);
       }
 
-      /*if(atlas.roi_ok)
-      {
-         int i=0;
-         for (i=0; i<atlas.roi_nbr ; i++)
-         {
-            QString roiReg_name = atlas.name + "_to_" + m_neo.prefix + "-roi"+ QString::number(i)+".nrrd";
-            atlasReg.roi[i] = atlas_dir->filePath(roiReg_name);
-         }
-      }  */
       int i=0;
       for (i=0; i<10 ; i++)
       {
@@ -164,15 +155,6 @@ void AtlasPopulationRegistration::defineRegisterAtlasParameters(Atlas atlas)
       {
          m_script += m_indent + "parcAtlas = '""'\n";
       }
-      
-      /*if (atlas.roi_ok==1)
-      {
-         int i=0;
-         for ( i=0 ; i<atlas.roi_nbr ; i++)
-         {
-         m_script += m_indent + "roi"+QString::number(i)+"Atlas = '" + atlas.roi[i] + "'\n";
-         }
-      }*/
 
       int i=0;
       for (i=0;i<10;i++)
@@ -234,22 +216,6 @@ void AtlasPopulationRegistration::submitRegisterAtlasJob(Atlas atlas, int i)
    else
    {      
       args += "'python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log, parcAtlas, roi0Atlas, roi1Atlas, roi2Atlas, roi3Atlas, roi4Atlas, roi5Atlas, roi6Atlas, roi7Atlas, roi8Atlas, roi9Atlas";
-
-      //args += "'python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, roiAtlas, parcAtlas, output, log";
-      /*args += "'python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log";
-      if(atlas.parc_ok)
-      {
-         args += ", parcAtlas";
-      }
-      
-      if(atlas.roi_ok)
-      {
-         int i=0;
-         for (i=0 ; i<atlas.roi_nbr ; i++)
-         {
-            args += ", roi"+QString::number(i)+"Atlas" ;
-         }
-      }*/
    }
    m_script += m_indent + "args = [" + args + "]\n";
    m_script += m_indent + "bsub_process = subprocess.Popen(args, stdout=subprocess.PIPE)\n";
@@ -290,24 +256,6 @@ void AtlasPopulationRegistration::executeRegisterAtlasProcess(Atlas atlas, int i
    else
    {
       command = "['python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log, parcAtlas, roi0Atlas, roi1Atlas, roi2Atlas, roi3Atlas, roi4Atlas, roi5Atlas, roi6Atlas, roi7Atlas, roi8Atlas, roi9Atlas]";
-
-      //command = "['python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log]";
-      /*QString arg;
-      if(atlas.parc_ok)
-      {
-         arg += ", parcAtlas";
-      }
-      
-      if(atlas.roi_ok)
-      {
-         int i=0;
-         for(i=0 ; i<atlas.roi_nbr ; i++)
-         {
-            arg += ", roi"+QString::number(i)+"Atlas" ;
-         }
-      }
-      
-      command = "['python', atlasRegistration_script, name, T1Atlas, T2Atlas, segAtlas, output, log"+arg+"]";*/
    }
    
    

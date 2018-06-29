@@ -30,8 +30,8 @@ class XmlWriter
 
       void writeGeneralParameters(QXmlStreamWriter* stream);
       void writeRegistrationParameters(QXmlStreamWriter* stream, RegistrationParameters* registrationParameters);
-      //void writeQuicksilverParameters(QXmlStreamWriter* stream, RegistrationParameters* parameters);
       void writeNeosegParameters(QXmlStreamWriter* stream);
+      void writeAntsJointFusionParameters(QXmlStreamWriter* stream);
       void writeParametersConfiguration(QString file_path); 
 
       void writeExecutables(QXmlStreamWriter* stream);

@@ -123,6 +123,7 @@ PipelineParameters::PipelineParameters()
 
    m_antsParameters_DTI = new RegistrationParameters("DTI"); 
    m_registrationParameters_atlas = new RegistrationParameters("atlas");
+   m_antsJointFusionParameters = new AntsJointFusionParameters();
    m_neosegParameters = new NeosegParameters(); 
    m_executablePaths = new ExecutablePaths(); 
    m_libraryPaths = new LibraryPaths(); 
@@ -226,6 +227,7 @@ void PipelineParameters::setProgramPath(QString programPath)
    m_executablePaths->setDefaultExecutablePath("WeightedLabelsAverage");
    m_executablePaths->setDefaultExecutablePath("ReassignWhiteMatter");
    m_executablePaths->setDefaultExecutablePath("ABC");
+   m_executablePaths->setDefaultExecutablePath("antsJointFusion");
 
    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
    m_libraryPaths->setLibraryPath("FSL", env.value("FSLDIR", QString::null));
@@ -546,6 +548,21 @@ bool PipelineParameters::checkAtlasFiles(QString atlas)
       {  
          return true; 
       }
+
+      // Fusion
+      int ok=0;
+      for (int i=0; i<10 ; i++)
+      {
+         QString roiX="roi"+QString::number(i);
+         if ((atlasFiles[roiX]).size() == 1)
+         {
+            ok++;
+         }
+      }
+      if (ok!=0)
+      {
+         return true;
+      }
    }
    return false; 
 }
@@ -643,6 +660,7 @@ void PipelineParameters::initializeAtlasPopulation()
 
       if ( (atlasFiles["parc"]).size()==1 )
       {
+         atlas.probabilistic = 0;
          atlas.parc_ok=1;
          atlas.parc = (atlasFiles["parc"])[0].filePath();
       }
@@ -651,23 +669,6 @@ void PipelineParameters::initializeAtlasPopulation()
          atlas.parc_ok=0;
       }
 
-      /*atlas.roi_nbr=0;
-      for (int i=0 ; i<9 ; i++)
-      {
-         QString roiX="roi"+QString::number(i);
-         if ((atlasFiles[roiX]).size()==1)
-         {
-            atlas.roi[i] = (atlasFiles[roiX])[0].filePath();
-            atlas.roi_nbr++;
-            atlas.roi_ok=1;
-         }
-      }  
-
-      if(atlas.roi_nbr==0)
-      {
-         atlas.roi_ok=0;
-      }     */
-
       for (int i=0 ; i<10 ; i++)
       {
          QString roiX="roi"+QString::number(i);
@@ -675,18 +676,13 @@ void PipelineParameters::initializeAtlasPopulation()
          {
             atlas.roi[i] = (atlasFiles[roiX])[0].filePath();
             atlas.roi_ok[i]=1;
+            atlas.probabilistic = 0;
          }
          else
          {
             atlas.roi_ok[i]=0;
          }
       }  
-
-
-      /*m_registrationParameters_atlas->setBoolParc(atlas.parc_ok);    
-      m_registrationParameters_atlas->setBoolRoi(atlas.roi_ok);
-      m_registrationParameters_atlas->setRoiNbr(atlas.roi_nbr);*/
-
       //atlas.log = QDir(atlas_path).filePath(atlas.name + ".log");
 
       m_atlasPopulation.push_back(atlas);
@@ -1015,6 +1011,12 @@ RegistrationParameters* PipelineParameters::getRegistrationParameters()
 {
    return m_registrationParameters_atlas;
 }
+
+AntsJointFusionParameters* PipelineParameters::getAntsJointFusionParameters()
+{
+   return m_antsJointFusionParameters;
+}
+
 
 // Neoseg Parameters
 NeosegParameters* PipelineParameters::getNeosegParameters()

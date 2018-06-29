@@ -76,6 +76,11 @@ void Script::importGeneralModules()
    m_script += "import subprocess\n\n";
 }
 
+void Script::importFusionModules()
+{
+   m_script += "import fnmatch\n\n";
+}
+
 void Script::importXmlModules()
 {
    m_script += "from xml.etree import ElementTree\n";
@@ -105,6 +110,18 @@ void Script::implementCheckFileExistence()
    m_script += m_indent + m_indent + m_indent + "return True\n";
    m_script += m_indent + "except IOError:\n";
    m_script += m_indent + m_indent + "return False\n\n";
+}
+
+
+void Script::implementFind()
+{
+   m_script += "def find(pattern, path):\n";
+   m_script += m_indent + "result = []\n";
+   m_script += m_indent + "for root,dirs,files in os.walk(path):\n";
+   m_script += m_indent + m_indent + "for name in files:\n";
+   m_script += m_indent + m_indent + m_indent + "if fnmatch.fnmatch(name, pattern):\n";
+   m_script += m_indent + m_indent + m_indent + m_indent + "result.append(os.path.join(root, name))\n";
+   m_script += m_indent + "return result\n\n";
 }
 
 void Script::implementExecute()

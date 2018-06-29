@@ -552,37 +552,11 @@ void RegistrationParameters::setUsingAnts()
 
 void RegistrationParameters::setUsingQuicksilver()
 {
-   m_registrationSoftware=false ;
+   m_registrationSoftware=false;
 }
 
 bool RegistrationParameters::getRegistrationSoftware()
 {
    return m_registrationSoftware;
 }
-
-void RegistrationParameters::setBoolParc(bool bool_parc)
-{
-   m_parc_ok=bool_parc;
-}
-bool RegistrationParameters::getBoolParc()
-{
-   return m_parc_ok;
-}
-   
-void RegistrationParameters::setBoolRoi(bool bool_roi)
-{
-   m_roi_ok=bool_roi;
-}
-bool RegistrationParameters::getBoolRoi()
-{
-   return m_roi_ok;
-}
-   
-void RegistrationParameters::setRoiNbr(int nbr_roi)
-{
-   m_roi_nbr=nbr_roi;
-}
-int RegistrationParameters::getRoiNbr()
-{
-   return m_roi_nbr;
-}
+ 

@@ -17,10 +17,14 @@
 #include <QList>
 
 // My Specific Librairies
-#include "ui_Window.h"
+#include "ui_WindowMultiseg.h"
 #include "ui_About.h"
 #include "ui_neosegParameters.h"
 #include "ui_ABCParameters.h"
+#include "ui_antsJointFusionParameters.h"
+#include "ui_antsParameters.h"
+#include "ui_quicksilverParameters.h"
+
 #include "Pipeline.h"
 #include "XmlReader.h"
 #include "XmlWriter.h"
@@ -28,13 +32,13 @@
 #include "ExecutablePaths.h" 
 #include "LibraryPaths.h"
 #include "About.h" 
-
+#include "RegistrationParameters.h"
 
 #ifndef NEOSEGPIPELINE_VERSION
 #define NEOSEGPIPELINE_VERSION "unknown"
 #endif
 
-class DerivedWindow : public QMainWindow , public Ui_Window
+class DerivedWindow : public QMainWindow , public Ui_WindowMultiseg
 {
    Q_OBJECT // Enable slots and signals
 
@@ -135,6 +139,9 @@ class DerivedWindow : public QMainWindow , public Ui_Window
    // Atlas Registration //
    void changeUsingMaskAtlas(bool) ;
 
+   //Atlas Registration
+   void registrationSoftwareSelection() ;
+
    //Tissue Segmentation
    void tissueSegmentationSoftwareSelection() ;
 
@@ -199,17 +206,21 @@ class DerivedWindow : public QMainWindow , public Ui_Window
 private :
    
    // Window
-   Ui_Window ui;
+   Ui_WindowMultiseg ui;
    Ui::ABCParameters *abcParameters ;
    Ui::neosegParameters *neosegParameters ;
+   Ui::antsJointFusionParameters *antsJointFusionParameters ;
+   Ui::antsParameters *antsParameters ;
+   Ui::quicksilverParameters *quicksilverParameters ;
    // Pipeline 
    Pipeline* m_pipeline;
 
    // Parameters
    PipelineParameters* m_parameters;
-   AntsParameters* m_antsParameters_DTI; 
-   AntsParameters* m_antsParameters_atlas; 
-   NeosegParameters* m_neosegParameters; 
+   RegistrationParameters* m_antsParameters_DTI; 
+   RegistrationParameters* m_registrationParameters_atlas;
+   NeosegParameters* m_neosegParameters;
+   AntsJointFusionParameters* m_antsJointFusionParameters; 
 
    // Executables 
    ExecutablePaths* m_executables; 
@@ -299,6 +310,7 @@ private :
    bool m_parametersSet;
    bool m_executablesSet;
    bool m_pipelineWriten; 
+   //bool m_softwareRegistration;
    QString m_abcOutputImageFormat;
 
    MainScriptThread* m_thread; 

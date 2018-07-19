@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>752</width>
-    <height>384</height>
+    <width>814</width>
+    <height>592</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,16 +23,7 @@
       <enum>QFrame::Plain</enum>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
+      <property name="margin">
        <number>0</number>
       </property>
       <item>
@@ -41,16 +32,7 @@
          <string>2. EM segmentation</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_12">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
+         <property name="margin">
           <number>0</number>
          </property>
          <item>
@@ -65,16 +47,7 @@
             <item>
              <widget class="QWidget" name="widget_30" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_26">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
+               <property name="margin">
                 <number>0</number>
                </property>
                <item>
@@ -117,16 +90,7 @@
             <item>
              <widget class="QWidget" name="widget_31" native="true">
               <layout class="QHBoxLayout" name="horizontalLayout_28">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
+               <property name="margin">
                 <number>0</number>
                </property>
                <item>
@@ -306,24 +270,15 @@
                 <rect>
                  <x>0</x>
                  <y>0</y>
-                 <width>648</width>
-                 <height>202</height>
+                 <width>724</width>
+                 <height>430</height>
                 </rect>
                </property>
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <property name="spacing">
                  <number>0</number>
                 </property>
-                <property name="leftMargin">
-                 <number>0</number>
-                </property>
-                <property name="topMargin">
-                 <number>0</number>
-                </property>
-                <property name="rightMargin">
-                 <number>0</number>
-                </property>
-                <property name="bottomMargin">
+                <property name="margin">
                  <number>0</number>
                 </property>
                 <item>
@@ -349,16 +304,7 @@
                      <enum>QFrame::Plain</enum>
                     </property>
                     <layout class="QVBoxLayout" name="verticalLayout_4">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
+                     <property name="margin">
                       <number>0</number>
                      </property>
                      <item>

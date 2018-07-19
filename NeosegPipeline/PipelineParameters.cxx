@@ -121,8 +121,9 @@ PipelineParameters::PipelineParameters()
    m_computingSystem_default = m_computingSystem_values[0];
    m_computingSystem = m_computingSystem_default;
 
-   m_antsParameters_DTI = new AntsParameters("DTI"); 
-   m_antsParameters_atlas = new AntsParameters("atlas");
+   m_antsParameters_DTI = new RegistrationParameters("DTI"); 
+   m_registrationParameters_atlas = new RegistrationParameters("atlas");
+   m_antsJointFusionParameters = new AntsJointFusionParameters();
    m_neosegParameters = new NeosegParameters(); 
    m_executablePaths = new ExecutablePaths(); 
    m_libraryPaths = new LibraryPaths(); 
@@ -226,6 +227,7 @@ void PipelineParameters::setProgramPath(QString programPath)
    m_executablePaths->setDefaultExecutablePath("WeightedLabelsAverage");
    m_executablePaths->setDefaultExecutablePath("ReassignWhiteMatter");
    m_executablePaths->setDefaultExecutablePath("ABC");
+   m_executablePaths->setDefaultExecutablePath("antsJointFusion");
 
    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
    m_libraryPaths->setLibraryPath("FSL", env.value("FSLDIR", QString::null));
@@ -515,6 +517,13 @@ QMap<QString,QFileInfoList> PipelineParameters::findAtlasFiles(QString atlas_nam
    atlasFiles.insert("T1",find(atlas_dir, "T1" , "*" , "*" ) ) ;
    atlasFiles.insert("T2",find(atlas_dir, "T2" , "*" , "*" ) ) ;
    atlasFiles.insert("seg",find(atlas_dir, "seg" , "*" , "*" ) ) ;
+   for (int i=0; i<10 ; i++)
+   {
+      QString roiX="roi"+QString::number(i);
+      atlasFiles.insert(roiX,find(atlas_dir, roiX , "*" , "*" ) ) ;
+   }
+   atlasFiles.insert("parc",find(atlas_dir, "parc" , "*" , "*" ) ) ;
+
    atlasFiles.insert("white",find(atlas_dir, "white" , "*" , "*" ) ) ;
    atlasFiles.insert("gray",find(atlas_dir, "gray" , "*" , "*" ) ) ;
    atlasFiles.insert("csf",find(atlas_dir, "csf" , "*" , "*" ) ) ;
@@ -538,6 +547,21 @@ bool PipelineParameters::checkAtlasFiles(QString atlas)
       if ((atlasFiles["white"]).size() == 1 && (atlasFiles["gray"]).size() == 1 && (atlasFiles["csf"]).size() == 1)
       {  
          return true; 
+      }
+
+      // Fusion
+      int ok=0;
+      for (int i=0; i<10 ; i++)
+      {
+         QString roiX="roi"+QString::number(i);
+         if ((atlasFiles[roiX]).size() == 1)
+         {
+            ok++;
+         }
+      }
+      if (ok!=0)
+      {
+         return true;
       }
    }
    return false; 
@@ -589,7 +613,6 @@ bool PipelineParameters::checkAtlas(QString atlas)
 void PipelineParameters::initializeAtlasPopulation() 
 {
    m_atlasPopulation.clear(); 
-
    QStringList::const_iterator it;
 
    for (it = m_selectedAtlases.constBegin(); it != m_selectedAtlases.constEnd(); ++it) 
@@ -627,7 +650,6 @@ void PipelineParameters::initializeAtlasPopulation()
          atlas.probabilistic = 0;
       }
 
-
       if( (atlasFiles["white"]).size()==1 && (atlasFiles["gray"]).size()==1 && (atlasFiles["csf"]).size()==1 )
       {
          atlas.white = (atlasFiles["white"])[0].filePath();
@@ -636,6 +658,31 @@ void PipelineParameters::initializeAtlasPopulation()
          atlas.probabilistic=1;
       }
 
+      if ( (atlasFiles["parc"]).size()==1 )
+      {
+         atlas.probabilistic = 0;
+         atlas.parc_ok=1;
+         atlas.parc = (atlasFiles["parc"])[0].filePath();
+      }
+      else
+      {
+         atlas.parc_ok=0;
+      }
+
+      for (int i=0 ; i<10 ; i++)
+      {
+         QString roiX="roi"+QString::number(i);
+         if ((atlasFiles[roiX]).size()==1)
+         {
+            atlas.roi[i] = (atlasFiles[roiX])[0].filePath();
+            atlas.roi_ok[i]=1;
+            atlas.probabilistic = 0;
+         }
+         else
+         {
+            atlas.roi_ok[i]=0;
+         }
+      }  
       //atlas.log = QDir(atlas_path).filePath(atlas.name + ".log");
 
       m_atlasPopulation.push_back(atlas);
@@ -953,15 +1000,23 @@ int PipelineParameters::getNumberOfCores()
    return m_numberOfCores;
 }
 
-// ANTS Parameters
-AntsParameters* PipelineParameters::getAntsParametersDTI()
+// ANTS Parameters DTI
+RegistrationParameters* PipelineParameters::getAntsParametersDTI()
 {
    return m_antsParameters_DTI;
 }
-AntsParameters* PipelineParameters::getAntsParametersAtlas()
+
+// Registration Parameters
+RegistrationParameters* PipelineParameters::getRegistrationParameters()
 {
-   return m_antsParameters_atlas;
+   return m_registrationParameters_atlas;
 }
+
+AntsJointFusionParameters* PipelineParameters::getAntsJointFusionParameters()
+{
+   return m_antsJointFusionParameters;
+}
+
 
 // Neoseg Parameters
 NeosegParameters* PipelineParameters::getNeosegParameters()

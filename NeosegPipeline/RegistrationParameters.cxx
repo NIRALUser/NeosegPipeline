@@ -1,8 +1,11 @@
-#include "AntsParameters.h"
+#include "RegistrationParameters.h" 
 
-AntsParameters::AntsParameters(QString type)
-{
-   m_numberOfGB_min = 1;
+RegistrationParameters::RegistrationParameters(QString type)
+{ 
+	m_numberOfGB_min = 1;
+   m_numberOfRegistrations_default = 1;
+   m_numberOfCores_default = 1;
+   m_numberOfGB_default = 4;
 
    m_imageMetric_values << "CC" << "MI" << "PR" << "MSQ";    
    m_weight_min = 0;
@@ -20,8 +23,10 @@ AntsParameters::AntsParameters(QString type)
    m_gradientFieldSigma_min = 0;
    m_deformationFieldSigma_min = 0;
 
+   m_registrationSoftware_default=true ;
+
    if(type == "DTI")
-   {
+   { 
       m_name = "DTI";
 
       m_imageMetric_default = m_imageMetric_values[0];
@@ -33,7 +38,7 @@ AntsParameters::AntsParameters(QString type)
       m_iterationsL_default = 10;
 
       m_tranformation_default = m_transformationType_values[0];
-      m_gradientStepLength_default = 0.125;   
+      m_gradientStepLength_default = 0.125;    
       m_numberOfTimeSteps_default = 2;
       m_deltaTime_default = 0.01;
 
@@ -72,6 +77,9 @@ AntsParameters::AntsParameters(QString type)
 
       m_usingMask_default = true;
       m_usingSmoothedMask_default = false; 
+
+      m_container_id_default="";
+      m_output_dir_default="";
    }
 
    m_numberOfRegistrations = m_numberOfRegistrations_default;
@@ -102,9 +110,19 @@ AntsParameters::AntsParameters(QString type)
 
    m_usingMask = m_usingMask_default;
    m_usingSmoothedMask = m_usingSmoothedMask_default;
+
+   m_container_id=m_container_id_default;
+   m_output_dir=m_output_dir_default;
+
+   m_registrationSoftware=m_registrationSoftware_default;
 }
 
-bool AntsParameters::isSuperior(int value, int min)
+QString RegistrationParameters::getName()
+{
+   return m_name; 
+}
+
+bool RegistrationParameters::isSuperior(int value, int min)
 {
    if(value>min)
    {
@@ -113,16 +131,16 @@ bool AntsParameters::isSuperior(int value, int min)
    return false; 
 }
 
-bool AntsParameters::isSuperiorOrEqual(int value, int min)
+bool RegistrationParameters::isSuperiorOrEqual(int value, int min)
 {
-   if(value>=min)
+   if(value>=min) 
    {
       return true; 
    }
    return false; 
 }
 
-bool AntsParameters::isBetween(int value, int min, int max)
+bool RegistrationParameters::isBetween(int value, int min, int max)
 {
    if(value>min && value<max)
    {
@@ -131,7 +149,7 @@ bool AntsParameters::isBetween(int value, int min, int max)
    return false; 
 }
 
-bool AntsParameters::isSuperior(double value, double min)
+bool RegistrationParameters::isSuperior(double value, double min)
 {
    if(value>min)
    {
@@ -140,7 +158,7 @@ bool AntsParameters::isSuperior(double value, double min)
    return false; 
 }
 
-bool AntsParameters::isSuperiorOrEqual(double value, double min)
+bool RegistrationParameters::isSuperiorOrEqual(double value, double min)
 {
    if(value>=min)
    {
@@ -150,17 +168,17 @@ bool AntsParameters::isSuperiorOrEqual(double value, double min)
 }
 
 
-bool AntsParameters::isBetween(double value, double min, double max)
+bool RegistrationParameters::isBetween(double value, double min, double max)
 {
    if(value>min && value<max)
    {
       return true; 
    }
    return false; 
-}
+} 
 
 
-bool AntsParameters::isIn(QString item, QStringList list)
+bool RegistrationParameters::isIn(QString item, QStringList list)
 {
    QStringList::iterator it; 
    for(it=list.begin(); it!=list.end(); ++it)
@@ -172,330 +190,373 @@ bool AntsParameters::isIn(QString item, QStringList list)
    }
    return false; 
 }
-
-QString AntsParameters::getName()
-{
-   return m_name; 
-}
-
-// Number Of Registrations//  
-void AntsParameters::setNumberOfRegistrations(int numberOfRegistrations)
+ 
+void RegistrationParameters::setNumberOfRegistrations(int numberOfRegistrations)
 {
    m_numberOfRegistrations = numberOfRegistrations; 
 }
-int AntsParameters::getNumberOfRegistrations()
+int RegistrationParameters::getNumberOfRegistrations()
 {
    return m_numberOfRegistrations; 
 }
 
 // Number Of Cores//  
-void AntsParameters::setNumberOfCores(int numberOfCores)
+void RegistrationParameters::setNumberOfCores(int numberOfCores)
 {
    m_numberOfCores = numberOfCores; 
 }
-int AntsParameters::getNumberOfCores()
+int RegistrationParameters::getNumberOfCores()
 {
    return m_numberOfCores; 
 }
 
 // Number of GB//  
-bool AntsParameters::checkNumberOfGB(int numberOfGB)
+bool RegistrationParameters::checkNumberOfGB(int numberOfGB)
 {
    return isSuperior(numberOfGB, m_numberOfGB_min); 
 }
-void AntsParameters::setNumberOfGB(int numberOfGB)
+void RegistrationParameters::setNumberOfGB(int numberOfGB)
 {
    m_numberOfGB = numberOfGB; 
 }
-int AntsParameters::getNumberOfGB()
+int RegistrationParameters::getNumberOfGB()
 {
    return m_numberOfGB;  
 }
 
-bool AntsParameters::checkImageMetric(QString imageMetric)
+bool RegistrationParameters::checkImageMetric(QString imageMetric)
 {
    return isIn(imageMetric, m_imageMetric_values);
 }
-QStringList AntsParameters::getImageMetricValues()
+QStringList RegistrationParameters::getImageMetricValues()
 {
    return m_imageMetric_values; 
 }
 
 
-void AntsParameters::setImageMetric1(QString imageMetric1)
+void RegistrationParameters::setImageMetric1(QString imageMetric1)
 {
    m_imageMetric1=imageMetric1;
 }
-QString AntsParameters::getImageMetric1()
+QString RegistrationParameters::getImageMetric1()
 {
    return m_imageMetric1;
 }
-int AntsParameters::getImageMetric1Index()
+int RegistrationParameters::getImageMetric1Index()
 {
    return m_imageMetric_values.indexOf(m_imageMetric1);
 }
 
-void AntsParameters::setImageMetric2(QString imageMetric2)
+void RegistrationParameters::setImageMetric2(QString imageMetric2)
 {
    m_imageMetric2 = imageMetric2;
 }
-QString AntsParameters::getImageMetric2()
+QString RegistrationParameters::getImageMetric2()
 {
    return m_imageMetric2;
 }
-int AntsParameters::getImageMetric2Index()
+int RegistrationParameters::getImageMetric2Index()
 {
    return m_imageMetric_values.indexOf(m_imageMetric2);
 }
 
 
-double AntsParameters::getWeightMin()
+double RegistrationParameters::getWeightMin()
 {
    return m_weight_min;
 }
 
-void AntsParameters::setWeight1(double weight1)
+void RegistrationParameters::setWeight1(double weight1)
 {
    m_weight1=weight1;
 }
-bool AntsParameters::checkWeight1(double weight1)
+bool RegistrationParameters::checkWeight1(double weight1)
 {
    return isSuperior(weight1, m_weight_min);
 }
-double AntsParameters::getWeight1()
+double RegistrationParameters::getWeight1()
 {
    return m_weight1;
 }
 
-void AntsParameters::setWeight2(double weight2)
+void RegistrationParameters::setWeight2(double weight2)
 {
    m_weight2=weight2;
 }
-bool AntsParameters::checkWeight2(double weight2)
+bool RegistrationParameters::checkWeight2(double weight2)
 {
    return isSuperior(weight2, m_weight_min);
 }
-double AntsParameters::getWeight2()
+double RegistrationParameters::getWeight2()
 {
    return m_weight2;
 }
 
 
-int AntsParameters::getRadiusMin()
+int RegistrationParameters::getRadiusMin()
 {
    return m_radius_min;
 }
 
-void AntsParameters::setRadius1(int radius1)
+void RegistrationParameters::setRadius1(int radius1)
 {
    m_radius1=radius1;
 }
-bool AntsParameters::checkRadius1(int radius1)
+bool RegistrationParameters::checkRadius1(int radius1)
 {
    return isSuperior(radius1, m_radius_min);
 }
-int AntsParameters::getRadius1()
+int RegistrationParameters::getRadius1()
 {
    return m_radius1;
 }
 
-void AntsParameters::setRadius2(int radius2)
+void RegistrationParameters::setRadius2(int radius2)
 {
    m_radius2=radius2;
 }
-bool AntsParameters::checkRadius2(int radius2)
+bool RegistrationParameters::checkRadius2(int radius2)
 {
    return isSuperior(radius2, m_radius_min);
 }
-int AntsParameters::getRadius2()
+int RegistrationParameters::getRadius2()
 {
    return m_radius2;
 }
 
-int AntsParameters::getIterationsMin()
+int RegistrationParameters::getIterationsMin()
 {
    return m_iterations_min;
 }
-void AntsParameters::setIterationsJ(int iterationsJ)
+void RegistrationParameters::setIterationsJ(int iterationsJ)
 {
    m_iterationsJ=iterationsJ;
 }
-bool AntsParameters::checkIterationsJ(int iterationsJ)
+bool RegistrationParameters::checkIterationsJ(int iterationsJ)
 {
    return isSuperior(iterationsJ, m_iterations_min);
 }
-int AntsParameters::getIterationsJ()
+int RegistrationParameters::getIterationsJ()
 {
    return m_iterationsJ;
 }
 
-void AntsParameters::setIterationsK(int iterationsK)
+void RegistrationParameters::setIterationsK(int iterationsK)
 {
    m_iterationsK=iterationsK;
 }
-bool AntsParameters::checkIterationsK(int iterationsK)
+bool RegistrationParameters::checkIterationsK(int iterationsK)
 {
    return isSuperior(iterationsK, m_iterations_min);
 }
-int AntsParameters::getIterationsK()
+int RegistrationParameters::getIterationsK()
 {
    return m_iterationsK;
 }
 
-void AntsParameters::setIterationsL(int iterationsL)
+void RegistrationParameters::setIterationsL(int iterationsL)
 {
    m_iterationsL=iterationsL;
 }
-bool AntsParameters::checkIterationsL(int iterationsL)
+bool RegistrationParameters::checkIterationsL(int iterationsL)
 {
    return isSuperior(iterationsL, m_iterations_min);
 }
-int AntsParameters::getIterationsL()
+int RegistrationParameters::getIterationsL()
 {
    return m_iterationsL;
 }
 
-void AntsParameters::setTransformationType(QString transformationType)
+void RegistrationParameters::setTransformationType(QString transformationType)
 {
    m_transformationType = transformationType;
 }
-bool AntsParameters::checkTransformationType(QString transformationType)
+bool RegistrationParameters::checkTransformationType(QString transformationType)
 {
    return isIn(transformationType, m_transformationType_values);
 }
-QString AntsParameters::getTransformationType()
+QString RegistrationParameters::getTransformationType()
 {
    return m_transformationType;
 }
-int AntsParameters::getTransformationTypeIndex()
+int RegistrationParameters::getTransformationTypeIndex()
 {
    return m_transformationType_values.indexOf(m_transformationType);
 }
-QStringList AntsParameters::getTransformationTypeValues()
+QStringList RegistrationParameters::getTransformationTypeValues()
 {
    return m_transformationType_values; 
 }
 
-void AntsParameters::setGradientStepLength(double gradientStepLength)
+void RegistrationParameters::setGradientStepLength(double gradientStepLength)
 {
    m_gradientStepLength=gradientStepLength;
 }
-bool AntsParameters::checkGradientStepLength(double gradientStepLength)
+bool RegistrationParameters::checkGradientStepLength(double gradientStepLength)
 {
    return isSuperior(gradientStepLength, m_gradientStepLength_min);
 }
-double AntsParameters::getGradientStepLength()
+double RegistrationParameters::getGradientStepLength()
 {
    return m_gradientStepLength;
 }
-double AntsParameters::getGradientStepLengthMin()
+double RegistrationParameters::getGradientStepLengthMin()
 {
    return m_gradientStepLength_min;
 }
 
-void AntsParameters::setNumberOfTimeSteps(double numberOfTimeSteps)
+void RegistrationParameters::setNumberOfTimeSteps(double numberOfTimeSteps)
 {
    m_numberOfTimeSteps=numberOfTimeSteps;
 }
-bool AntsParameters::checkNumberOfTimeSteps(double numberOfTimeSteps)
+bool RegistrationParameters::checkNumberOfTimeSteps(double numberOfTimeSteps)
 {
    return isSuperior(numberOfTimeSteps, m_numberOfTimeSteps_min);
 }
-double AntsParameters::getNumberOfTimeSteps()
+double RegistrationParameters::getNumberOfTimeSteps()
 {
    return m_numberOfTimeSteps;
 }
-double AntsParameters::getNumberOfTimeStepsMin()
+double RegistrationParameters::getNumberOfTimeStepsMin()
 {
    return m_numberOfTimeSteps_min;
 }
 
-void AntsParameters::setDeltaTime(double deltaTime)
+void RegistrationParameters::setDeltaTime(double deltaTime)
 {
    m_deltaTime=deltaTime;
 }
-bool AntsParameters::checkDeltaTime(double deltaTime)
+bool RegistrationParameters::checkDeltaTime(double deltaTime)
 {
    return isSuperior(deltaTime, m_deltaTime_min);
 }
-double AntsParameters::getDeltaTime()
+double RegistrationParameters::getDeltaTime()
 {
    return m_deltaTime;
 }
-double AntsParameters::getDeltaTimeMin()
+double RegistrationParameters::getDeltaTimeMin()
 {
    return m_deltaTime_min;
 }
 
-void AntsParameters::setRegularizationType(QString regularizationType)
+void RegistrationParameters::setRegularizationType(QString regularizationType)
 {
    m_regularizationType = regularizationType;
 }
-bool AntsParameters::checkRegularizationType(QString regularizationType)
+bool RegistrationParameters::checkRegularizationType(QString regularizationType)
 {
    return isIn(regularizationType, m_regularizationType_values);
 }
-QString AntsParameters::getRegularizationType()
+QString RegistrationParameters::getRegularizationType()
 {
    return m_regularizationType;
 }
-int AntsParameters::getRegularizationTypeIndex()
+int RegistrationParameters::getRegularizationTypeIndex()
 {
    return m_regularizationType_values.indexOf(m_regularizationType);
 }
-QStringList AntsParameters::getRegularizationTypeValues()
+QStringList RegistrationParameters::getRegularizationTypeValues()
 {
    return m_regularizationType_values; 
 }
 
-void AntsParameters::setGradientFieldSigma(double gradientFieldSigma)
+void RegistrationParameters::setGradientFieldSigma(double gradientFieldSigma)
 {
    m_gradientFieldSigma=gradientFieldSigma;
 }
-bool AntsParameters::checkGradientFieldSigma(double gradientFieldSigma)
+bool RegistrationParameters::checkGradientFieldSigma(double gradientFieldSigma)
 {
    return isSuperior(gradientFieldSigma, m_gradientFieldSigma_min);
 }
-double AntsParameters::getGradientFieldSigma() 
+double RegistrationParameters::getGradientFieldSigma() 
 {
    return m_gradientFieldSigma;
 }
-double AntsParameters::getGradientFieldSigmaMin()
+double RegistrationParameters::getGradientFieldSigmaMin()
 {
    return m_gradientFieldSigma_min;
 }
 
-void AntsParameters::setDeformationFieldSigma(double deformationFieldSigma)
+void RegistrationParameters::setDeformationFieldSigma(double deformationFieldSigma)
 {
    m_deformationFieldSigma=deformationFieldSigma;
 }
-bool AntsParameters::checkDeformationFieldSigma(double deformationFieldSigma)
+bool RegistrationParameters::checkDeformationFieldSigma(double deformationFieldSigma)
 {
    return isSuperiorOrEqual(deformationFieldSigma, m_deformationFieldSigma_min);
 }
-double AntsParameters::getDeformationFieldSigma()
+double RegistrationParameters::getDeformationFieldSigma()
 {
    return m_deformationFieldSigma;
 }
-double AntsParameters::getDeformationFieldSigmaMin()
+double RegistrationParameters::getDeformationFieldSigmaMin()
 {
    return m_deformationFieldSigma_min;
 }
 
-void AntsParameters::setUsingMask(bool usingMask)
+void RegistrationParameters::setUsingMask(bool usingMask)
 {
    m_usingMask = usingMask; 
 }
-bool AntsParameters::getUsingMask()
+bool RegistrationParameters::getUsingMask()
 {
    return m_usingMask; 
 }
 
-void AntsParameters::setUsingSmoothedMask(bool usingSmoothedMask)
+void RegistrationParameters::setUsingSmoothedMask(bool usingSmoothedMask)
 {
    m_usingSmoothedMask = usingSmoothedMask; 
 }
-bool AntsParameters::getUsingSmoothedMask()
+bool RegistrationParameters::getUsingSmoothedMask()
 {
    return m_usingSmoothedMask; 
 }
+
+// Quicksilver container id
+void RegistrationParameters::setContainerId(QString container_id)
+{
+   m_container_id=container_id;
+}
+
+bool RegistrationParameters::checkContainerId(QString container_id)
+{
+   if(container_id!="")
+   {
+      return true;
+   }
+   else
+   {
+      return false;
+   }
+}
+
+QString RegistrationParameters::getContainerId()
+{
+   return m_container_id;
+}
+
+void RegistrationParameters::setOutputDir(QString output_dir)
+{
+   m_output_dir=output_dir;
+}
+
+QString RegistrationParameters::getOutputDir()
+{
+   return m_output_dir;
+}
+
+void RegistrationParameters::setUsingAnts()
+{
+   m_registrationSoftware=true;
+}
+
+void RegistrationParameters::setUsingQuicksilver()
+{
+   m_registrationSoftware=false;
+}
+
+bool RegistrationParameters::getRegistrationSoftware()
+{
+   return m_registrationSoftware;
+}
+ 

@@ -9,6 +9,7 @@
 #include <iterator>
 #include <map>
 #include <utility>
+#include <string>
 
 // Qt Librairies
 #include <QString>
@@ -18,9 +19,14 @@
 #include "Script.h"
 #include "Atlas.h"
 #include "Neo.h"
-#include "AntsParameters.h"
+#include "RegistrationParameters.h"
 #include "ExecutablePaths.h"
 #include "MinMax.h"
+
+#include <QResource>
+#include <QFile>
+#include <QTextStream>
+#include <QByteArray> 
 
 class AtlasRegistration : public Script  
 {
@@ -32,7 +38,7 @@ class AtlasRegistration : public Script
 
    // Set // 
    void setLog(QString log_path); 
-   void setAntsParameters(AntsParameters* ANTSParamaters);
+   void setRegistrationParameters(RegistrationParameters* RegistrationParameters);
 
    // Scripts //
    void initializeScript();
@@ -47,14 +53,12 @@ class AtlasRegistration : public Script
    void update();
    std::vector<Atlas> getOutput();
 
-
    private:
-
    // Log Path 
    QString m_log_path; 
 
    // Input // 
-   AntsParameters*         m_parameters;
+   RegistrationParameters* m_parameters;
 };
 
 #endif 

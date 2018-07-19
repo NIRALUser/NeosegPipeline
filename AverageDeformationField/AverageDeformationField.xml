@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+<title>AverageDeformationField</title>
+<description>This is a tool to average two deformation fields
+</description>
+<version>1.0</version>
+  <contributor>Kevin Pham</contributor>
+
+  <parameters>
+   <label>Input Output</label>
+
+   <image> 
+    <name>InputImage1</name>
+    <longflag>dfield1</longflag>
+    <label>Input Image 1</label>
+    <channel>input</channel>
+   </image>
+
+   <image> 
+    <name>InputImage2</name>
+    <longflag>dfield2</longflag>
+    <label>Input Image 2</label>
+    <channel>input</channel>
+   </image>
+   
+   <image>
+    <name>OutputImage</name>
+    <longflag>output</longflag>
+    <label>Output Image</label>
+    <channel>output</channel>
+   </image>
+  </parameters>
+
+</executable>

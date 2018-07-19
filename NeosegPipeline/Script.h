@@ -36,6 +36,7 @@ class Script
    // Initialize Script 
    void definePython();
    void importGeneralModules();
+   void importFusionModules();
    void importXmlModules();
    void defineExecutable(QString executable);
 
@@ -44,6 +45,7 @@ class Script
    void implementCheckFileExistence();
    void implementExecute();
    void implementExecutePipe();
+   void implementFind();
 
    // Execute Command Line
    void checkFinalOutputs(); 

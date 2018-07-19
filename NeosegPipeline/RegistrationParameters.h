@@ -1,17 +1,23 @@
-#ifndef DEF_AntsParameters
-#define DEF_AntsParameters
+#ifndef DEF_RegistrationParameters
+#define DEF_RegistrationParameters
 
 #include <iostream>
 
 #include <QString>
 #include <QStringList>
 
-class AntsParameters
+class RegistrationParameters
 {
    public:
 
    // Constructor 
-   AntsParameters(QString type);
+   RegistrationParameters(QString type);
+
+   bool checkImageMetric(QString imageMetric);
+   QStringList getImageMetricValues(); 
+
+   // Name 
+   QString getName(); 
 
    // Tests
    bool isSuperior(int value, int min);
@@ -25,13 +31,6 @@ class AntsParameters
    
    bool isIn(QString item, QStringList list);
 
-   bool checkImageMetric(QString imageMetric);
-   QStringList getImageMetricValues(); 
-
-   // Name 
-   QString getName(); 
-
-   // Number of Registrations
    void setNumberOfRegistrations(int numberOfRegistrations);
    int getNumberOfRegistrations(); 
 
@@ -147,9 +146,19 @@ class AntsParameters
    void setUsingSmoothedMask(bool usingSmoothedMask); 
    bool getUsingSmoothedMask();
 
+   void setContainerId(QString container_id);
+   bool checkContainerId(QString container_id);
+   QString getContainerId();
 
-   private:
-   
+   void setOutputDir(QString output_dir);
+   QString getOutputDir();
+
+   void setUsingAnts() ;
+   void setUsingQuicksilver() ;
+   bool getRegistrationSoftware();
+
+	private:
+
    // Number of Registrations  
    int m_numberOfRegistrations_default;   
    int m_numberOfRegistrations;   
@@ -164,7 +173,7 @@ class AntsParameters
    int m_numberOfGB_default;
    int m_numberOfGB;
 
-   // Name 
+    // Name 
    QString m_name; 
 
    // Image Metrics
@@ -253,7 +262,17 @@ class AntsParameters
    bool m_usingSmoothedMask_default;
    bool m_usingSmoothedMask; 
 
-}; 
+   //Docker container id
+   QString m_container_id_default;
+   QString m_container_id;
 
+   QString m_output_dir_default;
+   QString m_output_dir;
+
+   //Registration software
+   bool m_registrationSoftware_default;
+   bool m_registrationSoftware;
+
+};
 
 #endif

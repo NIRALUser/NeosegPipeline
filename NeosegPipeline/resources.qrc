@@ -1,16 +1,20 @@
 <RCC>
-  <qresource prefix="icons">
-    <file>icons/Logo128*128.png</file>
+  <qresource prefix="/icons">
+    <file>Resources/icons/Logo128*128.png</file>
     <file>icons/LogoWithRing.png</file>
-    <file>icons/eye.png</file>
-    <file>icons/stop-button.png</file>
-    <file>icons/run-button.png</file>
-    <file>icons/save-softwares.png</file>
-    <file>icons/load.png</file>
-    <file>icons/load-softwares.png</file>
-    <file>icons/save-3.png</file>
-    <file>icons/info.png</file>
-    <file>icons/quit.png</file>
-    <file>icons/refresh.png</file>
+    <file>Resources/icons/eye.png</file>
+    <file>Resources/icons/stop-button.png</file>
+    <file>Resources/icons/run-button.png</file>
+    <file>Resources/icons/save-softwares.png</file>
+    <file>Resources/icons/load.png</file>
+    <file>Resources/icons/load-softwares.png</file>
+    <file>Resources/icons/save-3.png</file>
+    <file>Resources/icons/info.png</file>
+    <file>Resources/icons/quit.png</file>
+    <file>Resources/icons/refresh.png</file>
+  </qresource> 
+  
+  <qresource prefix="/quicksilver_script">
+    <file>Resources/quicksilver_script/registration.py</file>
   </qresource>
 </RCC>

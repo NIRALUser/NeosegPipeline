@@ -7,7 +7,7 @@
 #include <QXmlStreamWriter>
 
 #include "PipelineParameters.h"
-#include "AntsParameters.h"
+#include "RegistrationParameters.h"
 
 
 class XmlWriter
@@ -29,8 +29,9 @@ class XmlWriter
       void writeDataConfiguration(QString file_path); 
 
       void writeGeneralParameters(QXmlStreamWriter* stream);
-      void writeAntsParameters(QXmlStreamWriter* stream, AntsParameters* antsParameters);
+      void writeRegistrationParameters(QXmlStreamWriter* stream, RegistrationParameters* registrationParameters);
       void writeNeosegParameters(QXmlStreamWriter* stream);
+      void writeAntsJointFusionParameters(QXmlStreamWriter* stream);
       void writeParametersConfiguration(QString file_path); 
 
       void writeExecutables(QXmlStreamWriter* stream);

@@ -9,6 +9,7 @@
 #include <iterator>
 #include <map>
 #include <utility>
+#include <string>
 
 // Qt Librairies
 #include <QString>
@@ -18,9 +19,8 @@
 #include "Script.h"
 #include "Atlas.h"
 #include "Neo.h"
-#include "AntsParameters.h"
+#include "RegistrationParameters.h"
 #include "ExecutablePaths.h"
-
 
 class AtlasPopulationRegistration : public Script  
 {
@@ -33,7 +33,7 @@ class AtlasPopulationRegistration : public Script
    // Set // 
    void setAtlasPopulation(std::vector<Atlas> atlasPopulation);  
    void setComputingSystem(QString computingSystem);
-   void setAntsParameters(AntsParameters* ANTSParamaters);
+   void setRegistrationParameters(RegistrationParameters* RegistrationParameters);
 
    // Define Outputs //
    Atlas defineRegisteredAtlas(Atlas atlas);
@@ -48,9 +48,9 @@ class AtlasPopulationRegistration : public Script
    void implementExecute();
 
    // Register Atlas Script // 
-   void implementRegisterAtlas(QString &script, bool probabilistic);
+   /*void implementRegisterAtlas(QString &script, bool probabilistic);
    void writeRegisterAtlas();
-   void writeRegisterProbabilisticAtlas();
+   void writeRegisterProbabilisticAtlas();*/
 
    // Register Atlas Population Script // 
    void implementTestRegistrationDone();
@@ -64,16 +64,13 @@ class AtlasPopulationRegistration : public Script
    void update();
    std::vector<Atlas> getOutput();
 
-
    private:
 
    // Input // 
    std::vector<Atlas>      m_atlasPopulation;
-   AntsParameters*         m_parameters;
+   RegistrationParameters* m_parameters;
    QString                 m_computingSystem;
    int                     m_nbCores;
-   
-
 
 };
 

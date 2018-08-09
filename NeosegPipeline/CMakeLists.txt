@@ -34,11 +34,8 @@ QT4_WRAP_CPP(MOC_SOURCES DerivedWindow.h MainScriptThread.h)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}
                     ${CMAKE_CURRENT_BINARY_DIR})
 
-GENERATECLP(NeosegPipeline_CLP NeosegPipeline.xml)
-
 # NeosegPipeline #
-SET(NeosegPipeline_SOURCE  main.cxx
-                           NeosegPipelineTool.cxx 
+SET(MultiSegPipeline_SOURCE  NeosegPipelineTool.cxx 
                            DerivedWindow.cxx
                            XmlReader.cxx 
                            XmlWriter.cxx
@@ -62,7 +59,7 @@ SET(NeosegPipeline_SOURCE  main.cxx
                            AntsJointFusionParameters.cxx
 )
 
-SET(NeosegPipeline_HEADERS NeosegPipelineTool.h
+SET(MultiSegPipeline_HEADERS NeosegPipelineTool.h
                            DerivedWindow.h
                            About.h
                            XmlReader.h
@@ -95,7 +92,7 @@ SET(NeosegPipeline_HEADERS NeosegPipelineTool.h
 )
 
 
-FILE(READ NeosegPipeline.xml var)
+FILE(READ MultiSegPipeline.xml var)
 
 STRING(REGEX MATCH "<version>.*</version>" ext "${var}")
 STRING(REPLACE "<version>" "" version_number ${ext} )
@@ -103,10 +100,20 @@ STRING(REPLACE "</version>" "" version_number ${version_number})
 
 ADD_DEFINITIONS(-DNEOSEGPIPELINE_VERSION="${version_number}")
 
-ADD_EXECUTABLE(MultisegPipeline ${NeosegPipeline_SOURCE} ${NeosegPipeline_HEADERS} ${MOC_SOURCES} ${UI_SOURCES} ${NeosegPipeline_CLP} ${RESOURCES})
-TARGET_LINK_LIBRARIES(MultisegPipeline ${QT_LIBRARIES} ${ITK_LIBRARIES} CountNumberOfLabels)
-
-INSTALL(TARGETS MultisegPipeline RUNTIME DESTINATION bin)
+SEMMacroBuildCLI(
+   NAME MultiSegPipeline
+   EXECUTABLE_ONLY
+   INCLUDE_DIRECTORIES ${QT_INCLUDE_DIR} ${ITK_INCLUDE_DIR}
+   LINK_DIRECTORIES ${QT_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS}
+   TARGET_LIBRARIES ${QT_LIBRARIES} ${ITK_LIBRARIES} CountNumberOfLabels
+   ADDITIONAL_SRCS ${MultiSegPipeline_SOURCE} ${MultiSegPipeline_HEADERS} ${MOC_SOURCES} ${UI_SOURCES} ${NeosegPipeline_CLP} ${RESOURCES}
+   RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+   LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+   ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+   INSTALL_RUNTIME_DESTINATION bin
+   INSTALL_LIBRARY_DESTINATION lib
+   INSTALL_ARCHIVE_DESTINATION lib
+)
 
 
 

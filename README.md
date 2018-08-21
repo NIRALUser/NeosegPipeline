@@ -13,13 +13,13 @@ See License.txt
 
 It builds the software tool and all the dependencies. If you want to build ANTs, check the option `BUILD_ANTs' in the cmake menu. 
 
----
+```
   git clone https://github.com/NIRALUser/NeosegPipeline.git
   mkdir NeosegPipeline-build
   cd NeosegPipeline-build
   cmake ../NeosegPipeline
   make
----
+```
 
 ## More information
 

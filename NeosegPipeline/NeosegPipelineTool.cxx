@@ -16,6 +16,9 @@ NeosegPipelineTool::NeosegPipelineTool(QString programPath)
 void NeosegPipelineTool::setOutput(QString output)
 {
    m_parameters->setOutput(output);
+   if(m_parameters->getAntsJointFusionParameters()){
+      m_parameters->getAntsJointFusionParameters()->setOutputDir(output);
+   }
 }
 
 void NeosegPipelineTool::setPrefix(QString prefix)

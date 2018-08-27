@@ -158,6 +158,7 @@ void Pipeline::writeantsJointFusionExecution()
     QString module_name = "AntsJointFusionExecution";
     m_antsJointFusionExecution = new::AntsJointFusionExecution(module_name);
     m_antsJointFusionExecution->setIndent(m_indent);   
+    m_antsJointFusionExecution->setNeo(m_parameters->getNeo());
     //m_atlasPopulationRegistration->setAtlasPopulation(m_parameters->getAtlasPopulation());
     m_antsJointFusionExecution->setAntsJointFusionParameters(m_parameters->getAntsJointFusionParameters());
     //m_antsJointFusionExecution->SetPipelineParameters(m_parameters);

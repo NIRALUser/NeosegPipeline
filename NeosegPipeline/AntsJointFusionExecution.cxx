@@ -36,7 +36,8 @@ void AntsJointFusionExecution::implementRun()
   QString output_dir = m_parameters->getOutputDir();
   QString fusion_dir = output_dir + "/6.AntsJointFusionExecution/";
   m_script += m_indent + "ants_path='/tools/ANTS/ANTSv2.2.0/bin/antsJointFusion'\n";
-  m_script += m_indent + "target_path = '" + output_dir + "'+'/1.PreProcessingData/neo-T1-stripped-corrected_NP.nrrd'\n";
+  // I pray to the coding gods that the 'T1-stripped-corrected' hard coded strings in PreProcessingData will never change, amen. 
+  m_script += m_indent + "target_path = '" + output_dir + "'+'/1.PreProcessingData/" + m_prefix + "T1-stripped-corrected" + m_suffix + ".nrrd'\n";
 
   m_script += m_indent + "output_dir = '" + output_dir + "'\n";
   m_script += m_indent + "fusion_dir = '" + fusion_dir + "'\n";

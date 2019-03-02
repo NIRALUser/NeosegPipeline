@@ -1,10 +1,3 @@
-if( NOT EXTERNAL_SOURCE_DIRECTORY )
-  set( EXTERNAL_SOURCE_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}/ExternalSources )
-endif()
-if( NOT EXTERNAL_BINARY_DIRECTORY )
-  set( EXTERNAL_BINARY_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} )
-endif()
-
 # Make sure this file is included only once by creating globally unique varibles
 # based on the name of this included file.
 get_filename_component(CMAKE_CURRENT_LIST_FILENAME ${CMAKE_CURRENT_LIST_FILE} NAME_WE)
@@ -25,23 +18,20 @@ ProjectDependancyPush(CACHED_proj ${proj})
 # even if other External_${ExtProjName}.cmake files are sourced by
 # SlicerMacroCheckExternalProjectDependency
 set(extProjName niral_utilities) #The find_package known name
-set(proj        ${extProjName}) #This local name
-
-#if(${USE_SYSTEM_${extProjName}})
-#  unset(${extProjName}_DIR CACHE)
-#endif()
+set(proj      niral_utilities) #This local name
 
 # Sanity checks
 if(DEFINED ${extProjName}_DIR AND NOT EXISTS ${${extProjName}_DIR})
   message(FATAL_ERROR "${extProjName}_DIR variable is defined but corresponds to non-existing directory (${${extProjName}_DIR})")
 endif()
 
-if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" ) )
-  # Set dependency list
-  set(${proj}_DEPENDENCIES ITKv4 VTK SlicerExecutionModel)
+# Set dependency list
+set(${proj}_DEPENDENCIES ITKv4 VTK)
 
-  # Include dependent projects if any
-  SlicerMacroCheckExternalProjectDependency(${proj})
+# Include dependent projects if any
+SlicerMacroCheckExternalProjectDependency(${proj})
+
+if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" ) )
   #message(STATUS "${__indent}Adding project ${proj}")
 
   # Set CMake OSX variable to pass down the external project
@@ -54,31 +44,33 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
   endif()
 
   ### --- Project specific additions here
-  set(${proj}_CMAKE_OPTIONS
-    -DCOMPILE_CONVERTITKFORMATS:BOOL=ON
-    -DCOMPILE_CORREVAL:BOOL=OFF
-    -DCOMPILE_CROPTOOLS:BOOL=ON
-    -DCOMPILE_CURVECOMPARE:BOOL=OFF
-    -DCOMPILE_DMDBIOMARKERTOOL:BOOL=OFF
-    -DCOMPILE_DTIAtlasBuilder:BOOL=OFF
-    -DCOMPILE_DWI_NIFTINRRDCONVERSION:BOOL=OFF
-    -DCOMPILE_IMAGEMATH:BOOL=ON
-    -DCOMPILE_IMAGESTAT:BOOL=OFF
-    -DCOMPILE_MULTIATLASSEG:BOOL=OFF
-    -DCOMPILE_POLYDATAMERGE:BOOL=OFF
-    -DCOMPILE_POLYDATATRANSFORM:BOOL=ON
-    -DCOMPILE_TRANSFORMDEFORMATIONFIELD:BOOL=OFF
-    -DCOMPILE_TEXTUREBIOMARKERTOOL:BOOL=OFF
-    -DCOMPILE_Unsupported:BOOL=OFF
-    -DUSE_SYSTEM_SlicerExecutionModel:BOOL=ON
-    -DUSE_SYSTEM_ITK:BOOL=ON
-    -DUSE_SYSTEM_VTK:BOOL=ON
-    -DITK_VERSION_MAJOR:STRING=${ITK_VERSION_MAJOR}
-    )
 
+  set(${proj}_CMAKE_OPTIONS
+      -DBUILD_TESTING:BOOL=OFF
+      -DBUILD_EXAMPLES:BOOL=OFF
+      -DBUILD_SHARED_LIBS=OFF
+      -DCMAKE_INSTALL_PREFIX:PATH=${EXTERNAL_BINARY_DIRECTORY}/${proj}-install
+      -DCOMPILE_IMAGEMATH:BOOL=ON
+      -DCOMPILE_IMAGESTAT:BOOL=OFF
+      -DCOMPILE_CROPTOOLS:BOOL=OFF
+      -DCOMPILE_CONVERTITKFORMATS:BOOL=OFF
+      -DCOMPILE_DWI_NIFTINRRDCONVERSION:BOOL=OFF
+      -DCOMPILE_POLYDATAMERGE:BOOL=OFF
+      -DCOMPILE_CURVECOMPARE:BOOL=OFF
+      -DCOMPILE_MULTIATLASSEG:BOOL=OFF
+      -DCOMPILE_DTITensorNormalization:BOOL=OFF
+      -DCOMPILE_MAURERDISTANCETRANSFORM:BOOL=OFF
+      -DITK_DIR:PATH=${ITK_DIR}
+      -DVTK_DIR:PATH=${VTK_DIR}
+      -DSlicerExecutionModel_DIR:PATH=${SlicerExecutionModel_DIR}
+      -DINSTALL_RUNTIME_DESTINATION=${INSTALL_RUNTIME_DESTINATION}
+      -DINSTALL_LIBRARY_DESTINATION=${INSTALL_LIBRARY_DESTINATION}
+      -DINSTALL_ARCHIVE_DESTINATION=${INSTALL_ARCHIVE_DESTINATION}
+    )
   ### --- End Project specific additions
-  set( ${proj}_REPOSITORY ${git_protocol}://github.com/NIRALUser/niral_utilities.git )
-  set( ${proj}_GIT_TAG debff5f9fbf41f7508e5d3988c33e56dee5cdcc6 )
+  set(${proj}_REPOSITORY ${git_protocol}://github.com/NIRALUser/niral_utilities.git)
+  set(${proj}_GIT_TAG release)  
+
   ExternalProject_Add(${proj}
     GIT_REPOSITORY ${${proj}_REPOSITORY}
     GIT_TAG ${${proj}_GIT_TAG}
@@ -94,15 +86,15 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
       ${CMAKE_OSX_EXTERNAL_PROJECT_ARGS}
       ${COMMON_EXTERNAL_PROJECT_ARGS}
       ${${proj}_CMAKE_OPTIONS}
-      -DCMAKE_INSTALL_PREFIX:PATH=${EXTERNAL_BINARY_DIRECTORY}/${proj}-install
 ## We really do want to install in order to limit # of include paths INSTALL_COMMAND ""
     DEPENDS
       ${${proj}_DEPENDENCIES}
   )
-  set(${extProjName}_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-build)
+  set(${extProjName}_DIR ${EXTERNAL_BINARY_DIRECTORY}/${proj}-install/lib/CMake/niral_utilities)  
 else()
   if(${USE_SYSTEM_${extProjName}})
-    find_package(${extProjName} REQUIRED)
+    find_package(${extProjName} REQUIRED
+      HINTS ${CMAKE_CURRENT_BINARY_DIR}/../DTIProcess-build/niral_utilities-install/lib/CMake/niral_utilities)
     message("USING the system ${extProjName}, set ${extProjName}_DIR=${${extProjName}_DIR}")
   endif()
   # The project is provided using ${extProjName}_DIR, nevertheless since other
@@ -113,4 +105,3 @@ endif()
 list(APPEND ${CMAKE_PROJECT_NAME}_SUPERBUILD_EP_VARS ${extProjName}_DIR:PATH)
 
 ProjectDependancyPop(CACHED_extProjName extProjName)
-ProjectDependancyPop(CACHED_proj proj)

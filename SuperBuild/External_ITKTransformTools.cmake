@@ -61,7 +61,7 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
 
   ### --- End Project specific additions
   set( ${proj}_REPOSITORY ${git_protocol}://github.com/NIRALUser/ITKTransformTools.git )
-  set( ${proj}_GIT_TAG 44bd9c45e809ddb8c665498b6d7e856e1ee3c27d )
+  set( ${proj}_GIT_TAG release )
   ExternalProject_Add(${proj}
     GIT_REPOSITORY ${${proj}_REPOSITORY}
     GIT_TAG ${${proj}_GIT_TAG}

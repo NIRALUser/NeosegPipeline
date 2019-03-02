@@ -66,7 +66,7 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
 
   ### --- End Project specific additions
   set(${proj}_REPOSITORY ${git_protocol}://github.com/NIRALUser/ABC.git)
-  set(${proj}_GIT_TAG 10aa3952ac0b8aad7dc953ae7f31f8d9d77b7ebd )
+  set(${proj}_GIT_TAG 1.5.1 )
 
   ExternalProject_Add(${proj}
     GIT_REPOSITORY ${${proj}_REPOSITORY}

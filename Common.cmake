@@ -121,3 +121,36 @@ option(BUILD_WeightedLabelsAverage "build the WeightedLabelsAverage project" ON)
 option(BUILD_SpreadFA "build the SpreadFA project" ON)
 option(BUILD_ReassignWhiteMatter "build the ReassignWhiteMatter project" ON)
 
+
+#-----------------------------------------------------------------------------
+# SLICER EXTENSION
+#-----------------------------------------------------------------------------
+if( ${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION )
+  set(EXTENSION_NAME ${LOCAL_PROJECT_NAME} )
+  set(MODULE_NAME ${LOCAL_PROJECT_NAME} )
+  set(EXTENSION_HOMEPAGE "https://github.com/NIRALUser/NeosegPipeline")
+  set(EXTENSION_CATEGORY "Segmentation")
+  set(EXTENSION_CONTRIBUTORS "Kevin Pham, Marie Cherel, Juan Carlos Prieto, Martin Styner")
+  set(EXTENSION_DESCRIPTION "Automated segmentation algorithm for neonate brain MRI using a subject-specific atlas.")
+  set(EXTENSION_ICONURL "https://www.nitrc.org/project/screenshot.php?group_id=836&screenshot_id=789")
+  set(EXTENSION_SCREENSHOTURLS "")
+  set(EXTENSION_DEPENDS "DTIProcess DTI-Reg SPHARM-PDM") # Specified as a space separated list or 'NA' if any
+  set(EXTENSION_BUILD_SUBDIRECTORY .)
+  unsetForSlicer( NAMES QT_QMAKE_EXECUTABLE SlicerExecutionModel_DIR ITK_DIR VTK_DIR CMAKE_C_COMPILER CMAKE_CXX_COMPILER CMAKE_CXX_FLAGS CMAKE_C_FLAGS ITK_LIBRARIES )
+  find_package(Slicer REQUIRED)
+  include(${Slicer_USE_FILE})
+  resetForSlicer( NAMES CMAKE_C_COMPILER CMAKE_CXX_COMPILER CMAKE_CXX_FLAGS CMAKE_C_FLAGS )
+
+  set(INSTALL_RUNTIME_DESTINATION ${Slicer_INSTALL_CLIMODULES_BIN_DIR})
+  set(INSTALL_LIBRARY_DESTINATION ${Slicer_INSTALL_CLIMODULES_LIB_DIR})
+  set(INSTALL_ARCHIVE_DESTINATION ${Slicer_INSTALL_CLIMODULES_LIB_DIR})
+
+  set( ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ITKv4 SlicerExecutionModel teem)
+  
+  add_definitions(-DSlicer_CLIMODULES_BIN_DIR="${Slicer_CLIMODULES_BIN_DIR}")
+else()
+  set(INSTALL_RUNTIME_DESTINATION bin)
+  set(INSTALL_LIBRARY_DESTINATION lib)
+  set(INSTALL_ARCHIVE_DESTINATION lib)
+  set( ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ITKv4 SlicerExecutionModel teem)
+endif()

@@ -59,8 +59,6 @@ endif()
 
 set(EXTERNAL_PROJECT_BUILD_TYPE "Release" CACHE STRING "Default build type for support libraries")
 
-set( ${PRIMARY_PROJECT_NAME}_DEPENDENCIES Qt4 ITKv4 SlicerExecutionModel)
-
 #------------------------------------------------------------------------------
 # ${PRIMARY_PROJECT_NAME} dependency list
 #------------------------------------------------------------------------------
@@ -90,6 +88,16 @@ set( ListProjects
     endif()
   endif()
 endForeach()
+
+if (${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION)
+  set(USE_SYSTEM_LIBS ON)
+else()
+  set(USE_SYSTEM_LIBS OFF)   
+endif()
+
+option(USE_SYSTEM_ITK "Build using an externally defined version of ITK" ${USE_SYSTEM_LIBS})
+option(USE_SYSTEM_SlicerExecutionModel "Build using an externally defined version of SlicerExecutionModel"  ${USE_SYSTEM_LIBS})
+option(USE_SYSTEM_VTK "Build using an externally defined version of VTK" ${USE_SYSTEM_LIBS})
 
 set(SLICER_CLI_DO_NOT_BUILD_ALL ON )
 set(BUILD_CLI_ResampleScalarVectorDWIVolume ON )

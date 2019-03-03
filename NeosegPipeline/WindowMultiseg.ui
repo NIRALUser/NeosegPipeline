@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>930</width>
-    <height>1111</height>
+    <height>1152</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -194,7 +194,16 @@
           <item row="1" column="4">
            <widget class="QWidget" name="widget_15" native="true">
             <layout class="QHBoxLayout" name="horizontalLayout_11">
-             <property name="margin">
+             <property name="leftMargin">
+              <number>1</number>
+             </property>
+             <property name="topMargin">
+              <number>1</number>
+             </property>
+             <property name="rightMargin">
+              <number>1</number>
+             </property>
+             <property name="bottomMargin">
               <number>1</number>
              </property>
              <item>
@@ -242,7 +251,7 @@
     <item row="1" column="0">
      <widget class="QTabWidget" name="tabs">
       <property name="currentIndex">
-       <number>5</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="data_tab">
        <attribute name="title">
@@ -540,7 +549,16 @@
               <item>
                <widget class="QWidget" name="widget_6" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_4">
-                 <property name="margin">
+                 <property name="leftMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>1</number>
                  </property>
                  <item>
@@ -575,10 +593,19 @@
                  </size>
                 </property>
                 <layout class="QGridLayout" name="gridLayout_3">
-                 <property name="horizontalSpacing">
+                 <property name="leftMargin">
                   <number>1</number>
                  </property>
-                 <property name="margin">
+                 <property name="topMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="horizontalSpacing">
                   <number>1</number>
                  </property>
                  <item row="0" column="1">
@@ -606,7 +633,16 @@
                     <enum>QFrame::Raised</enum>
                    </property>
                    <layout class="QHBoxLayout" name="horizontalLayout_21">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>1</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>1</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>1</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>1</number>
                     </property>
                     <item>
@@ -843,7 +879,16 @@ p, li { white-space: pre-wrap; }
               <item row="0" column="2">
                <widget class="QWidget" name="widget_34" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_17">
-                 <property name="margin">
+                 <property name="leftMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>1</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>1</number>
                  </property>
                  <item>
@@ -926,7 +971,16 @@ p, li { white-space: pre-wrap; }
            <item>
             <widget class="QWidget" name="widget_35" native="true">
              <layout class="QGridLayout" name="gridLayout_36">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item row="0" column="0">
@@ -938,7 +992,16 @@ p, li { white-space: pre-wrap; }
                  <item row="4" column="1">
                   <widget class="QWidget" name="widget_48" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_32">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item alignment="Qt::AlignLeft">
@@ -1002,7 +1065,16 @@ p, li { white-space: pre-wrap; }
                  <item row="3" column="1">
                   <widget class="QWidget" name="widget_49" native="true">
                    <layout class="QHBoxLayout" name="horizontalLayout_38">
-                    <property name="margin">
+                    <property name="leftMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
                      <number>0</number>
                     </property>
                     <item alignment="Qt::AlignLeft">
@@ -1254,13 +1326,31 @@ p, li { white-space: pre-wrap; }
            <string>Smoothing the probabilities</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_21">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="topMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <property name="bottomMargin">
             <number>12</number>
            </property>
            <item row="0" column="1">
             <widget class="QWidget" name="widget_27" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_14">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -1312,7 +1402,16 @@ p, li { white-space: pre-wrap; }
            <item row="0" column="0">
             <widget class="QWidget" name="widget_41" native="true">
              <layout class="QGridLayout" name="gridLayout_23">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item row="1" column="1">
@@ -1363,7 +1462,16 @@ p, li { white-space: pre-wrap; }
            <string>Computing CC Weights</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_19">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="topMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <property name="bottomMargin">
             <number>12</number>
            </property>
            <item row="0" column="0">
@@ -1379,7 +1487,16 @@ p, li { white-space: pre-wrap; }
            <item row="1" column="0">
             <widget class="QWidget" name="widget_25" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_18">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -1411,7 +1528,16 @@ p, li { white-space: pre-wrap; }
            <item row="2" column="0">
             <widget class="QWidget" name="widget_39" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_20">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -1447,7 +1573,16 @@ p, li { white-space: pre-wrap; }
            <item row="2" column="1">
             <widget class="QWidget" name="widget_26" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_3">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -1496,7 +1631,16 @@ p, li { white-space: pre-wrap; }
            <string>Including FA</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_20">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>12</number>
+           </property>
+           <property name="topMargin">
+            <number>12</number>
+           </property>
+           <property name="rightMargin">
+            <number>12</number>
+           </property>
+           <property name="bottomMargin">
             <number>12</number>
            </property>
            <item row="0" column="0">
@@ -1512,7 +1656,16 @@ p, li { white-space: pre-wrap; }
            <item row="2" column="0">
             <widget class="QWidget" name="widget_36" native="true">
              <layout class="QGridLayout" name="gridLayout_31">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item row="2" column="1">
@@ -1722,7 +1875,16 @@ p, li { white-space: pre-wrap; }
            <item row="1" column="4">
             <widget class="QWidget" name="widget_45" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_37">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -1754,7 +1916,16 @@ p, li { white-space: pre-wrap; }
            <item row="0" column="4">
             <widget class="QWidget" name="widget_44" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_36">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -1786,7 +1957,16 @@ p, li { white-space: pre-wrap; }
            <item row="0" column="0">
             <widget class="QWidget" name="widget_18" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <property name="margin">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
                <number>0</number>
               </property>
               <item>
@@ -1842,7 +2022,16 @@ p, li { white-space: pre-wrap; }
               <item row="0" column="0">
                <widget class="QWidget" name="widget_12" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_8">
-                 <property name="margin">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>0</number>
                  </property>
                  <item>
@@ -1874,7 +2063,16 @@ p, li { white-space: pre-wrap; }
               <item row="1" column="0">
                <widget class="QWidget" name="widget_16" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_24">
-                 <property name="margin">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>0</number>
                  </property>
                  <item>
@@ -1910,7 +2108,16 @@ p, li { white-space: pre-wrap; }
               <item row="1" column="3">
                <widget class="QWidget" name="widget_28" native="true">
                 <layout class="QHBoxLayout" name="horizontalLayout_25">
-                 <property name="margin">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
                   <number>0</number>
                  </property>
                  <item>
@@ -2412,7 +2619,16 @@ p, li { white-space: pre-wrap; }
         <item>
          <widget class="QWidget" name="execution_widget" native="true">
           <layout class="QVBoxLayout" name="verticalLayout_5">
-           <property name="margin">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
             <number>0</number>
            </property>
            <item>
@@ -2439,7 +2655,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>930</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

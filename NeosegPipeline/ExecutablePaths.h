@@ -14,6 +14,7 @@
 #include <QProcessEnvironment>
 #include <QMap>
 #include <QtGlobal>
+#include <itksys/SystemTools.hxx>
 
 class ExecutablePaths
 {
@@ -40,7 +41,8 @@ class ExecutablePaths
    std::vector<int> ConvertStringVersionToVector( std::string version ) ;
    bool testVersion( std::string givenVersion , std::string comparedVersion ) ;
    void ltrim(std::string& s) ;
-   QString m_currentDirectory; 
+   QString m_currentDirectory;
+   std::string m_commandDirectory; 
 
    QMap<QString, QString> m_executables; 
 

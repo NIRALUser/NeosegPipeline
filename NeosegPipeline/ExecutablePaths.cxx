@@ -38,20 +38,57 @@ void ExecutablePaths::setProgramPath(QString programPath)
 {
    m_currentDirectory = ((QFileInfo(programPath)).dir()).absolutePath();
    m_splitPath.prepend(m_currentDirectory); 
+   m_commandDirectory = itksys::SystemTools::GetFilenamePath(itksys::SystemTools::GetRealPath( programPath.toStdString().c_str() ));
 }
 
 QString ExecutablePaths::findExecutablePath(QString executableName)
 {
-   QStringList::iterator it;
-   for(it = m_splitPath.begin(); it != m_splitPath.end(); ++it)
-   {
-      QString executablePath = QDir(*it).filePath( executableName ) ;
-      if( checkExecutablePath( executableName , executablePath ) )
-      {
-         return executablePath ;
-      }
-   }   
-   return QString::null ;
+   // QStringList::iterator it;
+   // for(it = m_splitPath.begin(); it != m_splitPath.end(); ++it)
+   // {
+   //    QString executablePath = QDir(*it).filePath( executableName ) ;
+   //    if( checkExecutablePath( executableName , executablePath ) )
+   //    {
+   //       return executablePath ;
+   //    }
+   // }   
+   // return QString::null ;
+  std::vector<std::string> hints;
+  // std::cout<<"Command directory: "<<m_commandDirectory<<std::endl;
+  hints.push_back(m_commandDirectory);
+
+  #ifdef Slicer_CLIMODULES_BIN_DIR
+
+  hints.push_back(m_commandDirectory + "/../../../../ResampleDTIlogEuclidean/" + std::string(Slicer_CLIMODULES_BIN_DIR));
+  hints.push_back(m_commandDirectory + "/../../../../DTI-Reg/" + std::string(Slicer_CLIMODULES_BIN_DIR));
+  hints.push_back(m_commandDirectory + "/../../../../DTIProcess/" + std::string(Slicer_CLIMODULES_BIN_DIR));
+  hints.push_back(m_commandDirectory + "/../ExternalBin/");
+
+  // This path is used when is built as Slicer extension and in debug/build directory
+  hints.push_back(m_commandDirectory + "/../../../ResampleDTIlogEuclidean-build/" + std::string(Slicer_CLIMODULES_BIN_DIR));
+  hints.push_back(m_commandDirectory + "/../../../DTIProcess-build/niral_utilities-install/bin");
+  hints.push_back(m_commandDirectory + "/../../../DTIProcess-build/DTIProcess-inner-build/bin");
+  hints.push_back(m_commandDirectory + "/../../../DTI-Reg-build/ANTs-install/bin");
+  hints.push_back(m_commandDirectory + "/../../../DTI-Reg-build/DTI-Reg-inner-build/bin");
+  hints.push_back(m_commandDirectory + "/../../../DTI-Reg-build/ITKTransformTools-build");
+  hints.push_back(m_commandDirectory + "/../../../DTIProcess-build/niral_utilities-install/Slicer.app/Contents/" + std::string(Slicer_CLIMODULES_BIN_DIR));
+
+  //For Slicer executable
+  hints.push_back(m_commandDirectory + "/../../../../../");//LINUX
+  hints.push_back(m_commandDirectory + "/../../../../../MacOS");//MAC
+
+  #endif
+
+  // This paths are used when is built as standalone and testing
+  hints.push_back(m_commandDirectory + "/../../niral_utilities-install/bin");
+  hints.push_back(m_commandDirectory + "/../../ResampleDTIlogEuclidean-install/bin");
+  hints.push_back(m_commandDirectory + "/../../DTI-Reg-install/bin/");
+  hints.push_back(m_commandDirectory + "/../../ITKTransformTools-install/bin/");
+  hints.push_back(m_commandDirectory + "/../../DTIProcess-install/bin/");
+  hints.push_back(m_commandDirectory + "/../../Teem-install/bin");
+  hints.push_back(m_commandDirectory + "/../../");
+
+  return QString::fromStdString( itksys::SystemTools::FindProgram( executableName.toStdString(), hints, true ) );
 }
 
 //Converts software number from string to vector<int>

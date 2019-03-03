@@ -17,14 +17,6 @@ INCLUDE(${GenerateCLP_USE_FILE})
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${ITK_USE_FILE})
 
-
-SET(LIBRARY_NAME CountNumberOfLabels)
-SET(${LIBRARY_NAME}_SOURCES ${LIBRARY_NAME}.cxx ${LIBRARY_NAME}.h)
-ADD_LIBRARY(${LIBRARY_NAME} ${${LIBRARY_NAME}_SOURCES})
-TARGET_LINK_LIBRARIES(${LIBRARY_NAME} ${ITK_LIBRARIES} )
-
-INSTALL(TARGETS ${LIBRARY_NAME} ARCHIVE DESTINATION bin)
-
 QT4_ADD_RESOURCES(RESOURCES resources.qrc)
 #QT4_ADD_RESOURCES(quicksilver_generated_rcc ${quicksilver_rcc})
 QT4_WRAP_UI(UI_SOURCES WindowMultiseg.ui antsParameters.ui quicksilverParameters.ui neosegParameters.ui ABCParameters.ui antsJointFusionParameters.ui About.ui)
@@ -57,6 +49,7 @@ SET(MultiSegPipeline_SOURCE  NeosegPipelineTool.cxx
                            ABCExecution.cxx
                            AntsJointFusionExecution.cxx
                            AntsJointFusionParameters.cxx
+                           CountNumberOfLabels.cxx
 )
 
 SET(MultiSegPipeline_HEADERS NeosegPipelineTool.h
@@ -88,7 +81,7 @@ SET(MultiSegPipeline_HEADERS NeosegPipelineTool.h
                            ABCExecution.h
                            AntsJointFusionExecution.h
                            AntsJointFusionParameters.h
-
+                           CountNumberOfLabels.h
 )
 
 
@@ -105,14 +98,14 @@ SEMMacroBuildCLI(
    EXECUTABLE_ONLY
    INCLUDE_DIRECTORIES ${QT_INCLUDE_DIR} ${ITK_INCLUDE_DIR}
    LINK_DIRECTORIES ${QT_LIBRARY_DIRS} ${ITK_LIBRARY_DIRS}
-   TARGET_LIBRARIES ${QT_LIBRARIES} ${ITK_LIBRARIES} CountNumberOfLabels
+   TARGET_LIBRARIES ${QT_LIBRARIES} ${ITK_LIBRARIES}
    ADDITIONAL_SRCS ${MultiSegPipeline_SOURCE} ${MultiSegPipeline_HEADERS} ${MOC_SOURCES} ${UI_SOURCES} ${NeosegPipeline_CLP} ${RESOURCES}
    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
    ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
-   INSTALL_RUNTIME_DESTINATION bin
-   INSTALL_LIBRARY_DESTINATION lib
-   INSTALL_ARCHIVE_DESTINATION lib
+   INSTALL_RUNTIME_DESTINATION ${INSTALL_RUNTIME_DESTINATION}
+   INSTALL_LIBRARY_DESTINATION ${INSTALL_LIBRARY_DESTINATION}
+   INSTALL_ARCHIVE_DESTINATION ${INSTALL_ARCHIVE_DESTINATION}
 )
 
 

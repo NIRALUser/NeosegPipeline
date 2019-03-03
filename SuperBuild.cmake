@@ -81,11 +81,6 @@ set( ListProjects
   option(BUILD_${var} "build the ${var} project" OFF)
   if( BUILD_${var} )
     List( APPEND ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ${var} )
-  else()
-    List( LENGTH ${PRIMARY_PROJECT_NAME}_DEPENDENCIES dependencies_size )
-    if( dependencies_size GREATER 0 )
-      List( REMOVE_ITEM ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ${var} )
-    endif()
   endif()
 endForeach()
 
@@ -305,10 +300,15 @@ endif()
 #    ${CMAKE_CURRENT_BINARY_DIR}/CTestCustom.cmake
 #    @ONLY)
 #endif()
-
 #------------------------------------------------------------------------------
 # Configure and build ${PROJECT_NAME}
 #------------------------------------------------------------------------------
+
+set(DEPENDENCIES_DIR "")
+foreach(dependency ${${PRIMARY_PROJECT_NAME}_DEPENDENCIES})
+  list(APPEND DEPENDENCIES_DIR -D${dependency}_DIR:PATH=${${dependency}_DIR})
+endforeach()
+message(STATUS ${DEPENDENCIES_DIR})
 set(proj ${PRIMARY_PROJECT_NAME})
 ExternalProject_Add(${proj}
   DEPENDS ${${PRIMARY_PROJECT_NAME}_DEPENDENCIES}
@@ -320,6 +320,8 @@ ExternalProject_Add(${proj}
     --no-warn-unused-cli    # HACK Only expected variables should be passed down.
     ${CMAKE_OSX_EXTERNAL_PROJECT_ARGS}
     ${${PROJECT_NAME}_EXTERNAL_PROJECT_ARGS}
+    ${extension_args}
+    ${DEPENDENCIES_DIR}
     -D${PRIMARY_PROJECT_NAME}_SUPERBUILD:BOOL=OFF    #NOTE: VERY IMPORTANT reprocess top level CMakeList.txt
     -DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_CURRENT_BINARY_DIR}/${PRIMARY_PROJECT_NAME}-install
     -DBUILD_NeosegPipeline:BOOL=${BUILD_NeosegPipeline}
@@ -398,4 +400,10 @@ endif()
 
 if(BUILD_ABC)
   install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/ABC-install/bin/ABC DESTINATION bin)
+endif()
+
+
+if( ${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION )
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${CMAKE_BINARY_DIR}/MultisegPipeline-build;${EXTENSION_NAME};ALL;/")
+  include(${Slicer_EXTENSION_CPACK})
 endif()

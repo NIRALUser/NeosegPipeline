@@ -121,7 +121,6 @@ option(BUILD_WeightedLabelsAverage "build the WeightedLabelsAverage project" ON)
 option(BUILD_SpreadFA "build the SpreadFA project" ON)
 option(BUILD_ReassignWhiteMatter "build the ReassignWhiteMatter project" ON)
 
-
 #-----------------------------------------------------------------------------
 # SLICER EXTENSION
 #-----------------------------------------------------------------------------
@@ -145,12 +144,18 @@ if( ${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION )
   set(INSTALL_LIBRARY_DESTINATION ${Slicer_INSTALL_CLIMODULES_LIB_DIR})
   set(INSTALL_ARCHIVE_DESTINATION ${Slicer_INSTALL_CLIMODULES_LIB_DIR})
 
-  set( ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ITKv4 SlicerExecutionModel teem)
+  set( ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ITKv4 SlicerExecutionModel teem neoseg ABC)
   
+  set(extension_args 
+    -DSlicer_DIR:PATH=${Slicer_DIR}
+    -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}
+    -D${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION:BOOL=ON
+  )
   add_definitions(-DSlicer_CLIMODULES_BIN_DIR="${Slicer_CLIMODULES_BIN_DIR}")
 else()
   set(INSTALL_RUNTIME_DESTINATION bin)
   set(INSTALL_LIBRARY_DESTINATION lib)
   set(INSTALL_ARCHIVE_DESTINATION lib)
-  set( ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ITKv4 SlicerExecutionModel teem)
+  set(extension_args "")
+  set( ${PRIMARY_PROJECT_NAME}_DEPENDENCIES ITKv4 SlicerExecutionModel teem neoseg ABC)
 endif()

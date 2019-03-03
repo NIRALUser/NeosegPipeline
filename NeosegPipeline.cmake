@@ -22,3 +22,60 @@ if( BUILD_ReassignWhiteMatter )
   add_subdirectory( ReassignWhiteMatter )
 endif()
 
+if(neoseg_DIR)
+
+  find_program(neoseg_PATH 
+    neoseg
+    HINTS ${neoseg_DIR}/bin ${neoseg_DIR}
+    NO_SYSTEM_ENVIRONMENT_PATH)
+
+  if(neoseg_PATH)
+    if (${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION)
+      install(PROGRAMS ${neoseg_PATH} 
+        DESTINATION ${INSTALL_RUNTIME_DESTINATION}/../ExternalBin
+        COMPONENT RUNTIME)
+    else()
+      install(PROGRAMS ${neoseg_PATH}
+        DESTINATION ${INSTALL_RUNTIME_DESTINATION}
+        COMPONENT RUNTIME)
+    endif()
+  endif()
+endif()
+
+if(ABC_DIR)
+
+  find_program(ABC_PATH 
+    ABC
+    HINTS ${ABC_DIR}/bin ${ABC_DIR} ${ABC_DIR}/StandAloneCLI
+    NO_SYSTEM_ENVIRONMENT_PATH)
+
+  if(ABC_PATH)
+    if (${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION)
+      install(PROGRAMS ${ABC_PATH}
+        DESTINATION ${INSTALL_RUNTIME_DESTINATION}/../ExternalBin
+        COMPONENT RUNTIME)
+    else()
+      install(PROGRAMS ${ABC_PATH}
+        DESTINATION ${INSTALL_RUNTIME_DESTINATION}
+        COMPONENT RUNTIME)
+    endif()
+  endif()
+endif()
+
+if(Teem_DIR)
+
+  find_program(UNU_PATH 
+    unu
+    HINTS ${Teem_DIR}/bin ${Teem_DIR} ${Teem_DIR}/../bin
+    NO_SYSTEM_ENVIRONMENT_PATH)
+
+  if (${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION)
+    install(PROGRAMS ${UNU_PATH}
+      DESTINATION ${INSTALL_RUNTIME_DESTINATION}/../ExternalBin
+      COMPONENT RUNTIME)
+  else()
+    install(PROGRAMS ${UNU_PATH}
+      DESTINATION ${INSTALL_RUNTIME_DESTINATION}
+      COMPONENT RUNTIME)
+  endif()
+endif()

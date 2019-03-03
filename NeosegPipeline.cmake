@@ -22,6 +22,11 @@ if( BUILD_ReassignWhiteMatter )
   add_subdirectory( ReassignWhiteMatter )
 endif()
 
+if( ${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION )
+  set(CPACK_INSTALL_CMAKE_PROJECTS "${CPACK_INSTALL_CMAKE_PROJECTS};${CMAKE_BINARY_DIR};${EXTENSION_NAME};ALL;/")
+  include(${Slicer_EXTENSION_CPACK})
+endif()
+
 if(neoseg_DIR)
 
   find_program(neoseg_PATH 

@@ -61,8 +61,12 @@ QString ExecutablePaths::findExecutablePath(QString executableName)
 
   hints.push_back(m_commandDirectory + "/../../../../ResampleDTIlogEuclidean/" + std::string(Slicer_CLIMODULES_BIN_DIR));
   hints.push_back(m_commandDirectory + "/../../../../DTI-Reg/" + std::string(Slicer_CLIMODULES_BIN_DIR));
+  hints.push_back(m_commandDirectory + "/../../../../DTI-Reg/" + std::string(Slicer_CLIMODULES_BIN_DIR) + "../ExternalBin");
   hints.push_back(m_commandDirectory + "/../../../../DTIProcess/" + std::string(Slicer_CLIMODULES_BIN_DIR));
+  hints.push_back(m_commandDirectory + "/../../../../DTIProcess/" + std::string(Slicer_CLIMODULES_BIN_DIR) + "../ExternalBin");
+  hints.push_back(m_commandDirectory + "/../../../../SPHARM-PDM/" + std::string(Slicer_CLIMODULES_BIN_DIR));
   hints.push_back(m_commandDirectory + "/../ExternalBin/");
+  hints.push_back(m_commandDirectory + "/../../../../../" + std::string(Slicer_CLIMODULES_BIN_DIR));
 
   // This path is used when is built as Slicer extension and in debug/build directory
   hints.push_back(m_commandDirectory + "/../../../ResampleDTIlogEuclidean-build/" + std::string(Slicer_CLIMODULES_BIN_DIR));

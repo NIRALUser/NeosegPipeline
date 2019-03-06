@@ -954,15 +954,16 @@ void DerivedWindow::selectExecutable(QString executable_name)
      executable_path = QFileDialog::getOpenFileName(this, tr("Select executable"), dir_path);
    if(!executable_path.isEmpty())
    {
-       if( m_executables->checkExecutablePath( executable_name , executable_path) )
-       {
-           (executable.enter_lineEdit)->setText(executable_path) ;
-           m_executables->setExecutablePath( executable_name , executable_path ) ;
-       }
-      else
-      {
-         QMessageBox::critical(this, executable_name, executable_path + tr("\nis not executable or is the incorrect version"));
-      }
+      //  if( m_executables->checkExecutablePath( executable_name , executable_path) )
+      //  {
+      //      (executable.enter_lineEdit)->setText(executable_path) ;
+      //      m_executables->setExecutablePath( executable_name , executable_path ) ;
+      //  }
+      // else
+      // {
+      //    QMessageBox::critical(this, executable_name, executable_path + tr("\nis not executable or is the incorrect version"));
+      // }
+      m_executables->setExecutablePath( executable_name , executable_path ) ;
    }
 }
 
@@ -976,15 +977,17 @@ void DerivedWindow::enterExecutable(QString executable_name)
     std::cout<<executable_path.toStdString()<<std::endl;
 
     if(executable_path.toStdString().compare("") != 0){
-        if( m_executables->checkExecutablePath( executable_name , executable_path) )
-        {
-            (executable.enter_lineEdit)->setText(executable_path) ;
-            m_executables->setExecutablePath( executable_name , executable_path ) ;
-        }
-        else
-        {
-            QMessageBox::critical(this, executable_name, executable_path + tr("\nis not executable or is the incorrect version"));
-        }
+        // if( m_executables->checkExecutablePath( executable_name , executable_path) )
+        // {
+        //     (executable.enter_lineEdit)->setText(executable_path) ;
+        //     m_executables->setExecutablePath( executable_name , executable_path ) ;
+        // }
+        // else
+        // {
+        //     QMessageBox::critical(this, executable_name, executable_path + tr("\nis not executable or is the incorrect version"));
+        // }
+        (executable.enter_lineEdit)->setText(executable_path) ;
+        m_executables->setExecutablePath( executable_name , executable_path ) ;
     }
 }
 

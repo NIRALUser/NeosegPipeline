@@ -83,6 +83,9 @@ QString ExecutablePaths::findExecutablePath(QString executableName)
 
   #endif
 
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  hints.push_back(env.value("FSLDIR", QString::null).toStdString() + "/bin");
+
   // This paths are used when is built as standalone and testing
   hints.push_back(m_commandDirectory + "/../../niral_utilities-install/bin");
   hints.push_back(m_commandDirectory + "/../../ResampleDTIlogEuclidean-install/bin");

@@ -15,6 +15,9 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 #include <QList>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QScrollBar>
 
 // My Specific Librairies
 #include "ui_WindowMultiseg.h"

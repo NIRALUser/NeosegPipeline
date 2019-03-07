@@ -4,9 +4,19 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 # This project is designed to be built outside the Insight source tree.
 PROJECT(NeosegPipeline)
 
-# Find Qt
-FIND_PACKAGE(Qt4 COMPONENTS QtCore QtGui QtXml REQUIRED)
-INCLUDE(${QT_USE_FILE})
+
+# find Qt5 headers
+if(UNIX AND NOT APPLE)
+  find_package(Qt5 COMPONENTS Widgets Core Xml Gui X11Extras REQUIRED)
+else()
+  find_package(Qt5 COMPONENTS Widgets Core Xml Gui REQUIRED)
+endif()
+
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
+include_directories(${Qt5Xml_INCLUDE_DIRS})
+add_definitions(${Qt5Widgets_DEFINITIONS})
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
+set(QT_LIBRARIES ${Qt5Widgets_LIBRARIES})
 
 #Find SlicerExecutionModel
 FIND_PACKAGE(SlicerExecutionModel REQUIRED)
@@ -17,10 +27,10 @@ INCLUDE(${GenerateCLP_USE_FILE})
 FIND_PACKAGE(ITK REQUIRED)
 INCLUDE(${ITK_USE_FILE})
 
-QT4_ADD_RESOURCES(RESOURCES resources.qrc)
+QT5_ADD_RESOURCES(RESOURCES resources.qrc)
 #QT4_ADD_RESOURCES(quicksilver_generated_rcc ${quicksilver_rcc})
-QT4_WRAP_UI(UI_SOURCES WindowMultiseg.ui antsParameters.ui quicksilverParameters.ui neosegParameters.ui ABCParameters.ui antsJointFusionParameters.ui About.ui)
-QT4_WRAP_CPP(MOC_SOURCES DerivedWindow.h MainScriptThread.h)
+QT5_WRAP_UI(UI_SOURCES WindowMultiseg.ui antsParameters.ui quicksilverParameters.ui neosegParameters.ui ABCParameters.ui antsJointFusionParameters.ui About.ui)
+QT5_WRAP_CPP(MOC_SOURCES DerivedWindow.h MainScriptThread.h)
 
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}

@@ -13,7 +13,7 @@ endif()
 set(${CMAKE_CURRENT_LIST_FILENAME}_FILE_INCLUDED 1)
 
 # Include dependent projects if any
-set(extProjName Teem) #The find_package known name
+set(extProjName teem) #The find_package known name
 set(proj ${extProjName})              #This local name
 
 #if(${USE_SYSTEM_${extProjName}})

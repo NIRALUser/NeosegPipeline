@@ -120,5 +120,109 @@ SEMMacroBuildCLI(
 
 
 
+# Generate a bundle
+if(CREATE_BUNDLE)
+
+  set(bundle_name MultiSegPipeline${version_number})
+
+  if(APPLE)
+    set(OS_BUNDLE MACOSX_BUNDLE)
+  elseif(WIN32)
+    set(OS_BUNDLE WIN32)
+  endif()
+
+  #--------------------------------------------------------------------------------
+  SET(qtconf_dest_dir bin)
+  SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/${bundle_name}")
+
+  
+  set(myApp_ICON ${CMAKE_SOURCE_DIR}/Resources/Icons/MultiSegPipeline_Icon.png)
+  set(CPACK_PACKAGE_ICON "${myApp_ICON}")
+
+  IF(APPLE)
+    SET(qtconf_dest_dir ${bundle_name}.app/Contents/Resources)
+    SET(APPS "\${CMAKE_INSTALL_PREFIX}/${bundle_name}.app")
+
+    set(MACOSX_BUNDLE_BUNDLE_NAME "${bundle_name}")
+    set(MACOSX_BUNDLE_INFO_STRING "MultiSegPipeline: Atlas based neonate brain MRI segmentation")
+    set(MACOSX_BUNDLE_GUI_IDENTIFIER "niral.unc.edu.${bundle_name}")
+    set(MACOSX_BUNDLE_LONG_VERSION_STRING "MultiSegPipeline version - ${version_number}")
+    set(MACOSX_BUNDLE_SHORT_VERSION_STRING "${version_number}")
+    set(MACOSX_BUNDLE_BUNDLE_VERSION "${version_number}")
+    set(MACOSX_BUNDLE_COPYRIGHT "Copyright 2019 University of North Carolina , Chapel Hill.")
+    
+    set_source_files_properties(
+      ${myApp_ICON}
+      PROPERTIES
+      MACOSX_PACKAGE_LOCATION Resources
+      )
+
+    get_filename_component(apple_icon_filename ${myApp_ICON} NAME)
+    set(MACOSX_BUNDLE_ICON_FILE ${apple_icon_filename})
+
+  ENDIF(APPLE)
+
+  IF(WIN32)
+    SET(APPS "\${CMAKE_INSTALL_PREFIX}/bin/${bundle_name}.exe")
+  ENDIF(WIN32)
+
+  include_directories(${CMAKE_CURRENT_BINARY_DIR})
+  add_executable(${bundle_name} ${OS_BUNDLE}
+    ${myApp_ICON} ${MultiSegPipeline_SOURCE} MultiSegPipeline.cxx
+  )
+  target_link_libraries(${bundle_name} ${QT_LIBRARIES} ${ITK_LIBRARIES})
+
+  #--------------------------------------------------------------------------------
+  # Install the QtTest application, on Apple, the bundle is at the root of the
+  # install tree, and on other platforms it'll go into the bin directory.
+  INSTALL(TARGETS ${bundle_name}
+    DESTINATION . COMPONENT Runtime
+    RUNTIME DESTINATION bin COMPONENT Runtime
+  )
+
+  macro(install_qt5_plugin _qt_plugin_name _qt_plugins_var)
+    get_target_property(_qt_plugin_path "${_qt_plugin_name}" LOCATION)
+    if(EXISTS "${_qt_plugin_path}")
+      get_filename_component(_qt_plugin_file "${_qt_plugin_path}" NAME)
+      get_filename_component(_qt_plugin_type "${_qt_plugin_path}" PATH)
+      get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
+      set(_qt_plugin_dest "${bundle_name}.app/Contents/PlugIns/${_qt_plugin_type}")
+      install(FILES "${_qt_plugin_path}"
+        DESTINATION "${_qt_plugin_dest}"
+        COMPONENT Runtime)
+      set(${_qt_plugins_var}
+        "${${_qt_plugins_var}};\${CMAKE_INSTALL_PREFIX}/${_qt_plugin_dest}/${_qt_plugin_file}")
+    else()
+      message(FATAL_ERROR "QT plugin ${_qt_plugin_name} not found")
+    endif()
+  endmacro()
+  
+  install_qt5_plugin("Qt5::QCocoaIntegrationPlugin" QT_PLUGINS)
+
+  #--------------------------------------------------------------------------------
+  # install a qt.conf file
+  # this inserts some cmake code into the install script to write the file
+  INSTALL(CODE "
+      file(WRITE \"\${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}/qt.conf\" \"[Paths]\nPlugins = PlugIns\n\")
+      " COMPONENT Runtime)
+
+  # Install the license
+  INSTALL(FILES 
+    ${CMAKE_SOURCE_DIR}/LICENSE
+    DESTINATION "${CMAKE_INSTALL_PREFIX}/${qtconf_dest_dir}"
+    COMPONENT Runtime)
 
 
+  find_package(Qt5Widgets)
+  get_target_property(Qt5_location Qt5::Widgets LOCATION)
+
+  string(FIND ${Qt5_location} "/QtWidgets" length)
+  string(SUBSTRING ${Qt5_location} 0 ${length} Qt5_location)
+  #Fix the bundle
+  install(CODE "
+    include(BundleUtilities)
+    fixup_bundle(\"${APPS}\" \"${QT_PLUGINS};\" \"${Qt5_location}\")
+   "
+    COMPONENT Runtime)
+
+endif()

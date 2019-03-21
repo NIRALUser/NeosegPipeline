@@ -60,33 +60,35 @@ void AtlasGeneration::setFASmoothingSize(double FASmoothingSize)
 
 void AtlasGeneration::createDirectories()
 {  
-   m_module_dir->mkpath( "temp/templates/templateT1" );
-   QString templateT1 = m_module_dir->filePath( "temp/templates/templateT1" );
-   m_templateT1.dir = new QDir( templateT1 );  
- 
-   m_module_dir->mkpath( "temp/templates/templateT2" );
-   QString templateT2 = m_module_dir->filePath( "temp/templates/templateT2" );
-   m_templateT2.dir = new QDir( templateT2 );  
+   if(!m_ABCPipelineModeOn){
+      m_module_dir->mkpath( "temp/templates/templateT1" );
+      QString templateT1 = m_module_dir->filePath( "temp/templates/templateT1" );
+      m_templateT1.dir = new QDir( templateT1 );  
+    
+      m_module_dir->mkpath( "temp/templates/templateT2" );
+      QString templateT2 = m_module_dir->filePath( "temp/templates/templateT2" );
+      m_templateT2.dir = new QDir( templateT2 );  
 
-   m_module_dir->mkpath( "temp/priorProbabilities/white" );
-   QString white_path = m_module_dir->filePath( "temp/priorProbabilities/white" );
-   m_white.dir = new QDir( white_path );  
- 
-   m_module_dir->mkpath( "temp/priorProbabilities/gray" );
-   QString gray_path = m_module_dir->filePath( "temp/priorProbabilities/gray" );
-   m_gray.dir = new QDir( gray_path );  
- 
-   m_module_dir->mkpath( "temp/priorProbabilities/csf" );
-   QString csf_path = m_module_dir->filePath( "temp/priorProbabilities/csf" );
-   m_csf.dir = new QDir( csf_path );  
- 
-   m_module_dir->mkpath( "temp/priorProbabilities/rest" );
-   QString rest_path = m_module_dir->filePath( "temp/priorProbabilities/rest" );
-   m_rest.dir = new QDir( rest_path ); 
+      m_module_dir->mkpath( "temp/priorProbabilities/white" );
+      QString white_path = m_module_dir->filePath( "temp/priorProbabilities/white" );
+      m_white.dir = new QDir( white_path );  
+    
+      m_module_dir->mkpath( "temp/priorProbabilities/gray" );
+      QString gray_path = m_module_dir->filePath( "temp/priorProbabilities/gray" );
+      m_gray.dir = new QDir( gray_path );  
+    
+      m_module_dir->mkpath( "temp/priorProbabilities/csf" );
+      QString csf_path = m_module_dir->filePath( "temp/priorProbabilities/csf" );
+      m_csf.dir = new QDir( csf_path );  
+    
+      m_module_dir->mkpath( "temp/priorProbabilities/rest" );
+      QString rest_path = m_module_dir->filePath( "temp/priorProbabilities/rest" );
+      m_rest.dir = new QDir( rest_path ); 
 
-   m_module_dir -> mkpath("temp/priorProbabilities");
-   QString priorProbabilities_path = m_module_dir->filePath("temp/priorProbabilities");
-   m_priorProbabilities_dir = new QDir(priorProbabilities_path);  
+      m_module_dir -> mkpath("temp/priorProbabilities");
+      QString priorProbabilities_path = m_module_dir->filePath("temp/priorProbabilities");
+      m_priorProbabilities_dir = new QDir(priorProbabilities_path);  
+   }
 }
 
 void AtlasGeneration::initializeScript()
@@ -239,7 +241,7 @@ void AtlasGeneration::generateWeightedAveragedLabels()
    addSubElement("weights", "neightborhoodRadiusUnit", "NEIGHTBORHOOD-RADIUS-UNIT", m_neightborhoodRadiusUnit);
 
    if(m_ABCPipelineModeOn){
-      addSubElement("parameters", "outputs", "OUTPUT", this->getOutput() + "/temp/priorProbabilities/");
+      addSubElement("parameters", "outputs", "OUTPUT", this->getOutput());
    }else{
       m_script += m_indent + m_indent + "outputs = SubElement(parameters, 'OUTPUTS')\n";
       addSubElement("outputs", "white", "WHITE-AVERAGE", whiteAverage);

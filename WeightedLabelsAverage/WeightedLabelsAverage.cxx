@@ -142,13 +142,6 @@ int main(int argc, char* argv[])
 
    WeightedLabelsAverageFilterType::InputImageLabelIndexMapType map = WeightedLabelsAverageFilter->GetInputImagePixelType();
 
-   int start = 1;
-   int addout = 0;
-   if(map.find(0) == map.end()){//If the label 0 (background) is not found then we write all of the generated outputs. l
-    start = 0;
-    addout = 1;
-   }
-
    std::cout<<"Writing Outputs: "<<std::endl;
 
    if(parameters->GetOutputDirectory().empty()){//The output folder is set when there is an unknown number of priors.
@@ -173,11 +166,16 @@ int main(int argc, char* argv[])
      writer_csf->SetUseCompression(true);
      writer_csf->Update();
    }else{
-    for(int i = start; i < (int)WeightedLabelsAverageFilter->GetNumberOfOutputs(); i++){
+    for(int i = 0; i < (int)WeightedLabelsAverageFilter->GetNumberOfOutputs(); i++){
       WriterType::Pointer writer_white = WriterType::New(); 
        writer_white->SetInput(WeightedLabelsAverageFilter->GetOutput(i)); 
        char buf[50];
-       sprintf(buf, "%d", i + addout);
+       if(i == 0){
+        sprintf(buf, "%d", WeightedLabelsAverageFilter->GetNumberOfOutputs());//The 0 label is the REST class
+       }else{
+        sprintf(buf, "%d", i);
+       }
+       
        std::string outfilename = parameters->GetOutputDirectory() + "/" + std::string(buf)  + inputExtension;
        std::cout<<"\t"<<outfilename<<std::endl;
        writer_white->SetFileName(outfilename.c_str());

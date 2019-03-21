@@ -57,6 +57,8 @@ QString ExecutablePaths::findExecutablePath(QString executableName)
   // std::cout<<"Command directory: "<<m_commandDirectory<<std::endl;
   hints.push_back(m_commandDirectory);
 
+  hints.push_back(m_commandDirectory + "/../ExternalBin/");
+
   #ifdef Slicer_CLIMODULES_BIN_DIR
 
   hints.push_back(m_commandDirectory + "/../../../../ResampleDTIlogEuclidean/" + std::string(Slicer_CLIMODULES_BIN_DIR));
@@ -95,7 +97,12 @@ QString ExecutablePaths::findExecutablePath(QString executableName)
   hints.push_back(m_commandDirectory + "/../../Teem-install/bin");
   hints.push_back(m_commandDirectory + "/../../");
 
-  return QString::fromStdString( itksys::SystemTools::FindProgram( executableName.toStdString(), hints, true ) );
+  std::string exe_path = itksys::SystemTools::FindProgram( executableName.toStdString(), hints, true );
+  if(exe_path.compare("") == 0){
+    exe_path = itksys::SystemTools::FindProgram( executableName.toStdString() );
+  }
+
+  return QString::fromStdString( exe_path );
 }
 
 //Converts software number from string to vector<int>

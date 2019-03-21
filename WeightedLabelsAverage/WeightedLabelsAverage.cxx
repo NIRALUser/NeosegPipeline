@@ -166,7 +166,7 @@ int main(int argc, char* argv[])
      writer_csf->SetUseCompression(true);
      writer_csf->Update();
    }else{
-    for(int i = 0; i < (int)WeightedLabelsAverageFilter->GetNumberOfOutputs(); i++){
+    for(int i = 1; i < (int)WeightedLabelsAverageFilter->GetNumberOfOutputs(); i++){
       WriterType::Pointer writer_white = WriterType::New(); 
        writer_white->SetInput(WeightedLabelsAverageFilter->GetOutput(i)); 
        char buf[50];
@@ -183,6 +183,8 @@ int main(int argc, char* argv[])
        writer_white->Update();
      }
    }
+
+   return EXIT_SUCCESS;
    
 }
 

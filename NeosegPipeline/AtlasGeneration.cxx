@@ -240,7 +240,7 @@ void AtlasGeneration::generateWeightedAveragedLabels()
    addSubElement("weights", "neightborhoodRadiusUnit", "NEIGHTBORHOOD-RADIUS-UNIT", m_neightborhoodRadiusUnit);
 
    if(m_ABCPipelineModeOn){
-      addSubElement("parameters", "outputs", "OUTPUT", this->getOutput());
+      addSubElement("parameters", "outputs", "OUTPUT", this->getOutput() + "/temp/priorProbabilities/");
    }else{
       m_script += m_indent + m_indent + "outputs = SubElement(parameters, 'OUTPUTS')\n";
       addSubElement("outputs", "white", "WHITE-AVERAGE", whiteAverage);

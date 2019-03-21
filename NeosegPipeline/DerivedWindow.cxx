@@ -12,8 +12,8 @@ DerivedWindow::DerivedWindow() : Ui_WindowMultiseg()
    abcParameters->setupUi(this->softwareFrame);
    antsJointFusionParameters = new Ui::antsJointFusionParameters ;
    antsJointFusionParameters->setupUi(this->softwareFrame) ;
-   this->radioNeoseg->setChecked( true ) ;
-   this->radioABC->setChecked( false ) ;
+   this->radioABC->setChecked( true ) ;
+   this->radioNeoseg->setChecked( false ) ;
    this->radioantsJointFusion->setChecked( false ) ;
 
    antsParameters = new Ui::antsParameters ;
@@ -215,7 +215,7 @@ DerivedWindow::DerivedWindow() : Ui_WindowMultiseg()
 
    this->adjustSize();
    // We run the function "tissueSegmentationSoftwareSelection" once to initialize the display.
-   radioABC->setChecked(true);
+   // radioABC->setChecked(true);
    tissueSegmentationSoftwareSelection() ;
 
    radioAnts->setChecked(true);

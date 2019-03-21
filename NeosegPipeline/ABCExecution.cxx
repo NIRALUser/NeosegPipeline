@@ -130,12 +130,12 @@ void ABCExecution::writeABCParameters(QXmlStreamWriter *stream){
     stream->writeTextElement(QString("OUTPUT-FORMAT"), m_parameters->getAtlasFormat());
 
     stream->writeStartElement("IMAGE");
-    stream->writeTextElement(QString("FILE"), m_parameters->getT1());
+    stream->writeTextElement(QString("FILE"), m_parameters->getNeo().T1); 
     stream->writeTextElement(QString("ORIENTATION"), QString("file"));
     stream->writeEndElement();
 
     stream->writeStartElement("IMAGE");
-    stream->writeTextElement(QString("FILE"), m_parameters->getT2());
+    stream->writeTextElement(QString("FILE"), m_parameters->getNeo().T2);
     stream->writeTextElement(QString("ORIENTATION"), QString("file"));
     stream->writeEndElement();
 

@@ -44,12 +44,11 @@ QString XmlReader::readParametersConfigurationFile(QString file_path)
          if (stream->isStartElement())
          {
             QXmlStreamAttributes attributes = stream->attributes();
-
             if(stream->name() == "General-parameters")
             {
                readGeneralParameters(stream, errors);
             }
-            else if (stream->name() == "ANTS-parameters-DTI")
+            else if (stream->name() == "Registration-parameters-DTI")
             {
                readRegistrationParameters(stream, errors, m_antsParameters_DTI);
             }

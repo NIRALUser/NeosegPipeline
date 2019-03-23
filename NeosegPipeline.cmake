@@ -8,6 +8,34 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/Common.cmake)
 
 option(CREATE_BUNDLE "Create MACOSX_BUNDLE" OFF)
 
+if(CREATE_BUNDLE)
+
+  if(APPLE)
+    set(INSTALL_RUNTIME_DESTINATION ${bundle_name}.app/Contents/ExternalBin)    
+    set(CPACK_BINARY_DRAGNDROP ON)
+  endif()
+
+  if(UNIX AND NOT APPLE AND CREATE_BUNDLE)
+    # the RPATH to be used when installing
+    SET(CMAKE_INSTALL_RPATH "$ORIGIN/../lib;../lib")
+  endif()
+
+endif()
+
+FILE(READ NeosegPipeline/MultiSegPipeline.xml var)
+
+STRING(REGEX MATCH "<version>.*</version>" ext "${var}")
+STRING(REPLACE "<version>" "" version_number ${ext} )
+STRING(REPLACE "</version>" "" version_number ${version_number})
+
+ADD_DEFINITIONS(-DNEOSEGPIPELINE_VERSION="${version_number}")
+
+
+string(REPLACE "." ";" VERSION_LIST ${version_number})
+list(GET VERSION_LIST 0 CPACK_PACKAGE_VERSION_MAJOR)
+list(GET VERSION_LIST 1 CPACK_PACKAGE_VERSION_MINOR)
+list(GET VERSION_LIST 2 CPACK_PACKAGE_VERSION_PATCH)
+
 if( BUILD_NeosegPipeline )
   add_subdirectory( NeosegPipeline )
 endif()
@@ -22,16 +50,6 @@ endif()
 
 if( BUILD_ReassignWhiteMatter )
   add_subdirectory( ReassignWhiteMatter )
-endif()
-
-
-if(CREATE_BUNDLE)
-
-  if(APPLE)
-    set(INSTALL_RUNTIME_DESTINATION ${bundle_name}.app/Contents/ExternalBin)    
-    set(CPACK_BINARY_DRAGNDROP ON)
-  endif()
-
 endif()
 
 if(neoseg_DIR)
@@ -97,41 +115,8 @@ if( ${LOCAL_PROJECT_NAME}_BUILD_SLICER_EXTENSION )
   include(${Slicer_EXTENSION_CPACK})
 endif()
 
-if(UNIX)
- # when building, don't use the install RPATH already
- # (but later on when installing)
- SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE) 
- # the RPATH to be used when installing
- SET(CMAKE_INSTALL_RPATH "../lib")
-  
-
-  find_package(Qt5Widgets)
-
-  get_target_property(Qt5_location Qt5::Widgets LOCATION)  
-  string(FIND ${Qt5_location} "libQt5Widgets" length)
-  string(SUBSTRING ${Qt5_location} 0 ${length} Qt5_location)
-
-  install(FILES ${QtWidgets_location}
-      DESTINATION lib
-      COMPONENT Runtime)
-
-endif()
-
 
 if(CREATE_BUNDLE)
-
-  install(TARGETS ReassignWhiteMatter
-        DESTINATION ${INSTALL_RUNTIME_DESTINATION}
-        COMPONENT RUNTIME)
-
-  install(TARGETS SpreadFA
-        DESTINATION ${INSTALL_RUNTIME_DESTINATION}
-        COMPONENT RUNTIME)
-
-  install(TARGETS WeightedLabelsAverage
-        DESTINATION ${INSTALL_RUNTIME_DESTINATION}
-        COMPONENT RUNTIME)  
-
 
   find_package(DTI-Reg)
 
@@ -176,11 +161,22 @@ if(CREATE_BUNDLE)
 
   set(Slicer_CLI "" CACHE FILEPATH "File path for built directory of Slicer_CLI")
 
-  install(PROGRAMS ${Slicer_CLI}/cli-modules-build/Modules/CLI/N4ITKBiasFieldCorrection/N4ITKBiasFieldCorrection
+
+  find_program(N4ITKBiasFieldCorrection_PATH 
+    unu
+    HINTS ${Slicer_CLI}/cli-modules-build/Modules/CLI/N4ITKBiasFieldCorrection/N4ITKBiasFieldCorrection ${Slicer_CLI}/bin
+    NO_SYSTEM_ENVIRONMENT_PATH)  
+
+  install(PROGRAMS ${N4ITKBiasFieldCorrection_PATH}
       DESTINATION ${INSTALL_RUNTIME_DESTINATION}
       COMPONENT RUNTIME)  
 
-  install(PROGRAMS ${Slicer_CLI}/cli-modules-build/Modules/CLI/ResampleScalarVectorDWIVolume/ResampleScalarVectorDWIVolume
+  find_program(ResampleScalarVectorDWIVolume_PATH 
+    unu
+    HINTS ${Slicer_CLI}/cli-modules-build/Modules/CLI/ResampleScalarVectorDWIVolume/ResampleScalarVectorDWIVolume ${Slicer_CLI}/bin
+    NO_SYSTEM_ENVIRONMENT_PATH)  
+
+  install(PROGRAMS ${ResampleScalarVectorDWIVolume_PATH}
       DESTINATION ${INSTALL_RUNTIME_DESTINATION}
       COMPONENT RUNTIME)  
 
@@ -190,11 +186,29 @@ if(CREATE_BUNDLE)
       DESTINATION ${INSTALL_RUNTIME_DESTINATION}
       COMPONENT RUNTIME)  
 
-endif()
 
+  if(UNIX AND NOT APPLE)
 
+    find_package(Qt5Widgets)
 
-if(CREATE_BUNDLE)
+    get_target_property(Qt5_location Qt5::Widgets LOCATION)  
+    string(FIND ${Qt5_location} "libQt5Widgets" length)
+    string(SUBSTRING ${Qt5_location} 0 ${length} Qt5_location)
+    
+    get_target_property(QtWidgets_location Qt5::Widgets LOCATION)    
+    get_target_property(QCore_location Qt5::Core LOCATION)
+    get_target_property(QGui_location Qt5::Gui LOCATION)
+    
+    get_target_property(QtWidgets_SOFT Qt5::Widgets IMPORTED_SONAME_RELEASE)
+    get_target_property(QCore_SOFT Qt5::Core IMPORTED_SONAME_RELEASE)
+    get_target_property(QGui_SOFT Qt5::Gui IMPORTED_SONAME_RELEASE)
+    
+
+    install(FILES ${QtWidgets_location} ${QCore_location} ${QGui_location} ${Qt5_location}/${QtWidgets_SOFT} ${Qt5_location}/${QCore_SOFT} ${Qt5_location}/${QGui_SOFT} 
+      DESTINATION lib
+      COMPONENT Runtime)
+  endif()
+
   # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
   # where CPackConfig.cmake is created by including CPack
   # And then there's ways to customize this as well  

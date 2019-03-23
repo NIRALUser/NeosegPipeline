@@ -138,7 +138,7 @@ if(NOT ( DEFINED "USE_SYSTEM_${extProjName}" AND "${USE_SYSTEM_${extProjName}}" 
 
   ### --- End Project specific additions
   set( ${proj}_REPOSITORY ${git_protocol}://github.com/NIRALUser/SlicerCLI.git )
-  set( ${proj}_GIT_TAG 8acfde9f975d7e199ee6f500e4c5b9afbf7ebeb6 )
+  set( ${proj}_GIT_TAG master )
   
   ExternalProject_Add(${proj}
     GIT_REPOSITORY ${${proj}_REPOSITORY}

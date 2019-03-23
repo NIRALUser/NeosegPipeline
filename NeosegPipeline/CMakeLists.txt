@@ -154,7 +154,7 @@ if(CREATE_BUNDLE)
       )
 
     get_filename_component(apple_icon_filename ${myApp_ICON} NAME)
-    set(MACOSX_BUNDLE_ICON_FILE ${apple_icon_filename})
+    set(MACOSX_BUNDLE_ICON_FILE MultiSegPipeline_Icon)
 
     include_directories(${CMAKE_CURRENT_BINARY_DIR})
     add_executable(${bundle_name} ${OS_BUNDLE}

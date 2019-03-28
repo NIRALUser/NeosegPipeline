@@ -163,8 +163,8 @@ if(CREATE_BUNDLE)
 
 
   find_program(N4ITKBiasFieldCorrection_PATH 
-    unu
-    HINTS ${Slicer_CLI}/cli-modules-build/Modules/CLI/N4ITKBiasFieldCorrection/N4ITKBiasFieldCorrection ${Slicer_CLI}/bin
+    N4ITKBiasFieldCorrection
+    HINTS ${SlicerCLI_DIR}/Modules/CLI/N4ITKBiasFieldCorrection/bin/
     NO_SYSTEM_ENVIRONMENT_PATH)  
 
   install(PROGRAMS ${N4ITKBiasFieldCorrection_PATH}
@@ -172,8 +172,8 @@ if(CREATE_BUNDLE)
       COMPONENT RUNTIME)  
 
   find_program(ResampleScalarVectorDWIVolume_PATH 
-    unu
-    HINTS ${Slicer_CLI}/cli-modules-build/Modules/CLI/ResampleScalarVectorDWIVolume/ResampleScalarVectorDWIVolume ${Slicer_CLI}/bin
+    ResampleScalarVectorDWIVolume
+    HINTS ${SlicerCLI_DIR}/Modules/CLI/ResampleScalarVectorDWIVolume/bin/
     NO_SYSTEM_ENVIRONMENT_PATH)  
 
   install(PROGRAMS ${ResampleScalarVectorDWIVolume_PATH}
@@ -184,30 +184,7 @@ if(CREATE_BUNDLE)
   set(SPHARM_PDM_DIR "" CACHE FILEPATH "File path for built directory of SPHARM_PDM")
   install(PROGRAMS ${SPHARM_PDM_DIR}/SPHARM-PDM-build/Modules/CLI/SegPostProcessCLP/bin/SegPostProcessCLP
       DESTINATION ${INSTALL_RUNTIME_DESTINATION}
-      COMPONENT RUNTIME)  
-
-
-  if(UNIX AND NOT APPLE)
-
-    find_package(Qt5Widgets)
-
-    get_target_property(Qt5_location Qt5::Widgets LOCATION)  
-    string(FIND ${Qt5_location} "libQt5Widgets" length)
-    string(SUBSTRING ${Qt5_location} 0 ${length} Qt5_location)
-    
-    get_target_property(QtWidgets_location Qt5::Widgets LOCATION)    
-    get_target_property(QCore_location Qt5::Core LOCATION)
-    get_target_property(QGui_location Qt5::Gui LOCATION)
-    
-    get_target_property(QtWidgets_SOFT Qt5::Widgets IMPORTED_SONAME_RELEASE)
-    get_target_property(QCore_SOFT Qt5::Core IMPORTED_SONAME_RELEASE)
-    get_target_property(QGui_SOFT Qt5::Gui IMPORTED_SONAME_RELEASE)
-    
-
-    install(FILES ${QtWidgets_location} ${QCore_location} ${QGui_location} ${Qt5_location}/${QtWidgets_SOFT} ${Qt5_location}/${QCore_SOFT} ${Qt5_location}/${QGui_SOFT} 
-      DESTINATION lib
-      COMPONENT Runtime)
-  endif()
+      COMPONENT RUNTIME)
 
   # To Create a package, one can run "cpack -G DragNDrop CPackConfig.cmake" on Mac OS X
   # where CPackConfig.cmake is created by including CPack

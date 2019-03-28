@@ -217,4 +217,57 @@ if(CREATE_BUNDLE)
 
   ENDIF(APPLE)
 
+  if(UNIX AND NOT APPLE)
+    
+    set(QT_PLUGINS "")
+    set(qt_plugins Qt5::QXcbIntegrationPlugin Qt5::QXcbGlxIntegrationPlugin)
+    foreach(qt_plugin ${qt_plugins})
+
+      get_target_property(_qt_plugin_path "${qt_plugin}" LOCATION)
+      get_filename_component(_qt_plugin_file "${_qt_plugin_path}" NAME)
+      get_filename_component(_qt_plugin_type "${_qt_plugin_path}" PATH)
+      get_filename_component(_qt_plugin_type "${_qt_plugin_type}" NAME)
+
+      install(PROGRAMS "${_qt_plugin_path}"
+            DESTINATION "lib/QtPlugins/${_qt_plugin_type}"
+            COMPONENT RuntimePlugins)
+      
+      list(APPEND
+        QT_PLUGINS 
+        \${CMAKE_INSTALL_PREFIX}/lib/QtPlugins/${_qt_plugin_type}/${_qt_plugin_file}
+        )
+    endforeach()
+
+    INSTALL(CODE "
+        file(WRITE \"\${CMAKE_INSTALL_PREFIX}/bin/qt.conf\" \"[Paths]\nPrefix=..\nPlugins=lib/QtPlugins\n\")
+        " COMPONENT Runtime)
+
+    get_target_property(Qt5_location Qt5::Widgets LOCATION)  
+    string(FIND ${Qt5_location} "libQt5Widgets" length)
+    string(SUBSTRING ${Qt5_location} 0 ${length} Qt5_location)
+
+    install(CODE "
+      include(BundleUtilities)
+      fixup_bundle(\"\${CMAKE_INSTALL_PREFIX}/bin/MultiSegPipeline\" \"${QT_PLUGINS};\" \"${Qt5_location};\")
+      file(GLOB qt_libs \${CMAKE_INSTALL_PREFIX}/bin/*.so*)
+      foreach(qt_lib \${qt_libs})
+        get_filename_component(qt_file \"\${qt_lib}\" NAME)
+        file(RENAME \${qt_lib} \${CMAKE_INSTALL_PREFIX}/lib/\${qt_file})
+      endforeach()
+     "
+      COMPONENT Runtime)
+
+    
+    file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/MultiSegPipeline "\#!/bin/bash\nSCRIPT=$(realpath -s $0)\nSCRIPTPATH=$(dirname $SCRIPT)\nexport LD_LIBRARY_PATH=$SCRIPTPATH/lib\n$SCRIPTPATH/bin/MultiSegPipeline\n")
+
+    install(CODE "
+      file(
+        COPY ${CMAKE_CURRENT_BINARY_DIR}/MultiSegPipeline
+        DESTINATION \${CMAKE_INSTALL_PREFIX}
+        FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE
+      )
+      " COMPONENT Runtime)
+    
+  endif()
+
 endif()

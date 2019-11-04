@@ -609,7 +609,7 @@ void AtlasGeneration::computeRestABC(){
    localf += m_indent + m_indent + "numEMS = str(len(allpriors))\n";
    localf += m_indent + m_indent + "args = [ImageMath,templateT1,'-normalizeEMS',numEMS,'-EMSfile',priorProbabilities,'-type','float','-extension','.nrrd','-outbase',outbase]\n";
    localf += m_indent + m_indent + "execute(args)\n";
-   localf += m_indent + m_indent + "dilatedMask = '" + this->getOutput() + "/temp/priorProbabilities/neo-mask-dilated_NP.nrrd" + "'\n";
+   localf += m_indent + m_indent + "dilatedMask = '" + this->getOutput() + "/temp/priorProbabilities/mask-dilated.nrrd" + "'\n";
    localf += m_indent + m_indent + "args = [ImageMath,mask,'-dilate','5,1','-outfile',dilatedMask]\n";
    localf += m_indent + m_indent + "execute(args)\n";
    localf += m_indent + m_indent + "#Generate the masked probability\n";

@@ -21,6 +21,13 @@ It builds the software tool and all the dependencies. If you want to build ANTs,
   make
 ```
 
+If you run into build issues if it does not find the Qt5 libs, then go into the MultisegPipeline build subdirectory and run ccmake there to provide the Qt5_Dir and finally run make
+```
+  cd MultisegPipeline-build
+  ccmake ../../NeosegPipeline/
+  make
+```
+
 ## More information
 
 Find the tool on [NITRC](http://www.nitrc.org/projects/neosegpipeline)

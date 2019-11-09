@@ -44,40 +44,6 @@
         <widget class="QWidget" name="widget_20" native="true">
          <layout class="QHBoxLayout" name="horizontalLayout_6">
           <item>
-           <widget class="QPushButton" name="runPipeline_button">
-            <property name="text">
-             <string> Run Pipeline</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>:/icons/icons/run-button.png</normaloff>:/icons/icons/run-button.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>24</width>
-              <height>15</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="stopPipeline_button">
-            <property name="text">
-             <string> Stop Pipeline</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>:/icons/icons/stop-button.png</normaloff>:/icons/icons/stop-button.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>15</width>
-              <height>15</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QProgressBar" name="runPipeline_progressBar">
             <property name="palette">
              <palette>
@@ -136,23 +102,6 @@
              </size>
             </property>
            </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="displayResults_button">
-            <property name="text">
-             <string> Display results</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>:/icons/icons/eye.png</normaloff>:/icons/icons/eye.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>15</height>
-             </size>
-            </property>
-           </widget>
           </item>
          </layout>
         </widget>
@@ -241,6 +190,57 @@
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="0">
+           <widget class="QPushButton" name="runPipeline_button">
+            <property name="text">
+             <string> Run Pipeline</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>:/icons/icons/run-button.png</normaloff>:/icons/icons/run-button.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>24</width>
+              <height>15</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPushButton" name="stopPipeline_button">
+            <property name="text">
+             <string> Stop Pipeline</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>:/icons/icons/stop-button.png</normaloff>:/icons/icons/stop-button.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>15</width>
+              <height>15</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QPushButton" name="displayResults_button">
+            <property name="text">
+             <string> Display results</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>:/icons/icons/eye.png</normaloff>:/icons/icons/eye.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>30</width>
+              <height>15</height>
+             </size>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>

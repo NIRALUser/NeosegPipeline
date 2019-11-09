@@ -169,8 +169,11 @@ DerivedWindow::DerivedWindow() : Ui_WindowMultiseg()
    // Reset all executables 
    connect(resetAllExecutables_button, SIGNAL(clicked()), this, SLOT(resetAllExecutables()));
 
-   // Run Pipeline
+   // Run Pipeline white button
    connect(runPipeline_button, SIGNAL(clicked()), this, SLOT(runPipeline()));
+
+   // Run pipeline green button 
+   connect(runPipeline_action, SIGNAL(clicked()), this, SLOT(runPipeline()));
 
    // Logging 
    connect(pipeline_radioButton, SIGNAL(clicked()), this, SLOT(selectLog())); 

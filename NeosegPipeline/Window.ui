@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>768</width>
-    <height>1117</height>
+    <height>1151</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -100,145 +100,6 @@
             </property>
             <property name="textVisible">
              <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QWidget" name="widget_10" native="true">
-         <layout class="QGridLayout" name="gridLayout_24">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <item row="1" column="4">
-           <widget class="QWidget" name="widget_15" native="true">
-            <layout class="QHBoxLayout" name="horizontalLayout_11">
-             <property name="leftMargin">
-              <number>1</number>
-             </property>
-             <property name="topMargin">
-              <number>1</number>
-             </property>
-             <property name="rightMargin">
-              <number>1</number>
-             </property>
-             <property name="bottomMargin">
-              <number>1</number>
-             </property>
-             <item>
-              <widget class="QLabel" name="computingSystem_label">
-               <property name="text">
-                <string>Run it on :</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QComboBox" name="computingSystem_comboBox"/>
-             </item>
-            </layout>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QCheckBox" name="overwriting_checkBox">
-            <property name="font">
-             <font>
-              <family>Sans Serif</family>
-             </font>
-            </property>
-            <property name="text">
-             <string>Overwrite existing results</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QCheckBox" name="stoppingIfError_checkBox">
-            <property name="text">
-             <string>Stop if error</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QCheckBox" name="cleaningUp_checkBox">
-            <property name="text">
-             <string>Clean-up after process</string>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <spacer name="horizontalSpacer_9">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="runPipeline_button">
-            <property name="text">
-             <string> Run Pipeline</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>:/icons/icons/run-button.png</normaloff>:/icons/icons/run-button.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>24</width>
-              <height>15</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QPushButton" name="displayResults_button">
-            <property name="text">
-             <string> Display results</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>:/icons/icons/eye.png</normaloff>:/icons/icons/eye.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>30</width>
-              <height>15</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="stopPipeline_button">
-            <property name="text">
-             <string> Stop Pipeline</string>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>:/icons/icons/stop-button.png</normaloff>:/icons/icons/stop-button.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>15</width>
-              <height>15</height>
-             </size>
             </property>
            </widget>
           </item>
@@ -458,6 +319,145 @@
                </widget>
               </item>
              </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QWidget" name="widget_10" native="true">
+          <layout class="QGridLayout" name="gridLayout_24">
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
+           <item row="1" column="4">
+            <widget class="QWidget" name="widget_15" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <property name="leftMargin">
+               <number>1</number>
+              </property>
+              <property name="topMargin">
+               <number>1</number>
+              </property>
+              <property name="rightMargin">
+               <number>1</number>
+              </property>
+              <property name="bottomMargin">
+               <number>1</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="computingSystem_label">
+                <property name="text">
+                 <string>Run it on :</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="computingSystem_comboBox"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="overwriting_checkBox">
+             <property name="font">
+              <font>
+               <family>Sans Serif</family>
+              </font>
+             </property>
+             <property name="text">
+              <string>Overwrite existing results</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="stoppingIfError_checkBox">
+             <property name="text">
+              <string>Stop if error</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QCheckBox" name="cleaningUp_checkBox">
+             <property name="text">
+              <string>Clean-up after process</string>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_9">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="4">
+            <widget class="QPushButton" name="displayResults_button">
+             <property name="text">
+              <string> Display results</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/icons/icons/eye.png</normaloff>:/icons/icons/eye.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>30</width>
+               <height>15</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QPushButton" name="stopPipeline_button">
+             <property name="text">
+              <string> Stop Pipeline</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/icons/icons/stop-button.png</normaloff>:/icons/icons/stop-button.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>15</width>
+               <height>15</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="runPipeline_button">
+             <property name="text">
+              <string> Run Pipeline</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>:/icons/icons/run-button.png</normaloff>:/icons/icons/run-button.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>24</width>
+               <height>15</height>
+              </size>
+             </property>
             </widget>
            </item>
           </layout>

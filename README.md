@@ -1,4 +1,4 @@
-# NeoSegPipeline
+# NeoSegPipeline/MultiSegPipeline
 
 ## What is it?
 
